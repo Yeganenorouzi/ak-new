@@ -11,25 +11,20 @@
         content="Tailwind Admin & Dashboard Template"
         name="description" />
     <meta content="" name="Themesbrand" />
-    <meta http-equiv="X-UA-Compatible" content="IE=11" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- App favicon -->
     <link rel="shortcut icon" href="<?php echo URLROOT . "/assets/images/favicon.ico" ?>" />
-    
-
 
     <link rel="stylesheet" href="<?php echo URLROOT . "/assets/libs/swiper/swiper-bundle.min.css" ?>">
-
 
     <link rel="stylesheet" href="<?php echo URLROOT . "/assets/css/icons.css" ?>" />
     <link rel="stylesheet" href="<?php echo URLROOT . "/assets/css/tailwind.css" ?>" />
 
 
-
 </head>
 
 <body data-mode="light" data-sidebar-size="lg">
-
     <div class="container-fluid">
         <div class="h-screen md:overflow-hidden">
             <div class="grid grid-cols-1 md:grid-cols-12">
@@ -42,6 +37,7 @@
                                     <span class="text-xl align-middle font-medium ltr:ml-2 rtl:mr-2 dark:text-white">ورود سامانه گارانتی آک</span>
                                 </a>
                             </div>
+
                             <div class="my-auto">
                                 <div class="text-center">
                                     <h5 class="text-gray-600 dark:text-gray-100">فرم زیر را تکمیل کنید و ورود را کلیک کنید</h5>
@@ -85,6 +81,7 @@
                                         <p class="text-gray-500 dark:text-zinc-100/60">حساب کاربری ندارید؟ <a href="<?php echo URLROOT . "/auth/register" ?>" class="text-violet-500 font-semibold"> ثبت نام </a> </p>
                                     </div>
                                 </form>
+
                             </div>
                         </div>
                         <div class=" text-center">
@@ -92,9 +89,9 @@
                                     document.write(new Date().getFullYear())
                                 </script> AK WARRANTY . با احساس <i class="mdi mdi-heart text-red-400"></i> توسط YEGI ساخته شده است</p>
                         </div>
-
                     </div>
                 </div>
+
                 <div class="col-span-12 md:col-span-7 lg:col-span-8 xl:col-span-9">
                     <div class="h-screen bg-cover relative p-5" style="background-image: url('<?php echo URLROOT . "/assets/images/AK-Brand-Guide-47.jpg" ?>');">
                         <div class="absolute inset-0 bg-violet-500/90"></div>
@@ -147,6 +144,7 @@
                 </script>
 
             </div>
+        </div>
 </body>
 
 </html>

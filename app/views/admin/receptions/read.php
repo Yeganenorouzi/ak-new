@@ -2,6 +2,7 @@
 <?php require_once(APPROOT . "/views/public/sidebar.php"); ?>
 
 
+
     <div class="main-content">
         <div class="page-content dark:bg-zinc-700">
             
@@ -47,17 +48,23 @@
                                                         <label for="checkbox-all" class="sr-only">چک باکس</label>
                                                     </div>
                                                 </th>
-                                                <th scope="col" class="px-6 py-3">
+                                                <th scope="col" class="px-4 py-3">
                                                     شماره پذیرش
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    سریال دستگاه
                                                 </th>
                                                 <th scope="col" class="px-6 py-3">
                                                     مدل دستگاه
                                                 </th>
                                                 <th scope="col" class="px-6 py-3">
-                                                    سریال دستگاه 
+                                                    نام مشتری  
                                                 </th>
                                                 <th scope="col" class="px-6 py-3">
                                                     وضعیت دستگاه
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    تاریخ پذیرش
                                                 </th>
                                                 <th scope="col" class="px-6 py-3">
                                                     عملیات
@@ -65,147 +72,38 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($data as $item): ?>
-                                            <tr class="bg-white border-b border-gray-100  hover:bg-gray-50/50 dark:bg-zinc-700 dark:hover:bg-zinc-700/50 dark:border-zinc-600">
-                                                <td class="w-4 p-4">
-                                                    <div class="flex items-center">                                                        
-                                                        <input id="checkbox-all" type="checkbox" class="w-4 h-4 focus:ring-0 focus:outline-0 border-gray-100 focus:ring-offset-0 rounded dark:bg-zinc-700 dark:border-zinc-500 dark:checked:bg-violet-500">
-                                                        <label for="checkbox-all" class="sr-only">چک باکس</label>
-                                                    </div>
-                                                </td>
-                                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                    <?php echo $item->id ?>
-                                                </th>
-                                                <td class="px-6 py-4">
-                                                    <?php echo $item->serial ?>
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    لپ تاپ
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    تومان 2999
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">ویرایش</a>
-                                                </td>
-                                            </tr>
-                                            <tr class="bg-white border-b border-gray-100  hover:bg-gray-50/50 dark:bg-zinc-700 dark:hover:bg-zinc-700/50 dark:border-zinc-600">
-                                                <td class="w-4 p-4">
-                                                    <div class="flex items-center">
-                                                        <input id="checkbox-all" type="checkbox" class="w-4 h-4 focus:ring-0 focus:outline-0 border-gray-100 focus:ring-offset-0 rounded dark:bg-zinc-700 dark:border-zinc-500 dark:checked:bg-violet-500">
-                                                        <label for="checkbox-all" class="sr-only">چک باکس</label>
-                                                    </div>
-                                                </td>
-                                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                    مایکروسافت سرفیس
-                                                </th>
-                                                <td class="px-6 py-4">
-                                                    سفید
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    لپ تاپ
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    تومان 1999
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">ویرایش</a>
-                                                </td>
-                                            </tr>
-                                            <tr class="bg-white border-b border-gray-100  hover:bg-gray-50/50 dark:bg-zinc-700 dark:hover:bg-zinc-700/50 dark:border-zinc-600">
-                                                <td class="w-4 p-4">
-                                                    <div class="flex items-center">
-                                                        <input id="checkbox-all" type="checkbox" class="w-4 h-4 focus:ring-0 focus:outline-0 border-gray-100 focus:ring-offset-0 rounded dark:bg-zinc-700 dark:border-zinc-500 dark:checked:bg-violet-500">
-                                                        <label for="checkbox-all" class="sr-only">چک باکس</label>
-                                                    </div>
-                                                </td>
-                                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                    موس ریزر
-                                                </th>
-                                                <td class="px-6 py-4">
-                                                    مشکی
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    لوازم جانبی
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    تومان 99
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">ویرایش</a>
-                                                </td>
-                                            </tr>
-                                            <tr class="bg-white border-b border-gray-100  hover:bg-gray-50/50 dark:bg-zinc-700 dark:hover:bg-zinc-700/50 dark:border-zinc-600">
-                                                <td class="w-4 p-4">
-                                                    <div class="flex items-center">
-                                                        <input id="checkbox-all" type="checkbox" class="w-4 h-4 focus:ring-0 focus:outline-0 border-gray-100 focus:ring-offset-0 rounded dark:bg-zinc-700 dark:border-zinc-500 dark:checked:bg-violet-500">
-                                                        <label for="checkbox-all" class="sr-only">چک باکس</label>
-                                                    </div>
-                                                </td>
-                                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                    اپل واچ
-                                                </th>
-                                                <td class="px-6 py-4">
-                                                    خاکستری
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    لوازم جانبی
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    تومان 179
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">ویرایش</a>
-                                                </td>
-                                            </tr>
-                                            <tr class="bg-white border-b border-gray-100  hover:bg-gray-50/50 dark:bg-zinc-700 dark:hover:bg-zinc-700/50 dark:border-zinc-600">
-                                                <td class="w-4 p-4">
-                                                    <div class="flex items-center">
-                                                        <input id="checkbox-all" type="checkbox" class="w-4 h-4 focus:ring-0 focus:outline-0 border-gray-100 focus:ring-offset-0 rounded dark:bg-zinc-700 dark:border-zinc-500 dark:checked:bg-violet-500">
-                                                        <label for="checkbox-all" class="sr-only">چک باکس</label>
-                                                    </div>
-                                                </td>
-                                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                    ایپد
-                                                </th>
-                                                <td class="px-6 py-4">
-                                                    طلایی
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    تبلت
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    تومان 699
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">ویرایش</a>
-                                                </td>
-                                            </tr>
-                                            <tr class="bg-white border-b border-gray-100  hover:bg-gray-50/50 dark:bg-zinc-700 dark:hover:bg-zinc-700/50 dark:border-zinc-600">
-                                                <td class="w-4 p-4">
-                                                    <div class="flex items-center">
-                                                        <input id="checkbox-all" type="checkbox" class="w-4 h-4 focus:ring-0 focus:outline-0 border-gray-100 focus:ring-offset-0 rounded dark:bg-zinc-700 dark:border-zinc-500 dark:checked:bg-violet-500">
-                                                        <label for="checkbox-all" class="sr-only">چک باکس</label>
-                                                    </div>
-                                                </td>
-                                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                    آی مک 27 اینچ
-                                                </th>
-                                                <td class="px-6 py-4">
-                                                    خاکستری
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    کامپیوتر
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    تومان 3999
-                                                </td>
-                                                <td class="px-6 py-4">
-                                                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">ویرایش</a>
-                                                </td>
-                                            </tr>
+                                        <?php foreach ($data['receptions'] as $item): ?>
+                                            <tr class="bg-white border-b border-gray-100 hover:bg-gray-50/50 dark:bg-zinc-700 dark:hover:bg-zinc-700/50 dark:border-zinc-600">
+                                                    <td class="w-4 p-4">
+                                                        <div class="flex items-center">                                                        
+                                                            <input id="checkbox" type="checkbox" class="w-4 h-4 focus:ring-0 focus:outline-0 border-gray-100 focus:ring-offset-0 rounded dark:bg-zinc-700 dark:border-zinc-500 dark:checked:bg-violet-500">
+                                                            <label for="checkbox" class="sr-only">چک باکس</label>
+                                                        </div>
+                                                    </td>
+                                                    <th scope="row" class="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                        <?php echo $item->id; ?>
+                                                    </th>
+                                                    <td class="px-6 py-4">
+                                                        <?php echo $item->serial; ?>
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        <?php echo $item->model; ?>
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        <?php echo $item->name; ?>
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                            <?php echo $item->product_status; ?>
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        <?php echo $item->created_at?>
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        <a href="<?php echo URLROOT; ?>/admin/receptions/edit/<?php echo $item->id; ?>" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">ویرایش</a>
+                                                    </td>
+                                                </tr>
+                                            <?php endforeach; ?>
                                         </tbody>
-                                        <?php endforeach; ?>
                                     </table>
                                 </div>
                             </div>

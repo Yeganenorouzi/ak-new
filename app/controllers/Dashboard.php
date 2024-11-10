@@ -17,7 +17,6 @@ class Dashboard extends Controller{
   public function user(){
     return $this->view("user/dashboard/index");
 
-    
   }
 
 }

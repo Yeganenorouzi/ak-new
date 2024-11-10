@@ -8,8 +8,13 @@ class Receptions extends Controller
         $this->receptionsModel = $this->model("ReceptionsModel");
     }
 
-    public function index() {
-        return $this->view("admin/receptions/read");
+    public function admin() {
+        $data = [
+            "receptions" => $this->receptionsModel->getAllReceptions()
+          ];
+        return $this->view("admin/receptions/read",$data);      
     }
+
+   
 }
 

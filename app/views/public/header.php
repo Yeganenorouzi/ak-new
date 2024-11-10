@@ -100,11 +100,11 @@
             <div class="dropdown-menu absolute left-0 z-50 hidden w-72 list-none border border-gray-50 rounded bg-white shadow dark:bg-zinc-800 dark:border-zinc-600 dark:text-gray-300" aria-labelledby="dropdownMenuButton1">
               <div class="p-2">
                 <div class="grid grid-cols-3">
-                  <a class="dropdown-item hover:bg-gray-50/50 py-4 text-center dark:hover:bg-zinc-700/50 dark:hover:text-gray-50" href="https://www.google.com/">
+                  <a class="dropdown-item hover:bg-gray-50/50 py-4 text-center dark:hover:bg-zinc-700/50 dark:hover:text-gray-50" href="https://www.google.com/" target="_blank">
                     <img src="<?php echo URLROOT . "/assets/images/brands/google.png" ?>" class="mb-2 mx-auto h-6" alt="Google">
                     <span>گوگل</span>
                   </a>
-                  <a class="dropdown-item hover:bg-gray-50/50 py-4 text-center dark:hover:bg-zinc-700/50 dark:hover:text-gray-50" href="https://hamta.ntsw.ir/Account/Login?ReturnUrl=%2F">
+                  <a class="dropdown-item hover:bg-gray-50/50 py-4 text-center dark:hover:bg-zinc-700/50 dark:hover:text-gray-50" href="https://hamta.ntsw.ir/Account/Login?ReturnUrl=%2F" target="_blank">
                     <img src="<?php echo URLROOT . "/assets/images/brands/bitbucket.png" ?>" class="mb-2 mx-auto h-6" alt="Hamta">
                     <span>همتا</span>
                   </a>
@@ -215,8 +215,8 @@
         <div>
           <div class="dropdown relative ltr:mr-4 rtl:ml-4">
             <button type="button" class="flex items-center px-4 py-5 border-x border-gray-50 bg-gray-50/30 dropdown-toggle dark:bg-zinc-700 dark:border-zinc-600 dark:text-gray-100" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-              <img class="h-8 w-8 rounded-full ltr:xl:mr-2 rtl:xl:ml-2" src="<?php echo URLROOT . "/assets/images/users/avatar-1.jpg" ?>" alt="Header Avatar">
-              <span class="fw-medium hidden xl:block">فرهاد باقری</span>
+              <img class="h-8 w-8 rounded-full ltr:xl:mr-2 rtl:xl:ml-2" src="<?php echo URLROOT . "/assets/images/users/38.jpg" ?>" alt="Header Avatar">
+              <span class="fw-medium hidden xl:block"><?php echo $_SESSION['name']; ?></span>
               <i class="mdi mdi-chevron-down align-bottom hidden xl:block"></i>
             </button>
             <div class="dropdown-menu absolute top-0 ltr:-left-3 rtl:left-0 z-50 hidden w-40 list-none rounded bg-white shadow dark:bg-zinc-800" id="profile/log">

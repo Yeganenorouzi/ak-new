@@ -52,26 +52,21 @@ class AuthModel
 
 
   public function login($data)
-{
+  {
     try {
-        $this->db->query("SELECT * FROM users WHERE codemelli = :codemelli");
-        $this->db->bind(":codemelli", $data["codemelli"]);
-        $user = $this->db->fetch();
+      $this->db->query("SELECT * FROM users WHERE codemelli = :codemelli");
+      $this->db->bind(":codemelli", $data["codemelli"]);
+      $user = $this->db->fetch();
 
-        if ($user && password_verify($data["password"], $user->password)) {
-            $_SESSION['user_id'] = $user->id;
-            $_SESSION['codemelli'] = $user->codemelli;
-            $_SESSION['name'] = $user->name;
-            $_SESSION['is_admin'] = ($user->admin == 1);
-            
-            return true;
-        }
-        return false;
+      if ($user && password_verify($data["password"], $user->password)) {
+
+        return $user;
+      }
+      return false;
     } catch (Exception $e) {
-        error_log("Login error: " . $e->getMessage());
-        return false;
+      return false;
     }
-}
+  }
 
 
 

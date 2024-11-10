@@ -9,14 +9,14 @@
         <li class="menu-heading px-4 py-3.5 text-xs font-medium text-gray-500 cursor-default" data-key="t-menu">منو</li>
 
         <li>
-          <a href="index-2.html" class="pl-6 pr-4 py-3 block text-sm font-medium text-gray-700 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">
+          <a href="<?php echo URLROOT . "/dashboard/admin" ?> " class="pl-6 pr-4 py-3 block text-sm font-medium text-gray-700 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">
             <i data-feather="home"></i>
             <span data-key="t-dashboard"> داشبورد</span>
           </a>
         </li>
 
         <li>
-          <a href="<?php echo URLROOT . "/receptions/index" ?>" class="pl-6 pr-4 py-3 block text-sm font-medium text-gray-700 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">
+          <a href="<?php echo URLROOT . "/receptions/admin" ?>" class="pl-6 pr-4 py-3 block text-sm font-medium text-gray-700 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">
             <i data-feather="home"></i>
             <span data-key="t-dashboard"> پذیرش ها</span>
           </a>

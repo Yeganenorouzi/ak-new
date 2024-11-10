@@ -7,7 +7,7 @@ class Auth extends Controller
   {
     $this->authModel = $this->model("authmodel");
     if (isset($_SESSION['admin'])) {
-      header("location:" . URLROOT . "/dashboard/index");
+      header("location:" . URLROOT . "/dashboard/admin");
     }
   }
 
@@ -16,7 +16,7 @@ class Auth extends Controller
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
       $_POST = array_map('htmlspecialchars', $_POST);
       $data = [
-        "codemelli" => trim($_POST['codemelli']), 
+        "codemelli" => trim($_POST['codemelli']),
         "password" => trim($_POST['password']),
         "codemelli_err" => "",
         "password_err" => ""
@@ -30,12 +30,15 @@ class Auth extends Controller
         $data["password_err"] = "مقدار دهی کن";
       }
       if (empty($data["codemelli_err"]) && empty($data["password_err"])) {
-        if ($this->authModel->login($data)) {
-          $_SESSION['admin']=$data["codemelli"];
-          header("location:".URLROOT."/dashboard/admin");
+        $user = $this->authModel->login($data);
+        if ($user) {
+          $_SESSION['admin'] = $data["codemelli"];
+          $_SESSION['name'] = $user->name;
+          
+          header("location:" . URLROOT . "/dashboard/admin");
         } else {
           $_SESSION["login_err"] = "نام کاربری و یا کلمه عبور اشتباه می باشد";
-          header("location:".URLROOT."/auth/login");
+          header("location:" . URLROOT . "/auth/login");
         }
       } else {
         return $this->view('auth/login', $data);
@@ -186,7 +189,8 @@ class Auth extends Controller
     return is_numeric($codemelli) && strlen($codemelli) === 10;
   }
 
-  private function isValidCodeposti($codeposti) {
+  private function isValidCodeposti($codeposti)
+  {
     return preg_match('/^[1-9][0-9]{9}$/', $codeposti);
   }
 }
