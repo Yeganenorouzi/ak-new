@@ -1,8 +1,8 @@
 <?php 
 class Profile extends Controller {
-    private $userModel; 
+    private $profileModel; 
     public function __construct() {
-        $this->userModel = $this->model("UserModel");
+        $this->profileModel = $this->model("UsersModel");
     }
 
     public function index() {

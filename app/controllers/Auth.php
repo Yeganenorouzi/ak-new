@@ -33,6 +33,7 @@ class Auth extends Controller
         $user = $this->authModel->login($data);
         if ($user) {
           $_SESSION['admin'] = $data["codemelli"];
+          $_SESSION['is_admin'] = $user->admin;
           $_SESSION['name'] = $user->name;
           
           header("location:" . URLROOT . "/dashboard/admin");

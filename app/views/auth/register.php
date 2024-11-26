@@ -34,7 +34,7 @@
                     <div class="w-full bg-white xl:p-12 p-10 dark:bg-zinc-800">
                         <div class="flex h-[90vh] flex-col">
                             <div class="mx-auto">
-                                <a href="index-2.html" class="">
+                                <a href="#" class="">
                                     <img src="assets/images/logo-sm.svg" alt="" class="h-8 inline"> <span class="text-xl align-middle font-medium ltr:ml-2 rtl:mr-2 dark:text-white">ثبت نام سامانه گارانتی آک</span>
                                 </a>
                             </div>
@@ -43,7 +43,7 @@
                                     <h5 class="text-gray-600 dark:text-gray-100">فرم زیر را تکمیل کنید و ثبت نام را کلیک کنید</h5>
                                 </div>
 
-                                <form class="mt-4 pt-2" action="<?php echo URLROOT . "/auth/register" ?>" method="post">
+                                <form class="mt-4 pt-2" action="<?php echo URLROOT . "/auth/register" ?>" method="POST">
                                     <div class="mb-4">
                                         <label class="text-gray-600 font-medium mb-2 block dark:text-gray-100">ایمیل</label>
                                         <input type="text" class="w-full border-gray-100 rounded placeholder:text-sm py-2 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-gray-100 dark:placeholder:text-zinc-100/60" id="email" name="email" placeholder="ایمیل خود را وارد کنید" value="<?php echo $data["email"]; ?>">

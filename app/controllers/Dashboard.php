@@ -7,10 +7,13 @@ class Dashboard extends Controller{
       header("Location: " . URLROOT . "/auth/login");
       exit();
     }
+
   }
   public function admin(){
-    return $this->view("admin/dashboard/index");
-  
+      return $this->view("admin/dashboard/index");
+
+
+
     
   }
 
