@@ -62,26 +62,16 @@ class Users extends Controller
                 }
             }
 
-            // اعتبارسنجی
-            if (!$this->isValidCodemelli($data["codemelli"])) {
-                $errors[] = "کد ملی معتبر نیست.";
-            }
-            if (!filter_var($data["email"], FILTER_VALIDATE_EMAIL)) {
-                $errors[] = "ایمیل معتبر نیست.";
-            }
-            if (!preg_match("/^\d{11}$/", $data["mobile"])) {
-                $errors[] = "شماره موبایل باید 11 رقم باشد.";
-            }
-            if (strlen($data["password"]) < 6) {
-                $errors[] = "رمز عبور باید حداقل 6 کاراکتر باشد.";
-            }
+            $errors = $this->validateUserData($data);
 
             if (empty($errors)) {
-                if ($this->usersModel->createUser($data)) {
-                    header("location:" . URLROOT . "/users/index");
-                    exit();
-                } else {
-                    $errors[] = "خطا در ثبت اطلاعات";
+                try {
+                    if ($this->usersModel->createUser($data)) {
+                        header("location:" . URLROOT . "/users/index");
+                        exit();
+                    }
+                } catch (Exception $e) {
+                    $errors[] = $e->getMessage();
                 }
             }
         }
@@ -93,8 +83,17 @@ class Users extends Controller
         ]);
     }
 
-    private function isValidCodemelli($codemelli)
+    private function validateUserData($data)
     {
-        return is_numeric($codemelli) && strlen($codemelli) === 10;
+        $errors = [];
+        
+        if (!filter_var($data["email"], FILTER_VALIDATE_EMAIL)) {
+            $errors[] = "ایمیل معتبر نیست.";
+        }
+        if (!preg_match("/^\d{11}$/", $data["mobile"])) {
+            $errors[] = "شماره موبایل باید 11 رقم باشد.";
+        }
+
+        return $errors;
     }
 }

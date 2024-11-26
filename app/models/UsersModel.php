@@ -22,8 +22,8 @@ class UsersModel
       // هش کردن رمز عبور
       $hashedPassword = password_hash($data["password"], PASSWORD_DEFAULT);
 
-      if ($this->isDuplicateUser($data["email"], $data["mobile"])) {
-        throw new Exception("ایمیل یا شماره موبایل قبلاً ثبت شده است.");
+      if ($this->isDuplicateUser($data["email"], $data["mobile"], $data["codemelli"])) {
+        throw new Exception("ایمیل یا شماره موبایل یا کد ملی قبلاً ثبت شده است.");
       }
       if (!$this->isValidCodemelli($data["codemelli"])) {
         throw new Exception("کد ملی معتبر نیست.");
@@ -47,13 +47,28 @@ class UsersModel
     }
   }
 
-  private function isDuplicateUser($email, $mobile)
+  private function isDuplicateUser($email, $mobile, $codemelli)
   {
-    $this->db->query("SELECT * FROM `users` WHERE `email` = :email OR `mobile` = :mobile");
+    $this->db->query("SELECT email, mobile, codemelli FROM users WHERE email = :email OR mobile = :mobile OR codemelli = :codemelli");
     $this->db->bind(":email", $email);
     $this->db->bind(":mobile", $mobile);
+    $this->db->bind(":codemelli", $codemelli);
     $this->db->execute();
-    return $this->db->rowCount() > 0;
+    
+    if ($this->db->rowCount() > 0) {
+        $existingUser = $this->db->fetch();
+        if ($existingUser->email === $email) {
+            throw new Exception("این ایمیل قبلاً در سیستم ثبت شده است.");
+        }
+        if ($existingUser->mobile === $mobile) {
+            throw new Exception("این شماره موبایل قبلاً در سیستم ثبت شده است.");
+        }
+        if ($existingUser->codemelli === $codemelli) {
+            throw new Exception("این کد ملی قبلاً در سیستم ثبت شده است.");
+        }
+        return true;
+    }
+    return false;
   }
 
   private function isValidCodemelli($codemelli)

@@ -35,6 +35,24 @@
 
                     <div class="card-body">
                         <form action="<?php echo URLROOT; ?>/users/create" method="POST" enctype="multipart/form-data" class="max-w-2xl">
+                            <?php if (!empty($data['errors'])): ?>
+                                <div class="mb-6 p-4 rounded-lg bg-red-50 border border-red-200 dark:bg-red-900/20 dark:border-red-500/30">
+                                    <div class="flex items-center mb-2">
+                                        <svg class="w-5 h-5 text-red-500 dark:text-red-400 ml-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        <h3 class="text-lg font-semibold text-red-800 dark:text-red-400">لطفاً خطاهای زیر را برطرف کنید:</h3>
+                                    </div>
+                                    <ul class="list-disc list-inside space-y-1">
+                                        <?php foreach ($data['errors'] as $error): ?>
+                                            <li class="text-red-600 dark:text-red-400 text-sm">
+                                                <?php echo htmlspecialchars($error); ?>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </div>
+                            <?php endif; ?>
+
                             <div class="grid grid-cols-8 gap-5 mx-5">
                                 <div class="col-span-8 ">
                                     <div class="mb-4">
@@ -128,7 +146,19 @@
 
             </div>
 
-            
+            <!-- Modal -->
+            <div id="successModal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+                <div class="bg-white rounded-lg shadow-lg dark:bg-zinc-700 p-5 max-w-md w-full">
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3">عملیات موفق</h3>
+                    <p class="text-gray-700 dark:text-gray-300">اطلاعات کاربر با موفقیت ثبت شد.</p>
+                    <div class="mt-5 text-right">
+                        <button id="closeModal" class="bg-violet-500 text-white px-4 py-2 rounded hover:bg-violet-600">
+                            مشاهده لیست کاربران
+                        </button>
+                    </div>
+                </div>
+            </div>
+
 
 
 
@@ -158,4 +188,4 @@
                     }
                 }
             </script>
-            
+           
