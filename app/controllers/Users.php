@@ -49,7 +49,7 @@ class Users extends Controller
                 } else {
                     $fileName = time() . '_' . $_FILES['image']['name'];
                     $uploadPath = 'uploads/users/' . $fileName;
-                    
+
                     if (!is_dir('uploads/users')) {
                         mkdir('uploads/users', 0777, true);
                     }
@@ -86,7 +86,7 @@ class Users extends Controller
     private function validateUserData($data)
     {
         $errors = [];
-        
+
         if (!filter_var($data["email"], FILTER_VALIDATE_EMAIL)) {
             $errors[] = "ایمیل معتبر نیست.";
         }
@@ -95,5 +95,81 @@ class Users extends Controller
         }
 
         return $errors;
+    }
+
+    public function indexAgents()
+    {
+        $data = [
+            "agents" => $this->usersModel->getAllAgents()
+        ];
+        return $this->view("admin/agents/read", $data);
+    }
+
+    public function createAgent()
+    {
+        $errors = [];
+        $data = [
+            "codemelli" => '',
+            "mobile" => '',
+            "email" => '',
+            "name" => '',
+            "avatar" => ''
+        ];
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $data = [
+                "codemelli" => $_POST["codemelli"],
+                "mobile" => $_POST["mobile"],
+                "email" => $_POST["email"],
+                "password" => $_POST["password"],
+                "name" => $_POST["name"],
+                "avatar" => ''
+            ];
+
+            // بررسی و آپلود تصویر
+            if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+                $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+                $maxSize = 5 * 1024 * 1024; // 5MB
+
+                if (!in_array($_FILES['image']['type'], $allowedTypes)) {
+                    $errors[] = "فقط فایل‌های JPG و PNG مجاز هستند.";
+                } elseif ($_FILES['image']['size'] > $maxSize) {
+                    $errors[] = "حجم فایل نباید بیشتر از 5 مگابایت باشد.";
+                } else {
+                    $fileName = time() . '_' . $_FILES['image']['name'];
+                    $uploadPath = 'uploads/users/' . $fileName;
+
+                    if (!is_dir('uploads/users')) {
+                        mkdir('uploads/users', 0777, true);
+                    }
+
+                    if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath)) {
+                        $data['avatar'] = $fileName;
+                    } else {
+                        $errors[] = "خطا در آپلود فایل.";
+                    }
+                }
+            }
+
+            $errors = $this->validateUserData($data);
+
+            if (empty($errors)) {
+                try {
+                    if ($this->usersModel->createAgent($data)) {
+                        header("location:" . URLROOT . "/users/indexAgents");
+
+                        exit();
+                    }
+                } catch (Exception $e) {
+                    $errors[] = $e->getMessage();
+                }
+            }
+        }
+
+        // ارسال هم خطاها و هم داده‌های فرم به view
+        $this->view("admin/agents/create", [
+            "errors" => $errors,
+            "data" => $data
+        ]);
     }
 }

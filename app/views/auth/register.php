@@ -123,7 +123,8 @@
                                             </div>
                                         </div>
                                         <div class="flex">
-                                            <select class="w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-gray-100" id="ostan" name="ostan">
+                                            <select class="w-full px-3 py-2 bg-white border border-gray-100 text-sm rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-gray-100" id="ostan" name="ostan">
+                                                
                                                 <option value="" class="py-2">استان خود را انتخاب کنید</option>
                                                 <option value="آذربایجان شرقی" <?php echo ($data["ostan"] == "آذربایجان شرقی") ? 'selected' : ''; ?> class="py-2">آذربایجان شرقی</option>
                                                 <option value="آذربایجان غربی" <?php echo ($data["ostan"] == "آذربایجان غربی") ? 'selected' : ''; ?> class="py-2">آذربایجان غربی</option>
@@ -173,7 +174,7 @@
                                             </div>
                                         </div>
                                         <div class="flex">
-                                            <select class="w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-gray-100" id="shahr" name="shahr">
+                                            <select class="w-full px-3 py-2 bg-white border text-sm border-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-gray-100" id="shahr" name="shahr">
                                                 <option value="">شهر خود را انتخاب کنید</option>
                                             </select>
                                         </div>
@@ -275,8 +276,9 @@
                     </div>
                 </div>
                 <div class="col-span-12 md:col-span-7 lg:col-span-8 xl:col-span-9">
-                    <div class="h-screen bg-cover relative p-5 bg-[url('../images/auth-bg.jpg')]">
+                    <div class="h-screen bg-cover relative p-5" style="background-image: url('<?php echo URLROOT . "/assets/images/AK-Brand-Guide-47.jpg" ?>');">
                         <div class="absolute inset-0 bg-violet-500/90"></div>
+
 
                         <ul class="bg-bubbles absolute top-0 left-0 w-full h-full overflow-hidden animate-square">
                             <li class="h-10 w-10 rounded-3xl bg-white/10 absolute left-[10%] "></li>

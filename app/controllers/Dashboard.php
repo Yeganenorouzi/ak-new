@@ -17,8 +17,8 @@ class Dashboard extends Controller{
     
   }
 
-  public function user(){
-    return $this->view("user/dashboard/index");
+  public function agent(){
+    return $this->view("agent/dashboard/index");
 
   }
 

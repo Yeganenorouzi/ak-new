@@ -36,7 +36,11 @@ class Auth extends Controller
           $_SESSION['is_admin'] = $user->admin;
           $_SESSION['name'] = $user->name;
           
-          header("location:" . URLROOT . "/dashboard/admin");
+          if ($user->admin == 1) {
+            header("location:" . URLROOT . "/dashboard/admin");
+          } else {
+            header("location:" . URLROOT . "/dashboard/agent");
+          }
         } else {
           $_SESSION["login_err"] = "نام کاربری و یا کلمه عبور اشتباه می باشد";
           header("location:" . URLROOT . "/auth/login");

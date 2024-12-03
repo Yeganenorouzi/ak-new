@@ -43,10 +43,10 @@
           </a>
           <ul>
             <li>
-              <a href="starter.html" class="pr-14 pl-4 py-2 block text-[13.5px] font-medium text-gray-700 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">لیست نمایندگان </a>
+              <a href="<?php echo URLROOT . "/users/indexAgents" ?> " class="pr-14 pl-4 py-2 block text-[13.5px] font-medium text-gray-700 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">لیست نمایندگان </a>
             </li>
             <li>
-              <a href="maintenance.html" class="pr-14 pl-4 py-2 block text-[13.5px] font-medium text-gray-700 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">افزودن نماینده جدید</a>
+              <a href="<?php echo URLROOT . "/users/createAgent" ?> " class="pr-14 pl-4 py-2 block text-[13.5px] font-medium text-gray-700 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">افزودن نماینده جدید</a>
             </li>
             
           </ul>

@@ -12,7 +12,13 @@ class UsersModel
 
   public function getAllUsers()
   {
-    $this->db->query("SELECT * FROM users");
+    $this->db->query("SELECT * FROM users WHERE admin = 1");
+    return $this->db->fetchAll();
+  }
+
+  public function getAllAgents()
+  {
+    $this->db->query("SELECT * FROM users WHERE admin = 0");
     return $this->db->fetchAll();
   }
 
@@ -30,8 +36,40 @@ class UsersModel
       }
 
       $this->db->query(
-        "INSERT INTO users (codemelli, mobile, email, password, name, avatar)
-         VALUES (:codemelli, :mobile, :email, :password, :name, :avatar)"
+        "INSERT INTO users (codemelli, mobile, email, password, name, avatar, admin)
+         VALUES (:codemelli, :mobile, :email, :password, :name, :avatar, 1)"
+      );
+
+      $this->db->bind(":codemelli", trim($data["codemelli"]));
+      $this->db->bind(":mobile", trim($data["mobile"]));
+      $this->db->bind(":email", filter_var($data["email"], FILTER_VALIDATE_EMAIL));
+      $this->db->bind(":password", $hashedPassword);
+      $this->db->bind(":name", trim($data["name"]));
+      $this->db->bind(":avatar", $data["avatar"]);
+
+      return $this->db->execute();
+    } catch (Exception $e) {
+      throw $e;
+    }
+  }
+
+
+  public function createAgent($data)
+  {
+    try {
+      // هش کردن رمز عبور
+      $hashedPassword = password_hash($data["password"], PASSWORD_DEFAULT);
+
+      if ($this->isDuplicateUser($data["email"], $data["mobile"], $data["codemelli"])) {
+        throw new Exception("ایمیل یا شماره موبایل یا کد ملی قبلاً ثبت شده است.");
+      }
+      if (!$this->isValidCodemelli($data["codemelli"])) {
+        throw new Exception("کد ملی معتبر نیست.");
+      }
+
+      $this->db->query(
+        "INSERT INTO users (codemelli, mobile, email, password, name, avatar, admin)
+         VALUES (:codemelli, :mobile, :email, :password, :name, :avatar, 0)"
       );
 
       $this->db->bind(":codemelli", trim($data["codemelli"]));

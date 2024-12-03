@@ -19,13 +19,13 @@
   <link rel="shortcut icon" href="<?php echo URLROOT . "/assets/images/favicon.ico" ?>" />
 
   <!-- alertifyjs Css -->
-        <link href="assets/libs/alertifyjs/build/css/alertify.min.css" rel="stylesheet" type="text/css" />
+  <link href="assets/libs/alertifyjs/build/css/alertify.min.css" rel="stylesheet" type="text/css" />
 
-        <!-- alertifyjs default themes  Css -->
-        <link href="assets/libs/alertifyjs/build/css/themes/default.min.css" rel="stylesheet" type="text/css" />
-        
-        <!-- datepicker css -->
-        <link rel="stylesheet" href="assets/libs/flatpickr/flatpickr.min.css">
+  <!-- alertifyjs default themes  Css -->
+  <link href="assets/libs/alertifyjs/build/css/themes/default.min.css" rel="stylesheet" type="text/css" />
+
+  <!-- datepicker css -->
+  <link rel="stylesheet" href="<?php echo URLROOT . "/assets/libs/flatpickr/flatpickr.min.css" ?>">
 
   <link href="<?php echo URLROOT . "/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css" ?>" rel="stylesheet" type="text/css">
 
@@ -33,7 +33,7 @@
 
   <link rel="stylesheet" href="<?php echo URLROOT . "/assets/css/icons.css" ?>" />
   <link rel="stylesheet" href="<?php echo URLROOT . "/assets/css/tailwind.css" ?>" />
-  
+
 
 
 
@@ -84,7 +84,7 @@
             </div>
           </div>
         </div>
-        
+
         <!--  Darkmode -->
         <div>
           <button type="button" class="light-dark-mode text-xl px-4 h-[70px] text-gray-600 dark:text-gray-100 hidden sm:block ">
