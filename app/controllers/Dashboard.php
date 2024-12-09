@@ -1,5 +1,9 @@
-<?php 
-class Dashboard extends Controller{
+<?php
+class Dashboard extends Controller
+{
+  private $receptionsModel;
+  private $cardsModel;
+
 
   public function __construct()
   {
@@ -7,19 +11,25 @@ class Dashboard extends Controller{
       header("Location: " . URLROOT . "/auth/login");
       exit();
     }
-
-  }
-  public function admin(){
-      return $this->view("admin/dashboard/index");
-
-
-
+    $this->receptionsModel = $this->model("ReceptionsModel");
+    $this->cardsModel = $this->model("CardsModel");
     
   }
-
-  public function agent(){
-    return $this->view("agent/dashboard/index");
-
+  public function admin()
+  {
+   
+    $data = [
+      'total_receptions' => $this->receptionsModel->getTotalReceptions(),
+      'total_cards' => $this->cardsModel->getTotalCards()
+    ];
+    return $this->view("admin/dashboard/index",$data);
   }
 
+  public function agent()
+  {
+    $data = [
+      'total_receptions_by_agent' => $this->receptionsModel->getTotalReceptionsByAgent()
+    ];
+    return $this->view("agent/dashboard/index",$data);
+  }
 }

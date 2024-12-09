@@ -35,11 +35,11 @@
         <div class="grid grid-cols-4 gap-6 mb-8">
           <div class="bg-white rounded-lg shadow p-6 text-center">
             <h3 class="text-lg font-semibold">تعداد کل پذیرش ها</h3>
-            <p class="text-2xl font-bold text-blue-600 mt-2">150</p>
+            <p class="text-2xl font-bold text-blue-600 mt-2"><?php echo $data['total_receptions']; ?></p>
           </div>
           <div class="bg-white rounded-lg shadow p-6 text-center">
-            <h3 class="text-lg font-semibold">گوشی‌های در انتظار بررسی</h3>
-            <p class="text-2xl font-bold text-yellow-600 mt-2">۴۵</p>
+            <h3 class="text-lg font-semibold"> تعداد کل کارت گارانتی ها </h3>
+            <p class="text-2xl font-bold text-yellow-600 mt-2"><?php echo $data['total_cards']; ?></p>
           </div>
           <div class="bg-white rounded-lg shadow p-6 text-center">
             <h3 class="text-lg font-semibold">گوشی‌های تعمیر شده</h3>
