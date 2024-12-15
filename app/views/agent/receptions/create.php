@@ -73,33 +73,17 @@
                                             <div class="mb-3">
                                                 <label class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">استان</label>
                                                 <select class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
-                                                    name="ostan"
-                                                    value="<?php echo htmlspecialchars($data['ostan'] ?? ''); ?>"
-                                                    required>
-                                                    <option>انتخاب</option>
-                                                    <option>تهران</option>
-                                                    <option>اصفهان</option>
-                                                    <option>فارس</option>
-                                                    <option>خراسان رضوی</option>
-                                                    <option>آذربایجان شرقی</option>
-                                                    <option>کرمان</option>
-                                                    <option>مازندران</option>
-                                                    <option>گیلان</option>
-                                                    <option>هرمزگان</option>
-                                                    <option>لرستان</option>
-                                                    <option>سیستان و بلوچستان</option>
-                                                    <option>کهگیلویه و بویراحمد</option>
-                                                    <option>زنجان</option>
-                                                    <option>قم</option>
-                                                    <option>سمنان</option>
-                                                    <option>بوشهر</option>
-                                                    <option>چهارمحال و بختیاری</option>
-                                                    <option>ایلام</option>
-                                                    <option>خوزستان</option>
-                                                    <option>کردستان</option>
-                                                    <option>مرکزی</option>
-                                                    <option>البرز</option>
-                                                    <option>قم</option>
+                                                    name="ostan" id="province-select" required>
+                                                    <option value="">انتخاب استان</option>
+                                                    <?php 
+                                                    foreach (ProvinceHelper::getProvinces() as $province): 
+                                                    ?>
+                                                        <option value="<?php echo $province; ?>" <?php echo (isset($data['ostan']) && $data['ostan'] === $province) ? 'selected' : ''; ?>>
+                                                            <?php echo $province; ?>
+                                                        </option>
+                                                    <?php 
+                                                    endforeach; 
+                                                    ?>
                                                 </select>
                                             </div>
                                         </div>
@@ -108,33 +92,19 @@
                                             <div class="mb-3">
                                                 <label class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">شهر</label>
                                                 <select class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
-                                                    name="shahr"
-                                                    value="<?php echo htmlspecialchars($data['shahr'] ?? ''); ?>"
-                                                    required>
-                                                    <option>انتخاب</option>
-                                                    <option>تهران</option>
-                                                    <option>اصفهان</option>
-                                                    <option>فارس</option>
-                                                    <option>خراسان رضوی</option>
-                                                    <option>آذربایجان شرقی</option>
-                                                    <option>کرمان</option>
-                                                    <option>مازندران</option>
-                                                    <option>گیلان</option>
-                                                    <option>هرمزگان</option>
-                                                    <option>لرستان</option>
-                                                    <option>سیستان و بلوچستان</option>
-                                                    <option>کهگیلویه و بویراحمد</option>
-                                                    <option>زنجان</option>
-                                                    <option>قم</option>
-                                                    <option>سمنان</option>
-                                                    <option>بوشهر</option>
-                                                    <option>چهارمحال و بختیاری</option>
-                                                    <option>ایلام</option>
-                                                    <option>خوزستان</option>
-                                                    <option>کردستان</option>
-                                                    <option>مرکزی</option>
-                                                    <option>البرز</option>
-                                                    <option>قم</option>
+                                                    name="shahr" required>
+                                                    <option value="">انتخاب شهر</option>
+                                                    <?php 
+                                                    foreach (ProvinceHelper::getCities() as $province => $cities): 
+                                                        foreach ($cities as $city):
+                                                    ?>
+                                                        <option value="<?php echo $city; ?>" <?php echo (isset($data['shahr']) && $data['shahr'] === $city) ? 'selected' : ''; ?>>
+                                                            <?php echo $city; ?>
+                                                        </option>
+                                                    <?php 
+                                                        endforeach;
+                                                    endforeach; 
+                                                    ?>
                                                 </select>
                                             </div>
                                         </div>
@@ -145,14 +115,22 @@
                                     </div>
                                     <div class="col-span-12 lg:col-span-6">
                                         <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">کدملی</label>
-                                            <input
-                                                class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
-                                                type="text"
-                                                id="example-date-input"
-                                                name="codemelli"
-                                                value="<?php echo htmlspecialchars($data['codemelli'] ?? ''); ?>"
-                                                required>
+                                            <label for="codemelli" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">کدملی</label>
+                                            <div class="relative">
+                                                <input
+                                                    class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100 pr-[90px]"
+                                                    type="text"
+                                                    id="codemelli"
+                                                    name="codemelli"
+                                                    value="<?php echo htmlspecialchars($data['codemelli'] ?? ''); ?>"
+                                                    required>
+                                                <button 
+                                                    type="button" 
+                                                    class="btn absolute left-0 top-0 h-full px-3 text-white bg-violet-500 border-violet-500 hover:bg-violet-600 hover:border-violet-600 focus:bg-violet-600 focus:border-violet-600 focus:ring focus:ring-violet-500/30 active:bg-violet-600 active:border-violet-600 rounded-l" 
+                                                    id="search-button">
+                                                    استعلام
+                                                </button>
+                                            </div>
                                         </div>
                                         <div class="mb-4">
                                             <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">شماره پاسپورت</label>
@@ -162,7 +140,7 @@
                                                 id="example-date-input"
                                                 name="passport"
                                                 value="<?php echo htmlspecialchars($data['passport'] ?? ''); ?>"
-                                                required>
+                                                >
                                         </div>
                                         <div class="mb-4">
                                             <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">کد پستی</label>
@@ -170,8 +148,8 @@
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                                 type="text"
                                                 id="example-date-input"
-                                                name="code_posti"
-                                                value="<?php echo htmlspecialchars($data['code_posti'] ?? ''); ?>"
+                                                name="codeposti"
+                                                value="<?php echo htmlspecialchars($data['codeposti'] ?? ''); ?>"
                                                 required>
                                         </div>
 
@@ -515,3 +493,103 @@
         }
     }
 </script>
+
+<script>
+    document.getElementById('search-button').addEventListener('click', function() {
+        const codemelli = document.getElementById('codemelli').value;
+        
+        fetch('<?php echo URLROOT; ?>/customers/searchOrCreate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `codemelli=${encodeURIComponent(codemelli)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'found') {
+                // پر کردن سایر فیلدها
+                document.querySelector('[name="name"]').value = data.data.name;
+                document.querySelector('[name="mobile"]').value = data.data.mobile;
+                document.querySelector('[name="phone"]').value = data.data.phone;
+                document.querySelector('[name="address"]').value = data.data.address;
+                document.querySelector('[name="codeposti"]').value = data.data.codeposti;
+                document.querySelector('[name="passport"]').value = data.data.passport;
+                
+                // ست کردن استان
+                const provinceSelect = document.querySelector('[name="ostan"]');
+                provinceSelect.value = data.data.ostan;
+                
+                // تریگر کردن رویداد change برای لود شدن شهرها
+                const event = new Event('change');
+                provinceSelect.dispatchEvent(event);
+                
+                // کمی تاخیر برای اطمینان از لود شدن شهرها و سپس ست کردن شهر
+                setTimeout(() => {
+                    const citySelect = document.querySelector('[name="shahr"]');
+                    citySelect.value = data.data.shahr;
+                }, 100);
+
+            } else if (data.status === 'not_found') {
+                alert('کد ملی در سیستم نیست. لطفاً اطلاعات را وارد کنید.');
+                // پاک کردن فیلدها
+                document.querySelector('[name="name"]').value = '';
+                document.querySelector('[name="mobile"]').value = '';
+                document.querySelector('[name="phone"]').value = '';
+                document.querySelector('[name="ostan"]').value = '';
+                document.querySelector('[name="shahr"]').value = '';
+                document.querySelector('[name="address"]').value = '';
+                document.querySelector('[name="codeposti"]').value = '';
+                document.querySelector('[name="passport"]').value = '';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('خطا در برقراری ارتباط با سرور');
+        });
+    });
+
+    document.getElementById('customer-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        fetch('controller.php?action=createCustomer', {
+                method: 'POST',
+                body: new URLSearchParams(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'created') {
+                    alert('مشتری با موفقیت ایجاد شد.');
+                } else {
+                    alert('خطا در ذخیره اطلاعات.');
+                }
+            });
+    });
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const provinceSelect = document.querySelector('select[name="ostan"]');
+    const citySelect = document.querySelector('select[name="shahr"]');
+    const cities = <?php echo json_encode(ProvinceHelper::getCities()); ?>;
+
+    provinceSelect.addEventListener('change', function() {
+        const selectedProvince = this.value;
+        citySelect.innerHTML = '<option value="">انتخاب شهر</option>';
+
+        if (cities[selectedProvince]) {
+            cities[selectedProvince].forEach(city => {
+                const option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                citySelect.appendChild(option);
+            });
+        }
+    });
+});
+</script>
+
+
+
