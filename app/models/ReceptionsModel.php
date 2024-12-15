@@ -27,7 +27,8 @@ class ReceptionsModel
     return $result->total;  // دسترسی به مقدار total از شیء نتیجه
   }
 
-  public function getTotalReceptionsByAgent(){
+  public function getTotalReceptionsByAgent()
+  {
     $this->db->query("SELECT COUNT(*) AS total FROM receptions WHERE user_id = :user_id");
     $this->db->bind(":user_id", $_SESSION["user_id"]);
     $result = $this->db->fetch();
@@ -49,45 +50,50 @@ class ReceptionsModel
 
   public function createReception($data)
   {
-    try {
+    // فرض می‌کنیم مقدارها از فرم دریافت شده‌اند
+    $serial = $data['serial'];
+    $codemelli = $data['codemelli'];
 
 
-      // آماده‌سازی کوئری SQL
-      $this->db->query(
-        "INSERT INTO receptions (
-                serial,activation_start_date, guarantee_status, 
-                problem, situation, accessories, estimated_time, estimated_cost, 
-                paziresh_status, file1, file2, file3
-               
-            ) VALUES (
-                :serial, :activation_start_date, :guarantee_status, 
-                :problem, :situation, :accessories, :estimated_time, :estimated_cost, 
-                :paziresh_status, :file1, :file2, :file3
-            )"
-      );
+    // Step 1: گرفتن serials_id
+    $querySerial = $this->db->query("SELECT id FROM serials WHERE serial = :serial");
+    $this->db->bind(':serial', $serial);
+    $serial = $this->db->fetch();
 
-      // مقداردهی مقادیر برای بایند کردن
-      $this->db->bind(":serial", trim($data["serial"]));
-      $this->db->bind(":activation_start_date", $data["activation_start_date"] ?? null);
-      $this->db->bind(":guarantee_status", $data["guarantee_status"] ?? null);
-      $this->db->bind(":problem", $data["problem"] ?? null);
-      $this->db->bind(":situation", $data["situation"] ?? null);
-      $this->db->bind(":accessories", $data["accessories"] ?? null);
-      $this->db->bind(":estimated_time", $data["estimated_time"] ?? null);
-      $this->db->bind(":estimated_cost", $data["estimated_cost"] ?? null);
-      $this->db->bind(":paziresh_status", isset($data["paziresh_status"]) ? (bool)$data["paziresh_status"] : false);
-      $this->db->bind(":file1", $data["file1"] ?? null);
-      $this->db->bind(":file2", $data["file2"] ?? null);
-      $this->db->bind(":file3", $data["file3"] ?? null);
-      $this->db->bind(":created_at", date('Y-m-d H:i:s'));
-      $this->db->bind(":updated_at", date('Y-m-d H:i:s'));
-
-      // اجرای کوئری
-      return $this->db->execute();
-    } catch (Exception $e) {
-      throw $e;
+    if (!$serial) {
+      die('سریال وارد شده معتبر نیست');
     }
+
+    // Step 2: گرفتن customers_id
+    $queryCustomer = $this->db->query("SELECT id FROM customers WHERE codemelli = :codemelli");
+    $this->db->bind(':codemelli', $codemelli);
+    $customer = $this->db->fetch();
+
+    if (!$customer) {
+      die('کد ملی وارد شده معتبر نیست');
+    }
+
+    // Step 4: ایجاد رکورد در reception
+    $queryInsert = $this->db->query("INSERT INTO receptions (serial ,serial_id, customer_id,user_id, activation_start_date, 	guarantee_status, problem, situation ,accessories ,dex,estimated_time,estimated_cost	,paziresh_status,created_at) 
+                                 VALUES (:serial, :serials_id, :customers_id, :user_id, :activation_start_date, :guarantee_status, :problem, :situation , :accessories , :dex, :estimated_time, :estimated_cost, :paziresh_status, NOW())");
+    $this->db->bind(':serial', $data['serial']);
+    $this->db->bind(':serials_id', $serial['id']);
+    $this->db->bind(':customers_id', $customer['id']);
+    $this->db->bind(':user_id', $_SESSION['id']);
+    $this->db->bind(':activation_start_date', $data['activation_start_date']);
+    $this->db->bind(':guarantee_status', $data['guarantee_status']);
+    $this->db->bind(':problem', $data['problem']);
+    $this->db->bind(':situation', $data['situation']);
+    $this->db->bind(':accessories', $data['accessories']);
+    $this->db->bind(':dex', $data['dex']);
+    $this->db->bind(':estimated_time', $data['estimated_time']);
+    $this->db->bind(':estimated_cost', $data['estimated_cost']);
+    $this->db->bind(':paziresh_status', $data['paziresh_status']);
+    $this->db->execute();
+
+    echo "رکورد جدید با موفقیت ثبت شد!";
   }
+
 
   public function getSerialIdBySerial($serial)
   {

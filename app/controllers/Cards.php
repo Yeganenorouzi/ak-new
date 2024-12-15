@@ -22,7 +22,6 @@ class Cards extends Controller
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $serial = $_POST['serial'];
 
-            // Search for national code in the database
             $card = $this->cardModel->getCardBySerial($serial);
 
             if ($card) {

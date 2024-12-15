@@ -178,15 +178,23 @@
                             <div class="card-body">
                                 <div class="grid grid-cols-12 gap-5">
                                     <div class="col-span-12 lg:col-span-6">
-                                        <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">سریال اول دستگاه</label>
-                                            <input
-                                                class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
-                                                type="text"
-                                                id="example-text-input"
-                                                name="serial"
-                                                value="<?php echo htmlspecialchars($data['serial'] ?? ''); ?>"
-                                                required>
+                                    <div class="mb-4">
+                                            <label for="serial" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">سریال</label>
+                                            <div class="relative">
+                                                <input
+                                                    class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100 pr-[90px]"
+                                                    type="text"
+                                                    id="serial"
+                                                    name="serial"
+                                                    value="<?php echo htmlspecialchars($data['serial'] ?? ''); ?>"
+                                                    required>
+                                                <button 
+                                                    type="button" 
+                                                    class="btn absolute left-0 top-0 h-full px-3 text-white bg-violet-500 border-violet-500 hover:bg-violet-600 hover:border-violet-600 focus:bg-violet-600 focus:border-violet-600 focus:ring focus:ring-violet-500/30 active:bg-violet-600 active:border-violet-600 rounded-l" 
+                                                    id="search-button-2">
+                                                    استعلام
+                                                </button>
+                                            </div>
                                         </div>
 
                                         <div class="mb-4">
@@ -194,6 +202,7 @@
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
                                                 type="text"
+                                                name="model"
                                                 id="example-text-input">
                                         </div>
                                         <div class="mb-4">
@@ -201,6 +210,7 @@
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
                                                 type="text"
+                                                name="att1_code"
                                                 id="example-text-input">
                                         </div>
 
@@ -209,6 +219,7 @@
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
                                                 type="text"
+                                                name="att3_code"
                                                 id="example-text-input">
                                         </div>
 
@@ -217,6 +228,7 @@
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
                                                 type="text"
+                                                name="company"
                                                 id="example-text-input">
                                         </div>
                                         <div class="mb-4">
@@ -224,6 +236,7 @@
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
                                                 type="text"
+                                                name="start_guarantee"
                                                 id="example-text-input">
                                         </div>
 
@@ -235,6 +248,7 @@
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
                                                 type="text"
+                                                name="serial2"
                                                 id="example-text-input">
                                         </div>
                                         <div class="mb-4">
@@ -242,6 +256,7 @@
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
                                                 type="text"
+                                                name="title"
                                                 id="example-text-input">
                                         </div>
                                         <div class="mb-4">
@@ -249,6 +264,7 @@
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
                                                 type="text"
+                                                name="att2_code"
                                                 id="example-text-input">
                                         </div>
 
@@ -257,6 +273,7 @@
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
                                                 type="text"
+                                                name="att4_code"
                                                 id="example-text-input">
                                         </div>
                                         <div class="mb-4">
@@ -264,6 +281,7 @@
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
                                                 type="text"
+                                                name="sh_sanad"
                                                 id="example-text-input">
                                         </div>
                                         <div class="mb-4">
@@ -271,11 +289,9 @@
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
                                                 type="text"
+                                                name="expite_guarantee"
                                                 id="example-text-input">
-                                        </div>
-
-
-
+                                        </div>            
                                     </div>
                                 </div>
                             </div>
@@ -297,8 +313,8 @@
                                             <select class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100" name="paziresh_status" required
                                                 value="<?php echo htmlspecialchars($data['paziresh_status'] ?? ''); ?>">
                                                 <option>انتخاب</option>
-                                                <option> پذیرش حضوری</option>
-                                                <option> پذیرش غیرحضوری</option>
+                                                <option value="1"> پذیرش حضوری</option>
+                                                <option value="0"> پذیرش غیرحضوری</option>
                                             </select>
                                         </div>
                                     </div>
@@ -589,6 +605,79 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+</script>
+
+
+<script>
+    document.getElementById('search-button-2').addEventListener('click', function() {
+        const serial = document.getElementById('serial').value;
+        
+        fetch('<?php echo URLROOT; ?>/cards/searchOrCreate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `serial=${encodeURIComponent(serial)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'found') {
+                // پر کردن سایر فیلدها
+                document.querySelector('[name="serial"]').value = data.data.serial;
+                document.querySelector('[name="serial2"]').value = data.data.serial2;
+                document.querySelector('[name="model"]').value = data.data.model;
+                document.querySelector('[name="title"]').value = data.data.title;
+                document.querySelector('[name="att1_code"]').value = data.data.att1_code;
+                document.querySelector('[name="att2_code"]').value = data.data.att2_code;
+                document.querySelector('[name="att3_code"]').value = data.data.att3_code;
+                document.querySelector('[name="att4_code"]').value = data.data.att4_code;
+                document.querySelector('[name="company"]').value = data.data.company;
+                document.querySelector('[name="sh_sanad"]').value = data.data.sh_sanad;
+                document.querySelector('[name="start_guarantee"]').value = data.data.start_guarantee;
+                document.querySelector('[name="expite_guarantee"]').value = data.data.expite_guarantee;
+            
+
+            } else if (data.status === 'not_found') {
+                alert('سریال در سیستم نیست. لطفاً اطلاعات را وارد کنید.');
+                // پاک کردن فیلدها
+                document.querySelector('[name="serial"]').value = '';
+                document.querySelector('[name="serial2"]').value = '';
+                document.querySelector('[name="model"]').value = '';
+                document.querySelector('[name="title"]').value = '';
+                document.querySelector('[name="att1_code"]').value = '';
+                document.querySelector('[name="att2_code"]').value = '';
+                document.querySelector('[name="att3_code"]').value = '';
+                document.querySelector('[name="att4_code"]').value = '';
+                document.querySelector('[name="company"]').value = '';
+                document.querySelector('[name="sh_sanad"]').value = '';
+                document.querySelector('[name="start_guarantee"]').value = '';
+                document.querySelector('[name="expite_guarantee"]').value = '';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('خطا در برقراری ارتباط با سرور');
+        });
+    });
+
+    document.getElementById('customer-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        fetch('controller.php?action=createCard', {
+                method: 'POST',
+                body: new URLSearchParams(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'created') {
+                    alert('کارت با موفقیت ایجاد شد.');
+                } else {
+                    alert('خطا در ذخیره اطلاعات.');
+                }
+            });
+    });
 </script>
 
 

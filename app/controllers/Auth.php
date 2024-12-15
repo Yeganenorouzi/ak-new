@@ -36,7 +36,7 @@ class Auth extends Controller
           $_SESSION['user_codemelli'] = $data["codemelli"];
           $_SESSION['is_admin'] = $user->admin;
           $_SESSION['name'] = $user->name;
-          
+          $_SESSION['id'] = $user->id;
           if ($user->admin == 1) {
             header("location:" . URLROOT . "/dashboard/admin");
           } else {
