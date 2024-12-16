@@ -35,4 +35,13 @@ class CustomersModel{
 
         return $this->db->execute();
     }
+
+    public function getAllCustomersByAgent(){
+        $this->db->query("SELECT DISTINCT customers .* 
+                          FROM customers 
+                          INNER JOIN receptions ON receptions.customer_id = customers.id 
+                          WHERE receptions.user_id = :user_id");
+        $this->db->bind(':user_id', $_SESSION['id']);
+        return $this->db->fetchAll();
+    }
 }

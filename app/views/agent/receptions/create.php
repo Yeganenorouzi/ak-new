@@ -75,14 +75,14 @@
                                                 <select class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
                                                     name="ostan" id="province-select" required>
                                                     <option value="">انتخاب استان</option>
-                                                    <?php 
-                                                    foreach (ProvinceHelper::getProvinces() as $province): 
+                                                    <?php
+                                                    foreach (ProvinceHelper::getProvinces() as $province):
                                                     ?>
                                                         <option value="<?php echo $province; ?>" <?php echo (isset($data['ostan']) && $data['ostan'] === $province) ? 'selected' : ''; ?>>
                                                             <?php echo $province; ?>
                                                         </option>
-                                                    <?php 
-                                                    endforeach; 
+                                                    <?php
+                                                    endforeach;
                                                     ?>
                                                 </select>
                                             </div>
@@ -94,16 +94,16 @@
                                                 <select class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
                                                     name="shahr" required>
                                                     <option value="">انتخاب شهر</option>
-                                                    <?php 
-                                                    foreach (ProvinceHelper::getCities() as $province => $cities): 
+                                                    <?php
+                                                    foreach (ProvinceHelper::getCities() as $province => $cities):
                                                         foreach ($cities as $city):
                                                     ?>
-                                                        <option value="<?php echo $city; ?>" <?php echo (isset($data['shahr']) && $data['shahr'] === $city) ? 'selected' : ''; ?>>
-                                                            <?php echo $city; ?>
-                                                        </option>
-                                                    <?php 
+                                                            <option value="<?php echo $city; ?>" <?php echo (isset($data['shahr']) && $data['shahr'] === $city) ? 'selected' : ''; ?>>
+                                                                <?php echo $city; ?>
+                                                            </option>
+                                                    <?php
                                                         endforeach;
-                                                    endforeach; 
+                                                    endforeach;
                                                     ?>
                                                 </select>
                                             </div>
@@ -124,9 +124,9 @@
                                                     name="codemelli"
                                                     value="<?php echo htmlspecialchars($data['codemelli'] ?? ''); ?>"
                                                     required>
-                                                <button 
-                                                    type="button" 
-                                                    class="btn absolute left-0 top-0 h-full px-3 text-white bg-violet-500 border-violet-500 hover:bg-violet-600 hover:border-violet-600 focus:bg-violet-600 focus:border-violet-600 focus:ring focus:ring-violet-500/30 active:bg-violet-600 active:border-violet-600 rounded-l" 
+                                                <button
+                                                    type="button"
+                                                    class="btn absolute left-0 top-0 h-full px-3 text-white bg-violet-500 border-violet-500 hover:bg-violet-600 hover:border-violet-600 focus:bg-violet-600 focus:border-violet-600 focus:ring focus:ring-violet-500/30 active:bg-violet-600 active:border-violet-600 rounded-l"
                                                     id="search-button">
                                                     استعلام
                                                 </button>
@@ -139,8 +139,7 @@
                                                 type="text"
                                                 id="example-date-input"
                                                 name="passport"
-                                                value="<?php echo htmlspecialchars($data['passport'] ?? ''); ?>"
-                                                >
+                                                value="<?php echo htmlspecialchars($data['passport'] ?? ''); ?>">
                                         </div>
                                         <div class="mb-4">
                                             <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">کد پستی</label>
@@ -178,7 +177,7 @@
                             <div class="card-body">
                                 <div class="grid grid-cols-12 gap-5">
                                     <div class="col-span-12 lg:col-span-6">
-                                    <div class="mb-4">
+                                        <div class="mb-4">
                                             <label for="serial" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">سریال</label>
                                             <div class="relative">
                                                 <input
@@ -188,9 +187,9 @@
                                                     name="serial"
                                                     value="<?php echo htmlspecialchars($data['serial'] ?? ''); ?>"
                                                     required>
-                                                <button 
-                                                    type="button" 
-                                                    class="btn absolute left-0 top-0 h-full px-3 text-white bg-violet-500 border-violet-500 hover:bg-violet-600 hover:border-violet-600 focus:bg-violet-600 focus:border-violet-600 focus:ring focus:ring-violet-500/30 active:bg-violet-600 active:border-violet-600 rounded-l" 
+                                                <button
+                                                    type="button"
+                                                    class="btn absolute left-0 top-0 h-full px-3 text-white bg-violet-500 border-violet-500 hover:bg-violet-600 hover:border-violet-600 focus:bg-violet-600 focus:border-violet-600 focus:ring focus:ring-violet-500/30 active:bg-violet-600 active:border-violet-600 rounded-l"
                                                     id="search-button-2">
                                                     استعلام
                                                 </button>
@@ -291,7 +290,7 @@
                                                 type="text"
                                                 name="expite_guarantee"
                                                 id="example-text-input">
-                                        </div>            
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -347,45 +346,68 @@
                                     <div class="mb-4">
                                         <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">شرایط فیزیکی دستگاه</label>
                                         <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="example-date-input"
-                                            name="situation" required
+                                            name="situation"
+                                            required
                                             value="<?php echo htmlspecialchars($data['situation'] ?? ''); ?>">
                                     </div>
                                     <div class="mb-4">
                                         <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">ایراد دستگاه به اظهار مشتری </label>
                                         <input class="w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="example-month-input"
-                                            name="problem" required
+                                            name="problem"
+                                            required
                                             value="<?php echo htmlspecialchars($data['problem'] ?? ''); ?>">
                                     </div>
                                     <div class="mb-4">
                                         <label class="block font-medium text-gray-700 dark:text-gray-100 mb-2">لوازم همراه</label>
                                         <div class="py-2.5 flex space-x-4">
                                             <div class="form-check">
-                                                <label class="ltr:mr-2 rtl:ml-2 font-medium text-gray-700 dark:text-zinc-100" for="formrow-customCheck">جعبه</label>
-                                                <input type="checkbox" class="rounded align-middle ml-2 focus:ring-0  focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500" id="formrow-customCheck"
-                                                    name="accessories" required
-                                                    value="<?php echo htmlspecialchars($data['accessories'] ?? ''); ?>">
+                                                <label class="ltr:mr-2 rtl:ml-2 font-medium text-gray-700 dark:text-zinc-100" for="acc_box">جعبه</label>
+                                                <input type="checkbox"
+                                                    class="rounded align-middle ml-2 focus:ring-0 focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500"
+                                                    id="acc_box"
+                                                    name="accessories[]"
+                                                    value="box">
                                             </div>
                                             <div class="form-check">
-                                                <label class="ltr:mr-2 rtl:ml-2 font-medium text-gray-700 dark:text-zinc-100" for="formrow-customCheck">کارت گارانتی</label>
-                                                <input type="checkbox" class="rounded align-middle ml-2 focus:ring-0  focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500" id="formrow-customCheck">
+                                                <label class="ltr:mr-2 rtl:ml-2 font-medium text-gray-700 dark:text-zinc-100" for="acc_warranty">کارت گارانتی</label>
+                                                <input type="checkbox"
+                                                    class="rounded align-middle ml-2 focus:ring-0 focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500"
+                                                    id="acc_warranty"
+                                                    name="accessories[]"
+                                                    value="warrantycard">
                                             </div>
                                             <div class="form-check">
-                                                <label class="ltr:mr-2 rtl:ml-2 font-medium text-gray-700 dark:text-zinc-100" for="formrow-customCheck">آداپتور</label>
-                                                <input type="checkbox" class="rounded align-middle ml-2  focus:ring-0  focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500" id="formrow-customCheck">
+                                                <label class="ltr:mr-2 rtl:ml-2 font-medium text-gray-700 dark:text-zinc-100" for="acc_adapter">آداپتور</label>
+                                                <input type="checkbox"
+                                                    class="rounded align-middle ml-2 focus:ring-0 focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500"
+                                                    id="acc_adapter"
+                                                    name="accessories[]"
+                                                    value="adapter">
                                             </div>
                                             <div class="form-check">
-                                                <label class="ltr:mr-2 rtl:ml-2 font-medium text-gray-700 dark:text-zinc-100" for="formrow-customCheck">کابل شارژ</label>
-                                                <input type="checkbox" class="rounded align-middle ml-2  focus:ring-0  focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500" id="formrow-customCheck">
+                                                <label class="ltr:mr-2 rtl:ml-2 font-medium text-gray-700 dark:text-zinc-100" for="acc_cable">کابل شارژ</label>
+                                                <input type="checkbox"
+                                                    class="rounded align-middle ml-2 focus:ring-0 focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500"
+                                                    id="acc_cable"
+                                                    name="accessories[]"
+                                                    value="cable">
                                             </div>
                                             <div class="form-check">
-                                                <label class="ltr:mr-2 rtl:ml-2 font-medium text-gray-700 dark:text-zinc-100" for="formrow-customCheck">هندزفری </label>
-                                                <input type="checkbox" class="rounded align-middle ml-2  focus:ring-0  focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500" id="formrow-customCheck">
+                                                <label class="ltr:mr-2 rtl:ml-2 font-medium text-gray-700 dark:text-zinc-100" for="acc_handsfree">هندزفری</label>
+                                                <input type="checkbox"
+                                                    class="rounded align-middle ml-2 focus:ring-0 focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500"
+                                                    id="acc_handsfree"
+                                                    name="accessories[]"
+                                                    value="handsfree">
                                             </div>
                                             <div class="form-check">
-                                                <label class="ltr:mr-2 rtl:ml-2 font-medium text-gray-700 dark:text-zinc-100" for="formrow-customCheck">سوزن </label>
-                                                <input type="checkbox" class="rounded align-middle ml-2  focus:ring-0  focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500" id="formrow-customCheck">
+                                                <label class="ltr:mr-2 rtl:ml-2 font-medium text-gray-700 dark:text-zinc-100" for="acc_pin">سوزن</label>
+                                                <input type="checkbox"
+                                                    class="rounded align-middle ml-2 focus:ring-0 focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500"
+                                                    id="acc_pin"
+                                                    name="accessories[]"
+                                                    value="pin">
                                             </div>
-                                            <!-- گزینه‌های بیشتر -->
                                         </div>
                                     </div>
 
@@ -393,7 +415,10 @@
                                 <div class="col-span-12 lg:col-span-4">
                                     <div class="mb-4">
                                         <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">توضیحات </label>
-                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="example-date-input">
+                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="example-date-input"
+                                            name="dex"
+
+                                            value="<?php echo htmlspecialchars($data['dex'] ?? ''); ?>">
                                     </div>
                                     <div class="mb-4">
                                         <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">زمان تقریبی تعمیر </label>
@@ -513,56 +538,56 @@
 <script>
     document.getElementById('search-button').addEventListener('click', function() {
         const codemelli = document.getElementById('codemelli').value;
-        
-        fetch('<?php echo URLROOT; ?>/customers/searchOrCreate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `codemelli=${encodeURIComponent(codemelli)}`
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'found') {
-                // پر کردن سایر فیلدها
-                document.querySelector('[name="name"]').value = data.data.name;
-                document.querySelector('[name="mobile"]').value = data.data.mobile;
-                document.querySelector('[name="phone"]').value = data.data.phone;
-                document.querySelector('[name="address"]').value = data.data.address;
-                document.querySelector('[name="codeposti"]').value = data.data.codeposti;
-                document.querySelector('[name="passport"]').value = data.data.passport;
-                
-                // ست کردن استان
-                const provinceSelect = document.querySelector('[name="ostan"]');
-                provinceSelect.value = data.data.ostan;
-                
-                // تریگر کردن رویداد change برای لود شدن شهرها
-                const event = new Event('change');
-                provinceSelect.dispatchEvent(event);
-                
-                // کمی تاخیر برای اطمینان از لود شدن شهرها و سپس ست کردن شهر
-                setTimeout(() => {
-                    const citySelect = document.querySelector('[name="shahr"]');
-                    citySelect.value = data.data.shahr;
-                }, 100);
 
-            } else if (data.status === 'not_found') {
-                alert('کد ملی در سیستم نیست. لطفاً اطلاعات را وارد کنید.');
-                // پاک کردن فیلدها
-                document.querySelector('[name="name"]').value = '';
-                document.querySelector('[name="mobile"]').value = '';
-                document.querySelector('[name="phone"]').value = '';
-                document.querySelector('[name="ostan"]').value = '';
-                document.querySelector('[name="shahr"]').value = '';
-                document.querySelector('[name="address"]').value = '';
-                document.querySelector('[name="codeposti"]').value = '';
-                document.querySelector('[name="passport"]').value = '';
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('خطا در برقراری ارتباط با سرور');
-        });
+        fetch('<?php echo URLROOT; ?>/customers/searchOrCreate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `codemelli=${encodeURIComponent(codemelli)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'found') {
+                    // پر کردن سایر فیلدها
+                    document.querySelector('[name="name"]').value = data.data.name;
+                    document.querySelector('[name="mobile"]').value = data.data.mobile;
+                    document.querySelector('[name="phone"]').value = data.data.phone;
+                    document.querySelector('[name="address"]').value = data.data.address;
+                    document.querySelector('[name="codeposti"]').value = data.data.codeposti;
+                    document.querySelector('[name="passport"]').value = data.data.passport;
+
+                    // ست کردن استان
+                    const provinceSelect = document.querySelector('[name="ostan"]');
+                    provinceSelect.value = data.data.ostan;
+
+                    // تریگر کردن رویداد change برای لود شدن شهرها
+                    const event = new Event('change');
+                    provinceSelect.dispatchEvent(event);
+
+                    // کمی تاخیر برای اطمینان از لود شدن شهرها و سپس ست کردن شهر
+                    setTimeout(() => {
+                        const citySelect = document.querySelector('[name="shahr"]');
+                        citySelect.value = data.data.shahr;
+                    }, 100);
+
+                } else if (data.status === 'not_found') {
+                    alert('کد ملی در سیستم نیست. لطفاً اطلاعات را وارد کنید.');
+                    // پاک کردن فیلدها
+                    document.querySelector('[name="name"]').value = '';
+                    document.querySelector('[name="mobile"]').value = '';
+                    document.querySelector('[name="phone"]').value = '';
+                    document.querySelector('[name="ostan"]').value = '';
+                    document.querySelector('[name="shahr"]').value = '';
+                    document.querySelector('[name="address"]').value = '';
+                    document.querySelector('[name="codeposti"]').value = '';
+                    document.querySelector('[name="passport"]').value = '';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('خطا در برقراری ارتباط با سرور');
+            });
     });
 
     document.getElementById('customer-form').addEventListener('submit', function(e) {
@@ -586,78 +611,78 @@
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const provinceSelect = document.querySelector('select[name="ostan"]');
-    const citySelect = document.querySelector('select[name="shahr"]');
-    const cities = <?php echo json_encode(ProvinceHelper::getCities()); ?>;
+    document.addEventListener('DOMContentLoaded', function() {
+        const provinceSelect = document.querySelector('select[name="ostan"]');
+        const citySelect = document.querySelector('select[name="shahr"]');
+        const cities = <?php echo json_encode(ProvinceHelper::getCities()); ?>;
 
-    provinceSelect.addEventListener('change', function() {
-        const selectedProvince = this.value;
-        citySelect.innerHTML = '<option value="">انتخاب شهر</option>';
+        provinceSelect.addEventListener('change', function() {
+            const selectedProvince = this.value;
+            citySelect.innerHTML = '<option value="">انتخاب شهر</option>';
 
-        if (cities[selectedProvince]) {
-            cities[selectedProvince].forEach(city => {
-                const option = document.createElement('option');
-                option.value = city;
-                option.textContent = city;
-                citySelect.appendChild(option);
-            });
-        }
+            if (cities[selectedProvince]) {
+                cities[selectedProvince].forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+            }
+        });
     });
-});
 </script>
 
 
 <script>
     document.getElementById('search-button-2').addEventListener('click', function() {
         const serial = document.getElementById('serial').value;
-        
-        fetch('<?php echo URLROOT; ?>/cards/searchOrCreate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `serial=${encodeURIComponent(serial)}`
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'found') {
-                // پر کردن سایر فیلدها
-                document.querySelector('[name="serial"]').value = data.data.serial;
-                document.querySelector('[name="serial2"]').value = data.data.serial2;
-                document.querySelector('[name="model"]').value = data.data.model;
-                document.querySelector('[name="title"]').value = data.data.title;
-                document.querySelector('[name="att1_code"]').value = data.data.att1_code;
-                document.querySelector('[name="att2_code"]').value = data.data.att2_code;
-                document.querySelector('[name="att3_code"]').value = data.data.att3_code;
-                document.querySelector('[name="att4_code"]').value = data.data.att4_code;
-                document.querySelector('[name="company"]').value = data.data.company;
-                document.querySelector('[name="sh_sanad"]').value = data.data.sh_sanad;
-                document.querySelector('[name="start_guarantee"]').value = data.data.start_guarantee;
-                document.querySelector('[name="expite_guarantee"]').value = data.data.expite_guarantee;
-            
 
-            } else if (data.status === 'not_found') {
-                alert('سریال در سیستم نیست. لطفاً اطلاعات را وارد کنید.');
-                // پاک کردن فیلدها
-                document.querySelector('[name="serial"]').value = '';
-                document.querySelector('[name="serial2"]').value = '';
-                document.querySelector('[name="model"]').value = '';
-                document.querySelector('[name="title"]').value = '';
-                document.querySelector('[name="att1_code"]').value = '';
-                document.querySelector('[name="att2_code"]').value = '';
-                document.querySelector('[name="att3_code"]').value = '';
-                document.querySelector('[name="att4_code"]').value = '';
-                document.querySelector('[name="company"]').value = '';
-                document.querySelector('[name="sh_sanad"]').value = '';
-                document.querySelector('[name="start_guarantee"]').value = '';
-                document.querySelector('[name="expite_guarantee"]').value = '';
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('خطا در برقراری ارتباط با سرور');
-        });
+        fetch('<?php echo URLROOT; ?>/cards/searchOrCreate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `serial=${encodeURIComponent(serial)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'found') {
+                    // پر کردن سایر فیلدها
+                    document.querySelector('[name="serial"]').value = data.data.serial;
+                    document.querySelector('[name="serial2"]').value = data.data.serial2;
+                    document.querySelector('[name="model"]').value = data.data.model;
+                    document.querySelector('[name="title"]').value = data.data.title;
+                    document.querySelector('[name="att1_code"]').value = data.data.att1_code;
+                    document.querySelector('[name="att2_code"]').value = data.data.att2_code;
+                    document.querySelector('[name="att3_code"]').value = data.data.att3_code;
+                    document.querySelector('[name="att4_code"]').value = data.data.att4_code;
+                    document.querySelector('[name="company"]').value = data.data.company;
+                    document.querySelector('[name="sh_sanad"]').value = data.data.sh_sanad;
+                    document.querySelector('[name="start_guarantee"]').value = data.data.start_guarantee;
+                    document.querySelector('[name="expite_guarantee"]').value = data.data.expite_guarantee;
+
+
+                } else if (data.status === 'not_found') {
+                    alert('سریال در سیستم نیست. لطفاً اطلاعات را وارد کنید.');
+                    // پاک کردن فیلدها
+                    document.querySelector('[name="serial"]').value = '';
+                    document.querySelector('[name="serial2"]').value = '';
+                    document.querySelector('[name="model"]').value = '';
+                    document.querySelector('[name="title"]').value = '';
+                    document.querySelector('[name="att1_code"]').value = '';
+                    document.querySelector('[name="att2_code"]').value = '';
+                    document.querySelector('[name="att3_code"]').value = '';
+                    document.querySelector('[name="att4_code"]').value = '';
+                    document.querySelector('[name="company"]').value = '';
+                    document.querySelector('[name="sh_sanad"]').value = '';
+                    document.querySelector('[name="start_guarantee"]').value = '';
+                    document.querySelector('[name="expite_guarantee"]').value = '';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('خطا در برقراری ارتباط با سرور');
+            });
     });
 
     document.getElementById('customer-form').addEventListener('submit', function(e) {
@@ -679,6 +704,3 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     });
 </script>
-
-
-

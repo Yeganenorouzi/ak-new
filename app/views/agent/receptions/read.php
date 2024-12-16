@@ -46,7 +46,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($data['receptions'] as $item): ?>
+                                    <?php foreach ($data['receptionsAgent'] as $item): ?>
                                         <tr class="bg-white border-b border-gray-100 hover:bg-gray-50/50 dark:bg-zinc-700 dark:hover:bg-zinc-700/50 dark:border-zinc-600">
                                             <td class="w-4 p-4">
                                                 <div class="flex items-center">

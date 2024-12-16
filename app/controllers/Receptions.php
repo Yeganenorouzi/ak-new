@@ -8,53 +8,67 @@ class Receptions extends Controller
         $this->receptionsModel = $this->model("ReceptionsModel");
     }
 
-    public function admin() {
+    public function admin()
+    {
         $data = [
             "receptions" => $this->receptionsModel->getAllReceptions()
-          ];
-        return $this->view("admin/receptions/read",$data);      
+        ];
+        return $this->view("admin/receptions/read", $data);
     }
 
-    public function agent() {
+    public function agent()
+    {
         $data = [
-            "receptions" => $this->receptionsModel->getAllReceptionsByAgent()
-          ];
-        return $this->view("agent/receptions/read",$data);      
+            "receptionsAgent" => $this->receptionsModel->getAllReceptionsByAgent()
+        ];
+        return $this->view("agent/receptions/read", $data);
     }
 
 
-    public function create() {
+    public function create()
+    {
         return $this->view("agent/receptions/create");
     }
 
-    public function store() {
-        if($_SERVER["REQUEST_METHOD"] == "POST") {
+    // تابع کمکی برای آپلود فایل
+    private function uploadFile($file, $index) {
+        if (isset($file) && $file['error'] === UPLOAD_ERR_OK) {
+            $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+            $maxSize = 5 * 1024 * 1024; // 5MB
+
+            if (!in_array($file['type'], $allowedTypes)) {
+                return "فقط فایل‌های JPG و PNG مجاز هستند.";
+            } elseif ($file['size'] > $maxSize) {
+                return "حجم فایل نباید بیشتر از 5 مگابایت باشد.";
+            } else {
+                $fileName = time() . '_' . $index . '_' . $file['name'];
+                $uploadPath = 'uploads/receptions/' . $fileName;
+
+                if (!is_dir('uploads/receptions')) {
+                    mkdir('uploads/receptions', 0777, true);
+                }
+
+                if (move_uploaded_file($file['tmp_name'], $uploadPath)) {
+                    return $fileName;
+                } else {
+                    return "خطا در آپلود فایل.";
+                }
+            }
+        }
+        return '';
+    }
+
+    public function store()
+    {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $errors = [];
-            
+
             $serial_id = $this->receptionsModel->getSerialIdBySerial($_POST["serial"]);
             $user_id = $this->receptionsModel->getUserIdByCodeMelli($_SESSION["user_codemelli"]);
-            
-            // بررسی وجود مشتری و ایجاد در صورت عدم وجود
-            $customer_data = [
-                'codemelli' => $_POST["codemelli"],
-                'name' => $_POST["name"] ?? '',        
-                'passport' => $_POST["passport"] ?? '', 
-                'mobile' => $_POST["mobile"] ?? '',
-                'phone' => $_POST["phone"] ?? '',
-                'ostan' => $_POST["ostan"] ?? '',
-                'shahrestan' => $_POST["shahr"] ?? '',
-                'address' => $_POST["address"] ?? '' ,
-                'code_posti' => $_POST["code_posti"] ?? ''  
-            ];
-            $customer_id = $this->receptionsModel->getOrCreateCustomer($customer_data);
-            
-            if (!$serial_id) {
-                $errors[] = "سریال وارد شده معتبر نمی‌باشد.";
-            }
-            if (!$user_id) {
-                $errors[] = "کد ملی کاربر معتبر نمی‌باشد.";
-            }
-            
+            $customer_id = $this->receptionsModel->getCustomerIdByCodeMelli($_POST["codemelli"]);
+
+            $accessories = isset($_POST['accessories']) ? implode(',', $_POST['accessories']) : '';
+
             $data = [
                 "serial" => $_POST["serial"],
                 "serial_id" => $serial_id,
@@ -65,45 +79,33 @@ class Receptions extends Controller
                 "guarantee_status" => $_POST["guarantee_status"],
                 "problem" => $_POST["problem"],
                 "situation" => $_POST["situation"],
-                "accessories" => $_POST["accessories"],
+                "accessories" => $accessories,
+                "dex" => $_POST["dex"],
                 "estimated_time" => $_POST["estimated_time"],
                 "estimated_cost" => $_POST["estimated_cost"],
                 "paziresh_status" => $_POST["paziresh_status"],
                 "file1" => '',
                 "file2" => '',
-                "file3" => ''
+                "file3" => '',
+                "created_at" => date('Y-m-d H:i:s')
             ];
 
-            $fileFields = ['file1', 'file2', 'file3'];
-            foreach ($fileFields as $field) {
-                if (isset($_FILES[$field]) && $_FILES[$field]['error'] === UPLOAD_ERR_OK) {
-                    $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-                    $maxSize = 5 * 1024 * 1024;
-
-                    if (!in_array($_FILES[$field]['type'], $allowedTypes)) {
-                        $errors[] = "فقط فایل‌های JPG و PNG مجاز هستند.";
-                    } elseif ($_FILES[$field]['size'] > $maxSize) {
-                        $errors[] = "حجم فایل نباید بیشتر از 5 مگابایت باشد.";
+            // آپلود فایل‌ها
+            for ($i = 1; $i <= 3; $i++) {
+                $fileKey = 'file' . $i;
+                if (isset($_FILES[$fileKey])) {
+                    $result = $this->uploadFile($_FILES[$fileKey], $i);
+                    if (strlen($result) > 0 && !str_contains($result, '.')) {
+                        $errors[] = $result;
                     } else {
-                        $fileName = time() . '_' . $_FILES[$field]['name'];
-                        $uploadPath = 'uploads/receptions/' . $fileName;
-
-                        if (!is_dir('uploads/receptions')) {
-                            mkdir('uploads/receptions', 0777, true);
-                        }
-
-                        if (move_uploaded_file($_FILES[$field]['tmp_name'], $uploadPath)) {
-                            $data[$field] = $fileName;
-                        } else {
-                            $errors[] = "خطا در آپلود فایل.";
-                        }
+                        $data[$fileKey] = $result;
                     }
                 }
             }
 
             if (empty($errors)) {
                 $this->receptionsModel->createReception($data);
-                header("Location: " . URLROOT . "/agent/receptions/read");
+                header("Location: " . URLROOT . "/receptions/agent");
                 exit();
             } else {
                 $data['errors'] = $errors;
@@ -111,15 +113,4 @@ class Receptions extends Controller
             }
         }
     }
-
-    
-
-    
-
-    
-
-    
-
-   
 }
-
