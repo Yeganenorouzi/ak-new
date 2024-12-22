@@ -62,7 +62,7 @@
               <a href="<?php echo URLROOT . "/cards/index" ?>" class="pr-14 pl-4 py-2 block text-[13.5px] font-medium text-gray-700 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">لیست کارت گارانتی ها</a>
             </li>
             <li>
-              <a href="buttons.html" class="pr-14 pl-4 py-2 block text-[13.5px] font-medium text-gray-700 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">افزودن کارت گارانتی جدید</a>
+              <a href="<?php echo URLROOT . "/cards/create" ?>" class="pr-14 pl-4 py-2 block text-[13.5px] font-medium text-gray-700 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">افزودن کارت گارانتی جدید</a>
             </li>
             <li>
               <a href="cards.html" class="pr-14 pl-4 py-2 block text-[13.5px] font-medium text-gray-700 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">صدور کارت گارانتی</a>

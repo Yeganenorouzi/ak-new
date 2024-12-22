@@ -41,6 +41,39 @@
     <script src="<?php echo URLROOT . "/assets/js/pages/login.init.js" ?>"></script>
 
     <script src="<?php echo URLROOT . "/assets/js/app.js" ?>"></script>
+
+    <!-- datepicker js -->
+    <script src="<?php echo URLROOT . "/assets/js/jdate.min.js" ?>"></script>
+    <script>
+      window.Date = window.JDate;
+    </script>
+    <script src="<?php echo URLROOT . "/assets/libs/flatpickr/flatpickr.min.js" ?>"></script>
+    <script src="<?php echo URLROOT . "/assets/js/flatpicker_fa.js" ?>"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        flatpickr("#example-full-input", {
+            dateFormat: "Y-m-d",  // Only date format
+            altInput: true,
+            altFormat: "j F Y",   // Localized date display format
+            locale: {
+                firstDayOfWeek: 6,  // Saturday as first day of week
+                weekdays: {
+                    shorthand: ['شنبه', 'یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه'],
+                    longhand: ['شنبه', 'یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه']
+                },
+                months: {
+                    shorthand: ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'],
+                    longhand: ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند']
+                }
+            }
+        });
+    });
+    </script>
+
+
+
+
     </body>
 
 
