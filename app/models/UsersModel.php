@@ -113,4 +113,22 @@ class UsersModel
   {
     return preg_match("/^\d{10}$/", $codemelli);
   }
+
+  public function getUserById($id)
+  {
+    $this->db->query("SELECT * FROM users WHERE id = :id");
+    $this->db->bind(":id", $id);
+    return $this->db->fetch();
+  }
+
+  public function updateUser($id, $data)
+  {
+    $this->db->query("UPDATE users SET name = :name, email = :email, mobile = :mobile, avatar = :avatar WHERE id = :id");
+    $this->db->bind(":id", $id);
+    $this->db->bind(":name", $data["name"]);
+    $this->db->bind(":email", $data["email"]);
+    $this->db->bind(":mobile", $data["mobile"]);
+    $this->db->bind(":avatar", $data["avatar"]);
+    return $this->db->execute();
+  }
 }

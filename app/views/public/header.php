@@ -29,6 +29,7 @@
 
 
 
+
   <link href="<?php echo URLROOT . "/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css" ?>" rel="stylesheet" type="text/css">
 
   <link rel="stylesheet" href="<?php echo URLROOT . "/assets/libs/swiper/swiper-bundle.min.css" ?>">
@@ -41,7 +42,7 @@
 </head>
 
 <body data-mode="light" data-sidebar-size="lg">
-
+  
 
   <!-- leftbar-tab-menu -->
   <nav class="border-b border-slate-100 dark:bg-zinc-800 print:hidden flex items-center fixed top-0 right-0 left-0 bg-white z-10 dark:border-zinc-700">

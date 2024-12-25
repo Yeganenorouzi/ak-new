@@ -13,7 +13,7 @@ class Users extends Controller
         $data = [
             "users" => $this->usersModel->getAllUsers()
         ];
-        return $this->view("admin/users/read", $data);
+        return $this->view("admin/users/list", $data);
     }
 
     public function create()
@@ -27,7 +27,8 @@ class Users extends Controller
             "avatar" => ''
         ];
 
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if ($_SERVER["REQUEST_METHOD"] == "POST")
+         {
             $data = [
                 "codemelli" => $_POST["codemelli"],
                 "mobile" => $_POST["mobile"],
@@ -171,5 +172,26 @@ class Users extends Controller
             "errors" => $errors,
             "data" => $data
         ]);
+    }
+
+    public function edit($id)
+    {
+        $data = [
+            "user" => $this->usersModel->getUserById($id)
+        ];
+        return $this->view("admin/users/update", $data);
+    }
+
+
+    public function update($id)
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $this->usersModel->updateUser($id, $_POST);
+            header("Location: " . URLROOT . "/users/index");
+            exit();
+        }
+        // اگر متد POST نبود، به صفحه قبل برگردد
+        header("Location: " . URLROOT . "/users/edit/" . $id);
+        exit();
     }
 }

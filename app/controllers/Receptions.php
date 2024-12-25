@@ -31,7 +31,8 @@ class Receptions extends Controller
     }
 
     // تابع کمکی برای آپلود فایل
-    private function uploadFile($file, $index) {
+    private function uploadFile($file, $index)
+    {
         if (isset($file) && $file['error'] === UPLOAD_ERR_OK) {
             $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
             $maxSize = 5 * 1024 * 1024; // 5MB
@@ -84,6 +85,7 @@ class Receptions extends Controller
                 "estimated_time" => $_POST["estimated_time"],
                 "estimated_cost" => $_POST["estimated_cost"],
                 "paziresh_status" => $_POST["paziresh_status"],
+                "product_status" => "پذیرش در نمایندگی",
                 "file1" => '',
                 "file2" => '',
                 "file3" => '',
@@ -112,5 +114,25 @@ class Receptions extends Controller
                 return $this->view("agent/receptions/create", $data);
             }
         }
+    }
+
+    public function edit($id)
+    {
+        $data = [
+            "reception" => $this->receptionsModel->getReceptionById($id)
+        ];
+        return $this->view("admin/receptions/update", $data);
+    }
+
+    public function update($id)
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $this->receptionsModel->updateReception($id, $_POST);
+            header("Location: " . URLROOT . "/receptions/admin");
+            exit();
+        }
+        // اگر متد POST نبود، به صفحه قبل برگردد
+        header("Location: " . URLROOT . "/receptions/edit/" . $id);
+        exit();
     }
 }
