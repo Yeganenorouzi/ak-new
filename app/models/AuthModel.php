@@ -28,10 +28,18 @@ class AuthModel
   public function register($data)
   {
     try {
-      $hashedPassword = password_hash($data["password"], PASSWORD_DEFAULT);
-      $this->db->query("INSERT INTO `users`(`email`,`password`, `name`, `codemelli`, `mobile`, `ostan`, `shahr`, `address`, `phone`, `hours`, `codeposti`) VALUES (:email,:password,:name,:codemelli,:mobile,:ostan,:shahr,:address,:phone,:hours,:codeposti) ");
+      // Debug
+      error_log("Registration data: " . print_r($data, true));
+
+      $this->db->query("INSERT INTO `users`
+        (`email`, `password`, `name`, `codemelli`, `mobile`, `ostan`, 
+         `shahr`, `address`, `phone`, `hours`, `codeposti`) 
+      VALUES 
+        (:email, :password, :name, :codemelli, :mobile, :ostan,
+         :shahr, :address, :phone, :hours, :codeposti)");
+
       $this->db->bind(":email", $data["email"]);
-      $this->db->bind(":password", $hashedPassword);
+      $this->db->bind(":password", $data["password"]);
       $this->db->bind(":name", $data["name"]);
       $this->db->bind(":codemelli", $data["codemelli"]);
       $this->db->bind(":mobile", $data["mobile"]);
@@ -41,8 +49,13 @@ class AuthModel
       $this->db->bind(":phone", $data["phone"]);
       $this->db->bind(":hours", $data["hours"]);
       $this->db->bind(":codeposti", $data["codeposti"]);
-      $this->db->execute();
-      return true;
+
+      if ($this->db->execute()) {
+        return true;
+      }
+
+      error_log("Registration failed: Query execution returned false");
+      return false;
     } catch (Exception $e) {
       error_log("Registration error: " . $e->getMessage());
       return false;

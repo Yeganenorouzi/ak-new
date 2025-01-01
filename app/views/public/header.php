@@ -42,7 +42,7 @@
 </head>
 
 <body data-mode="light" data-sidebar-size="lg">
-  
+
 
   <!-- leftbar-tab-menu -->
   <nav class="border-b border-slate-100 dark:bg-zinc-800 print:hidden flex items-center fixed top-0 right-0 left-0 bg-white z-10 dark:border-zinc-700">
@@ -119,97 +119,7 @@
           </div>
         </div>
 
-        <div>
-          <div class="dropdown relative ">
-            <div class="relative">
-              <button type="button" class="btn border-0 h-[70px] dropdown-toggle px-4 text-gray-500 dark:text-gray-100" aria-expanded="false" data-dropdown-toggle="notification">
-                <i data-feather="bell" class="h-5 w-5"></i>
-              </button>
-              <span class="absolute text-xs px-1.5 bg-red-500 text-white font-medium rounded-full left-6 top-2.5">5</span>
-            </div>
-            <div class="dropdown-menu absolute z-50 hidden w-80 list-none rounded bg-white shadow dark:bg-zinc-800 " id="notification">
-              <div class="border border-gray-50 dark:border-gray-700 rounded" aria-labelledby="notification">
-                <div class="grid grid-cols-12 p-4">
-                  <div class="col-span-6">
-                    <h6 class="m-0 text-gray-700 dark:text-gray-100"> اطلاعیه‌ها </h6>
-                  </div>
-                  <div class="col-span-6 justify-self-end">
-                    <a href="#!" class="text-xs underline dark:text-gray-400"> خوانده نشده (3)</a>
-                  </div>
-                </div>
-                <div class="max-h-56" data-simplebar>
-                  <div>
-                    <a href="#!" class="text-reset notification-item">
-                      <div class="flex px-4 py-2 hover:bg-gray-50/50 dark:hover:bg-zinc-700/50">
-                        <div class="flex-shrink-0 ltr:mr-3 rtl:ml-3">
-                          <img src="assets/images/users/avatar-3.jpg" class="rounded-full h-8 w-8" alt="user-pic">
-                        </div>
-                        <div class="flex-grow">
-                          <h6 class="mb-1 text-gray-700 dark:text-gray-100">جیمز لمایر</h6>
-                          <div class="text-13 text-gray-600">
-                            <p class="mb-1 dark:text-gray-400"> به نظر می‌رسد زبان ساده شده انگلیسی باشد.</p>
-                            <p class="mb-0"><i class="mdi mdi-clock-outline dark:text-gray-400"></i> <span>1 ساعت پیش</span></p>
-                          </div>
-                        </div>
-                      </div>
-                    </a>
-                    <a href="#!" class="text-reset notification-item">
-                      <div class="flex px-4 py-2 hover:bg-gray-50/50 dark:hover:bg-zinc-700/50">
-                        <div class="flex-shrink-0 ltr:mr-3 rtl:ml-3">
-                          <div class="h-8 w-8 bg-violet-500 rounded-full text-center">
-                            <i class="bx bx-cart text-xl leading-relaxed text-white"></i>
-                          </div>
-                        </div>
-                        <div class="flex-grow">
-                          <h6 class="mb-1 text-gray-700 dark:text-gray-100">سفارش شما ثبت شده است</h6>
-                          <div class="text-13 text-gray-600">
-                            <p class="mb-1 dark:text-gray-400"> اگر چندین زبان با هم آمیخته شوند، دستور زبان را کاهش می‌دهند</p>
-                            <p class="mb-0"><i class="mdi mdi-clock-outline dark:text-gray-400"></i> <span>3 دقیقه پیش</span></p>
-                          </div>
-                        </div>
-                      </div>
-                    </a>
-                    <a href="#!" class="text-reset notification-item">
-                      <div class="flex px-4 py-2 hover:bg-gray-50/50 dark:hover:bg-zinc-700/50">
-                        <div class="flex-shrink-0 ltr:mr-3 rtl:ml-3">
-                          <div class="h-8 w-8 bg-green-500 rounded-full text-center">
-                            <i class="bx bx-badge-check text-xl leading-relaxed text-white"></i>
-                          </div>
-                        </div>
-                        <div class="flex-grow">
-                          <h6 class="mb-1 text-gray-700 dark:text-gray-100">محصول شما ارسال شده است</h6>
-                          <div class="text-13 text-gray-600">
-                            <p class="mb-1 dark:text-gray-400"> اگر چندین زبان با هم آمیخته شوند، دستور زبان را کاهش می‌دهند</p>
-                            <p class="mb-0"><i class="mdi mdi-clock-outline dark:text-gray-400"></i> <span>3 دقیقه پیش</span></p>
-                          </div>
-                        </div>
-                      </div>
-                    </a>
-                    <a href="#!" class="text-reset notification-item">
-                      <div class="flex px-4 py-2 hover:bg-gray-50/50 dark:hover:bg-zinc-700/50">
-                        <div class="flex-shrink-0 ltr:mr-3 rtl:ml-3">
-                          <img src="assets/images/users/avatar-6.jpg" class="rounded-full h-8 w-8" alt="user-pic">
-                        </div>
-                        <div class="flex-grow">
-                          <h6 class="mb-1 text-gray-700 dark:text-gray-100">سالنا لیفیلد</h6>
-                          <div class="text-13 text-gray-600">
-                            <p class="mb-1 dark:text-gray-400"> به عنوان یک دوست متشکک کمبریجی از غربی</p>
-                            <p class="mb-0"><i class="mdi mdi-clock-outline dark:text-gray-400"></i> <span>1 ساعت پیش</span></p>
-                          </div>
-                        </div>
-                      </div>
-                    </a>
-                  </div>
-                </div>
-                <div class="p-1 border-t grid border-gray-50 dark:border-zinc-600 justify-items-center">
-                  <a class="btn border-0 text-violet-500" href="javascript:void(0)">
-                    <i class="mdi mdi-arrow-left-circle mr-1"></i> <span>مشاهده بیشتر..</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+
 
 
         <div>
@@ -221,16 +131,16 @@
             </button>
             <div class="dropdown-menu absolute top-0 ltr:-left-3 rtl:left-0 z-50 hidden w-40 list-none rounded bg-white shadow dark:bg-zinc-800" id="profile/log">
               <div class="border border-gray-50 dark:border-zinc-600" aria-labelledby="navNotifications">
-                <div class="dropdown-item dark:text-gray-100">
-                  <a class="px-3 py-2 hover:bg-gray-50/50 block dark:hover:bg-zinc-700/50" href="<?php echo URLROOT . "/profile" ?>">
+                <!-- <div class="dropdown-item dark:text-gray-100">
+                  <a class="px-3 py-2 hover:bg-gray-50/50 block dark:hover:bg-zinc-700/50" href="<?php echo URLROOT . "/users/profile" ?>">
                     <i class="mdi mdi-face-man text-16 align-middle mr-1"></i> پروفایل
                   </a>
-                </div>
-                <div class="dropdown-item dark:text-gray-100">
+                </div> -->
+                <!-- <div class="dropdown-item dark:text-gray-100">
                   <a class="px-3 py-2 hover:bg-gray-50/50 block dark:hover:bg-zinc-700/50" href="lock-screen.html">
                     <i class="mdi mdi-lock text-16 align-middle mr-1"></i> قفل صفحه
                   </a>
-                </div>
+                </div> -->
                 <hr class="border-gray-50 dark:border-gray-700">
                 <div class="dropdown-item dark:text-gray-100">
                   <a class="p-3 hover:bg-gray-50/50 block dark:hover:bg-zinc-700/50" href="<?php echo URLROOT . "/auth/logout" ?>">

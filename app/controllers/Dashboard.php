@@ -20,7 +20,7 @@ class Dashboard extends Controller
    
     $data = [
       'total_receptions' => $this->receptionsModel->getTotalReceptions(),
-      'total_cards' => $this->cardsModel->getTotalCards()
+      'total_cards' => $this->cardsModel->getTotalCards(),
     ];
     return $this->view("admin/dashboard/index",$data);
   }

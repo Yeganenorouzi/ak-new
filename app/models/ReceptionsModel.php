@@ -30,7 +30,7 @@ class ReceptionsModel
   public function getTotalReceptionsByAgent()
   {
     $this->db->query("SELECT COUNT(*) AS total FROM receptions WHERE user_id = :user_id");
-    $this->db->bind(":user_id", $_SESSION["user_id"]);
+    $this->db->bind(":user_id", $_SESSION["id"]);
     $result = $this->db->fetch();
     return $result->total;
   }
@@ -43,11 +43,7 @@ class ReceptionsModel
 
     try {
       $this->db->query("SELECT 
-            receptions.id, receptions.problem, receptions.situation,
-            serials.serial, serials.model,
-            customers.name, customers.mobile,
-            receptions.file1, receptions.file2, receptions.file3 ,
-            receptions.created_at
+            receptions.*, serials.serial ,serials.model ,customers.name
             FROM receptions 
             INNER JOIN serials ON receptions.serial_id = serials.id 
             INNER JOIN customers ON receptions.customer_id = customers.id  
@@ -63,24 +59,45 @@ class ReceptionsModel
   }
 
 
-  public function createReception($data)
+
+
+  public function createReception(array $data): bool
   {
-    // فرض می‌کنیم مقدارها از فرم دریافت شده‌اند
-    $serialinput = $data['serial'];
-    $codemelli = $data['codemelli'];
+    try {
+      // Step 1: یافتن سریال
+      $serial = $this->findSerialById($data['serial']);
+      if (!$serial) {
+        throw new Exception("سریال مورد نظر یافت نشد");
+      }
 
+      // Step 2: گرفتن یا ایجاد مشتری
+      $customer_data = $this->extractCustomerData($data);
+      $customer_id = $this->getOrCreateCustomer($customer_data);
 
-    // Step 1: گرفتن serials_id
-    $this->db->query("SELECT id FROM serials WHERE serial = :serial");
-    $this->db->bind(':serial', $serialinput);
-    $serial = $this->db->fetch();
+      if (!$customer_id) {
+        throw new Exception("خطا در ایجاد یا دریافت اطلاعات مشتری");
+      }
 
-    if (!$serial) {
-      throw new Exception("سریال مورد نظر یافت نشد");
+      // Step 3: درج اطلاعات پذیرش
+      $this->insertReception($data, $serial->id, $customer_id);
+
+      return true;
+    } catch (Exception $e) {
+      error_log("Error in createReception: " . $e->getMessage());
+      throw new Exception("خطا در پردازش پذیرش: " . $e->getMessage());
     }
+  }
 
-    // Step 2: گرفتن یا ایجاد customers_id
-    $customer_data = [
+  private function findSerialById(string $serial): ?object
+  {
+    $this->db->query("SELECT id FROM serials WHERE serial = :serial");
+    $this->db->bind(':serial', $serial);
+    return $this->db->fetch();
+  }
+
+  private function extractCustomerData(array $data): array
+  {
+    return [
       'codemelli' => $data['codemelli'],
       'name' => $data['name'] ?? null,
       'passport' => $data['passport'] ?? null,
@@ -89,59 +106,72 @@ class ReceptionsModel
       'ostan' => $data['ostan'] ?? null,
       'shahr' => $data['shahr'] ?? null,
       'address' => $data['address'] ?? null,
-      'codeposti' => $data['codeposti'] ?? null
+      'codeposti' => $data['codeposti'] ?? null,
     ];
+  }
 
-    $customer_id = $this->getOrCreateCustomer($customer_data);
+  private function getOrCreateCustomer(array $customer_data): int
+  {
+    $customer_id = $this->getCustomerIdByCodeMelli($customer_data['codemelli']);
+    if (!$customer_id) {
+      $this->createCustomer($customer_data);
+      $customer_id = $this->getCustomerIdByCodeMelli($customer_data['codemelli']);
+    }
+    return $customer_id;
+  }
 
-    // Step 4: ایجاد رکورد در reception
-    $queryInsert = $this->db->query("INSERT INTO receptions (serial ,serial_id, customer_id,user_id, activation_start_date, 	guarantee_status, problem, situation ,accessories ,dex,estimated_time,estimated_cost	,paziresh_status,file1,file2,file3,created_at) 
-                                 VALUES (:serial, :serials_id, :customers_id, :user_id, :activation_start_date, :guarantee_status, :problem, :situation , :accessories , :dex, :estimated_time, :estimated_cost, :paziresh_status, :file1, :file2, :file3, NOW())");
-    $this->db->bind(':serial', $data['serial']);
-    $this->db->bind(':serials_id', $serial->id);
-    $this->db->bind(':customers_id', $customer_id);
-    $this->db->bind(':user_id', $_SESSION['id']);
-    $this->db->bind(':activation_start_date', $data['activation_start_date']);
-    $this->db->bind(':guarantee_status', $data['guarantee_status']);
-    $this->db->bind(':problem', $data['problem']);
-    $this->db->bind(':situation', $data['situation']);
-    $this->db->bind(':accessories', $data['accessories']);
-    $this->db->bind(':dex', $data['dex']);
-    $this->db->bind(':estimated_time', $data['estimated_time']);
-    $this->db->bind(':estimated_cost', $data['estimated_cost']);
-    $this->db->bind(':paziresh_status', $data['paziresh_status']);
-    $this->db->bind(':file1', $data['file1']);
-    $this->db->bind(':file2', $data['file2']);
-    $this->db->bind(':file3', $data['file3']);
-    $this->db->bind(':created_at', date('Y-m-d H:i:s'));
+  private function createCustomer(array $customer_data): void
+  {
+    $this->db->query("INSERT INTO customers (codemelli, name, passport, mobile, phone, ostan, shahr, address, codeposti ,created_at) VALUES (:codemelli, :name, :passport, :mobile, :phone, :ostan, :shahr, :address, :codeposti ,NOW())");
+    $this->db->bind(':codemelli', $customer_data['codemelli']);
+    $this->db->bind(':name', $customer_data['name']);
+    $this->db->bind(':passport', $customer_data['passport']);
+    $this->db->bind(':mobile', $customer_data['mobile']);
+    $this->db->bind(':phone', $customer_data['phone']);
+    $this->db->bind(':ostan', $customer_data['ostan']);
+    $this->db->bind(':shahr', $customer_data['shahr']);
+    $this->db->bind(':address', $customer_data['address']);
+    $this->db->bind(':codeposti', $customer_data['codeposti']);
     $this->db->execute();
   }
 
-  public function getOrCreateCustomer($customer_data)
+  private function insertReception(array $data, int $serial_id, int $customer_id): void
   {
-    // بررسی وجود مشتری
-    $this->db->query("SELECT * FROM customers WHERE codemelli = :codemelli");
-    $this->db->bind(':codemelli', $customer_data['codemelli']);
-    $customer = $this->db->fetch();
+    $this->db->query("INSERT INTO receptions (serial, serial_id, customer_id, user_id, activation_start_date, guarantee_status, 
+                        problem, situation, accessories, dex, estimated_time, estimated_cost, paziresh_status, product_status, file1, file2, file3, created_at) 
+                        VALUES (:serial, :serials_id, :customers_id, :user_id, :activation_start_date, :guarantee_status, 
+                        :problem, :situation, :accessories, :dex, :estimated_time, :estimated_cost, :paziresh_status, :product_status, :file1, :file2, :file3, NOW())");
 
-    if ($customer) {
-      // اگر مشتری وجود داشت، برگرداندن آی‌دی
-      return $customer->id;
-    } else {
-      // ایجاد مشتری جدید
-      $this->db->query("INSERT INTO customers (codemelli, name, passport, mobile, phone, ostan, shahr, address, codeposti) 
-                        VALUES (:codemelli, :name, :passport, :mobile, :phone, :ostan, :shahr, :address, :codeposti)");
-      $this->db->bind(':codemelli', $customer_data['codemelli']);
-      $this->db->bind(':name', $customer_data['name']);
-      $this->db->bind(':passport', $customer_data['passport']);
-      $this->db->bind(':mobile', $customer_data['mobile']);
-      $this->db->bind(':phone', $customer_data['phone']);
-      $this->db->bind(':ostan', $customer_data['ostan']);
-      $this->db->bind(':shahr', $customer_data['shahr']);
-      $this->db->bind(':address', $customer_data['address']);
-      $this->db->bind(':codeposti', $customer_data['codeposti']);
-      $this->db->execute();
-      return $this->db->fetch()->id;
+    $fields = [
+      ':serial' => $data['serial'],
+      ':serials_id' => $serial_id,
+      ':customers_id' => $customer_id,
+      ':user_id' => $_SESSION['id'],
+      ':activation_start_date' => $data['activation_start_date'],
+      ':guarantee_status' => $data['guarantee_status'],
+      ':problem' => $data['problem'],
+      ':situation' => $data['situation'],
+      ':accessories' => $data['accessories'],
+      ':dex' => $data['dex'],
+      ':estimated_time' => $data['estimated_time'],
+      ':estimated_cost' => $data['estimated_cost'],
+      ':paziresh_status' => $data['paziresh_status'],
+      ':product_status' => 'پذیرش در نمایندگی',
+      ':file1' => $data['file1'],
+      ':file2' => $data['file2'],
+      ':file3' => $data['file3']
+    ];
+
+    foreach ($fields as $key => $value) {
+      $this->db->bind($key, $value);
+    }
+
+    if (!$this->db->execute()) {
+      $errorInfo = $this->db->errorInfo(); // Use standard PDO errorInfo() method
+      if ($errorInfo[0] !== '00000') { // Only throw if there's actually an error
+        error_log("Error in insertReception: " . print_r($errorInfo, true));
+        throw new Exception("خطا در ثبت اطلاعات پذیرش: " . $errorInfo[2]); // Use the error message
+      }
     }
   }
 
@@ -188,7 +218,45 @@ class ReceptionsModel
 
   public function updateReception($id, $data)
   {
-    $this->db->query("UPDATE receptions SET   product_status = :product_status , kaar = :kaar , kaar_serial = :kaar_serial , kaar_at = :kaar_at ,  sh_baar2 = :sh_baar2 , sh_baar = :sh_baar WHERE id = :id");
+    // Handle file uploads
+    $uploadedFiles = ['file1' => 'image1', 'file2' => 'image2', 'file3' => 'image3'];
+    $uploadPath = APPROOT . '/public/assets/uploads/receptions/';
+
+    foreach ($uploadedFiles as $dbField => $inputField) {
+      // Check if new file is uploaded
+      if (isset($_FILES[$inputField]) && $_FILES[$inputField]['error'] === UPLOAD_ERR_OK) {
+        // Generate unique filename
+        $extension = pathinfo($_FILES[$inputField]['name'], PATHINFO_EXTENSION);
+        $newFilename = uniqid() . '.' . $extension;
+
+        // Move uploaded file
+        if (move_uploaded_file($_FILES[$inputField]['tmp_name'], $uploadPath . $newFilename)) {
+          // Delete old file if exists
+          if (!empty($data[$dbField])) {
+            $oldFile = $uploadPath . $data[$dbField];
+            if (file_exists($oldFile)) {
+              unlink($oldFile);
+            }
+          }
+          // Update filename in data array
+          $data[$dbField] = $newFilename;
+        }
+      }
+    }
+
+    // Update database
+    $this->db->query("UPDATE receptions SET 
+        product_status = :product_status,
+        kaar = :kaar,
+        kaar_serial = :kaar_serial,
+        kaar_at = :kaar_at,
+        sh_baar2 = :sh_baar2,
+        sh_baar = :sh_baar,
+        file1 = :file1,
+        file2 = :file2,
+        file3 = :file3
+        WHERE id = :id");
+
     $this->db->bind(':id', $id);
     $this->db->bind(':product_status', $data['product_status']);
     $this->db->bind(':kaar', $data['kaar']);
@@ -196,6 +264,21 @@ class ReceptionsModel
     $this->db->bind(':kaar_at', $data['kaar_at']);
     $this->db->bind(':sh_baar2', $data['sh_baar2']);
     $this->db->bind(':sh_baar', $data['sh_baar']);
-    $this->db->execute();
+    $this->db->bind(':file1', $data['file1']);
+    $this->db->bind(':file2', $data['file2']);
+    $this->db->bind(':file3', $data['file3']);
+
+    return $this->db->execute();
+  }
+
+  public function getReceptionsByCustomerId($customerId)
+  {
+    $this->db->query("SELECT receptions.*, serials.model, serials.serial
+                      FROM receptions 
+                      INNER JOIN serials ON receptions.serial_id = serials.id 
+                      WHERE receptions.customer_id = :customer_id
+                      ORDER BY receptions.created_at DESC");
+    $this->db->bind(':customer_id', $customerId);
+    return $this->db->fetchAll();
   }
 }

@@ -27,8 +27,7 @@ class Users extends Controller
             "avatar" => ''
         ];
 
-        if ($_SERVER["REQUEST_METHOD"] == "POST")
-         {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $data = [
                 "codemelli" => $_POST["codemelli"],
                 "mobile" => $_POST["mobile"],
@@ -103,7 +102,7 @@ class Users extends Controller
         $data = [
             "agents" => $this->usersModel->getAllAgents()
         ];
-        return $this->view("admin/agents/read", $data);
+        return $this->view("admin/agents/list", $data);
     }
 
     public function createAgent()
@@ -185,13 +184,53 @@ class Users extends Controller
 
     public function update($id)
     {
+        try {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $this->usersModel->updateUser($id, $_POST);
+                header("Location: " . URLROOT . "/users/index");
+                exit();
+            }
+            // اگر متد POST نبود، به صفحه قبل برگردد
+            header("Location: " . URLROOT . "/users/edit/" . $id);
+            exit();
+        } catch (Exception $e) {
+            $data['errors'][] = $e->getMessage();
+            $this->view('admin/users/update', $data);
+        }
+    }
+
+    public function delete($id)
+    {
+        $this->usersModel->deleteUser($id);
+        header("Location: " . URLROOT . "/users/index");
+        exit();
+    }
+
+    public function editAgent($id)
+    {
+        $data = [
+            "agent" => $this->usersModel->getAgentById($id)
+        ];
+        return $this->view("admin/agents/update", $data);
+    }
+
+
+    public function updateAgent($id)
+    {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $this->usersModel->updateUser($id, $_POST);
-            header("Location: " . URLROOT . "/users/index");
+            $this->usersModel->updateAgent($id, $_POST);
+            header("Location: " . URLROOT . "/users/indexAgents");
             exit();
         }
         // اگر متد POST نبود، به صفحه قبل برگردد
-        header("Location: " . URLROOT . "/users/edit/" . $id);
+        header("Location: " . URLROOT . "/users/editAgent/" . $id);
+        exit();
+    }
+
+    public function deleteAgent($id)
+    {
+        $this->usersModel->deleteAgent($id);
+        header("Location: " . URLROOT . "/users/indexAgents");
         exit();
     }
 }

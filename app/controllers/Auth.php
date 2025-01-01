@@ -148,7 +148,8 @@ class Auth extends Controller
           header("location:" . URLROOT . "/auth/login");
           exit();
         } else {
-          die("خطا در ثبت نام کاربر");
+          $data["register_err"] = "خطا در ثبت نام. لطفاً دوباره تلاش کنید یا با پشتیبانی تماس بگیرید.";
+          return $this->view('auth/register', $data);
         }
       } else {
         return $this->view('auth/register', $data);

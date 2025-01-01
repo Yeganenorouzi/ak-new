@@ -41,14 +41,7 @@
             <h3 class="text-lg font-semibold"> تعداد کل کارت گارانتی ها </h3>
             <p class="text-2xl font-bold text-yellow-600 mt-2"><?php echo $data['total_cards']; ?></p>
           </div>
-          <div class="bg-white rounded-lg shadow p-6 text-center">
-            <h3 class="text-lg font-semibold">گوشی‌های تعمیر شده</h3>
-            <p class="text-2xl font-bold text-green-600 mt-2">۱۰۵</p>
-          </div>
-          <div class="bg-white rounded-lg shadow p-6 text-center">
-            <h3 class="text-lg font-semibold">گوشی‌های آماده تحویل </h3>
-            <p class="text-2xl font-bold text-green-600 mt-2">50</p>
-          </div>
+          
 
         </div>
 

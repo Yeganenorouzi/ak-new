@@ -43,4 +43,12 @@ class DataBase
   {
     return $this->stmt->rowCount();
   }
+  public function getError()
+  {
+    return $this->stmt->errorInfo();
+  }
+  public function errorInfo()
+  {
+    return $this->stmt->errorInfo();
+  }
 }

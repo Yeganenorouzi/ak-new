@@ -12,21 +12,7 @@
                         <h4 class="mb-sm-0 text-lg font-semibold grow text-gray-800 dark:text-gray-100">فرم پذیرش </h4>
                         <button type="submit" class="flex btn text-white bg-violet-500 border-violet-500 hover:bg-violet-600 hover:border-violet-600 focus:bg-violet-600 focus:border-violet-600 focus:ring focus:ring-violet-500/30 active:bg-violet-600 active:border-violet-600 ltr:mr-2 rtl:ml-2">ثبت پذیرش </button>
 
-                        <nav class="flex" aria-label="Breadcrumb">
-                            <ol class="inline-flex items-center space-x-3 ltr:md:space-x-3 rtl:md:space-x-0">
-                                <li class="inline-flex items-center">
-                                    <div class="mb-4">
-                                        <h5 class="ltr:ml-1 rtl:mr-1 text-sm font-medium text-gray-500 hover:text-gray-900 ltr:md:ml-2 rtl:md:mr-2 dark:text-gray-100 dark:hover:text-white"><?php echo date('Y-m-d'); ?></h5>
-                                    </div>
-                                </li>
-
-                                <li class="inline-flex items-center">
-                                    <div class="mb-4">
-                                        <h5 class="ltr:ml-1 rtl:mr-1 text-sm font-medium text-gray-500 hover:text-gray-900 ltr:md:ml-2 rtl:md:mr-2 dark:text-gray-100 dark:hover:text-white">شماره پذیرش : </h5>
-                                    </div>
-                                </li>
-                            </ol>
-                        </nav>
+                        
                     </div>
                 </div>
 
@@ -75,15 +61,11 @@
                                                 <select class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
                                                     name="ostan" id="province-select" required>
                                                     <option value="">انتخاب استان</option>
-                                                    <?php
-                                                    foreach (ProvinceHelper::getProvinces() as $province):
-                                                    ?>
+                                                    <?php foreach (ProvinceHelper::getProvinces() as $province): ?>
                                                         <option value="<?php echo $province; ?>" <?php echo (isset($data['ostan']) && $data['ostan'] === $province) ? 'selected' : ''; ?>>
                                                             <?php echo $province; ?>
                                                         </option>
-                                                    <?php
-                                                    endforeach;
-                                                    ?>
+                                                    <?php endforeach; ?>
                                                 </select>
                                             </div>
                                         </div>
@@ -94,17 +76,13 @@
                                                 <select class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
                                                     name="shahr" required>
                                                     <option value="">انتخاب شهر</option>
-                                                    <?php
-                                                    foreach (ProvinceHelper::getCities() as $province => $cities):
-                                                        foreach ($cities as $city):
-                                                    ?>
+                                                    <?php foreach (ProvinceHelper::getCities() as $province => $cities): ?>
+                                                        <?php foreach ($cities as $city): ?>
                                                             <option value="<?php echo $city; ?>" <?php echo (isset($data['shahr']) && $data['shahr'] === $city) ? 'selected' : ''; ?>>
                                                                 <?php echo $city; ?>
                                                             </option>
-                                                    <?php
-                                                        endforeach;
-                                                    endforeach;
-                                                    ?>
+                                                        <?php endforeach; ?>
+                                                    <?php endforeach; ?>
                                                 </select>
                                             </div>
                                         </div>
@@ -154,13 +132,11 @@
 
                                         <div class="mb-4">
                                             <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">آدرس</label>
-                                            <textarea class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100 " style="height: 156px; resize: none;"
-                                                type="text"
-                                                id="example-text-input"
+                                            <textarea
+                                                class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
+                                                style="height: 156px; resize: none;"
                                                 name="address"
-                                                value="<?php echo htmlspecialchars($data['address'] ?? ''); ?>"
-                                                required></textarea>
-
+                                                required><?php echo htmlspecialchars($data['address'] ?? ''); ?></textarea>
                                         </div>
 
 
@@ -312,8 +288,8 @@
                                             <select class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100" name="paziresh_status" required
                                                 value="<?php echo htmlspecialchars($data['paziresh_status'] ?? ''); ?>">
                                                 <option>انتخاب</option>
-                                                <option value="1"> پذیرش حضوری</option>
-                                                <option value="0"> پذیرش غیرحضوری</option>
+                                                <option> پذیرش حضوری</option>
+                                                <option> پذیرش غیرحضوری</option>
                                             </select>
                                         </div>
                                     </div>
@@ -457,9 +433,7 @@
                                             type="file"
                                             id="avatar1"
                                             accept="image/*"
-                                            onchange="previewImage(this, 'preview1');"
-                                            name="file1"
-                                            value="<?php echo htmlspecialchars($data['file1'] ?? ''); ?>">
+                                            onchange="previewImage(this, 'preview1');">
                                         <div class="mt-2">
                                             <img id="preview1" src="#" alt="پیش نمایش تصویر" class="hidden rounded-lg" style="width: 150px; height: 150px; object-fit: cover;">
                                         </div>
@@ -476,9 +450,7 @@
                                             type="file"
                                             id="avatar2"
                                             accept="image/*"
-                                            onchange="previewImage(this, 'preview2');"
-                                            name="file2"
-                                            value="<?php echo htmlspecialchars($data['file2'] ?? ''); ?>">
+                                            onchange="previewImage(this, 'preview2');">
                                         <div class="mt-2">
                                             <img id="preview2" src="#" alt="پیش نمایش تصویر" class="hidden rounded-lg" style="width: 150px; height: 150px; object-fit: cover;">
                                         </div>
@@ -495,9 +467,7 @@
                                             type="file"
                                             id="avatar3"
                                             accept="image/*"
-                                            onchange="previewImage(this, 'preview3');"
-                                            name="file3"
-                                            value="<?php echo htmlspecialchars($data['file3'] ?? ''); ?>">
+                                            onchange="previewImage(this, 'preview3');">
                                         <div class="mt-2">
                                             <img id="preview3" src="#" alt="پیش نمایش تصویر" class="hidden rounded-lg" style="width: 150px; height: 150px; object-fit: cover;">
                                         </div>

@@ -13,7 +13,7 @@ class Receptions extends Controller
         $data = [
             "receptions" => $this->receptionsModel->getAllReceptions()
         ];
-        return $this->view("admin/receptions/read", $data);
+        return $this->view("admin/receptions/list", $data);
     }
 
     public function agent()
@@ -21,7 +21,7 @@ class Receptions extends Controller
         $data = [
             "receptionsAgent" => $this->receptionsModel->getAllReceptionsByAgent()
         ];
-        return $this->view("agent/receptions/read", $data);
+        return $this->view("agent/receptions/list", $data);
     }
 
 
@@ -76,6 +76,14 @@ class Receptions extends Controller
                 "user_id" => $user_id,
                 "codemelli" => $_POST["codemelli"],
                 "customer_id" => $customer_id,
+                "name" => $_POST["name"] ?? null,
+                "passport" => $_POST["passport"] ?? null,
+                "mobile" => $_POST["mobile"] ?? null,
+                "phone" => $_POST["phone"] ?? null,
+                "ostan" => $_POST["ostan"] ?? null,
+                "shahr" => $_POST["shahr"] ?? null,
+                "address" => $_POST["address"] ?? null,
+                "codeposti" => $_POST["codeposti"] ?? null,
                 "activation_start_date" => $_POST["activation_start_date"],
                 "guarantee_status" => $_POST["guarantee_status"],
                 "problem" => $_POST["problem"],
@@ -92,15 +100,15 @@ class Receptions extends Controller
                 "created_at" => date('Y-m-d H:i:s')
             ];
 
-            // آپلود فایل‌ها
-            for ($i = 1; $i <= 3; $i++) {
-                $fileKey = 'file' . $i;
-                if (isset($_FILES[$fileKey])) {
-                    $result = $this->uploadFile($_FILES[$fileKey], $i);
+            // آپلود فایل‌ها - اصلاح شده
+            $fileKeys = ['image1' => 'file1', 'image2' => 'file2', 'image3' => 'file3'];
+            foreach ($fileKeys as $uploadKey => $dataKey) {
+                if (isset($_FILES[$uploadKey])) {
+                    $result = $this->uploadFile($_FILES[$uploadKey], substr($uploadKey, -1));
                     if (strlen($result) > 0 && !str_contains($result, '.')) {
                         $errors[] = $result;
                     } else {
-                        $data[$fileKey] = $result;
+                        $data[$dataKey] = $result;
                     }
                 }
             }
@@ -134,5 +142,55 @@ class Receptions extends Controller
         // اگر متد POST نبود، به صفحه قبل برگردد
         header("Location: " . URLROOT . "/receptions/edit/" . $id);
         exit();
+    }
+
+    public function download($filename)
+    {
+        // استفاده از DIRECTORY_SEPARATOR برای سازگاری با ویندوز
+        $file = dirname(APPROOT) . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'receptions' . DIRECTORY_SEPARATOR . $filename;
+
+        // بررسی امنیتی - جلوگیری از directory traversal
+        $filename = basename($filename); // فقط نام فایل را استخراج می‌کند
+
+        if (!file_exists($file)) {
+            die('File not found at: ' . $file);
+        }
+
+        // تنظیم نوع محتوا بر اساس پسوند فایل
+        $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+        switch ($ext) {
+            case 'jpg':
+            case 'jpeg':
+                $content_type = 'image/jpeg';
+                break;
+            case 'png':
+                $content_type = 'image/png';
+                break;
+            default:
+                $content_type = 'application/octet-stream';
+        }
+
+        // ارسال هدرها
+        header('Content-Description: File Transfer');
+        header('Content-Type: ' . $content_type);
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($file));
+
+        // خواندن و ارسال فایل
+        ob_clean(); // پاک کردن خروجی قبلی
+        flush(); // ارسال هدرها
+        readfile($file);
+        exit;
+    }
+
+    public function show($id)
+    {
+        $data = [
+            "reception" => $this->receptionsModel->getReceptionById($id)
+        ];
+        return $this->view("admin/receptions/read", $data);
     }
 }

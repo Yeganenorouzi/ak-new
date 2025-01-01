@@ -44,4 +44,25 @@ class CustomersModel{
         $this->db->bind(':user_id', $_SESSION['id']);
         return $this->db->fetchAll();
     }
+
+    public function getCustomerById($id){
+        $this->db->query("SELECT * FROM customers WHERE id = :id");
+        $this->db->bind(':id', $id);
+        return $this->db->fetch();
+    }
+
+    public function updateCustomer($id, $data){
+        $this->db->query("UPDATE customers SET name = :name, codemelli = :codemelli, phone = :phone, mobile = :mobile, passport = :passport, ostan = :ostan, shahr = :shahr, address = :address, codeposti = :codeposti WHERE id = :id");
+        $this->db->bind(':id', $id);
+        $this->db->bind(':name', $data['name']);
+        $this->db->bind(':codemelli', $data['codemelli']);
+        $this->db->bind(':phone', $data['phone']);
+        $this->db->bind(':mobile', $data['mobile']);
+        $this->db->bind(':passport', $data['passport']);
+        $this->db->bind(':ostan', $data['ostan']);
+        $this->db->bind(':shahr', $data['shahr']);
+        $this->db->bind(':address', $data['address']);
+        $this->db->bind(':codeposti', $data['codeposti']);
+        return $this->db->execute();
+    }
 }

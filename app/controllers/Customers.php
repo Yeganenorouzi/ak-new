@@ -67,4 +67,33 @@ class Customers extends Controller
         ];
         return $this->view("agent/customers/read", $data);
     }
+
+    public function edit($id)
+    {
+        // ایجاد نمونه از مدل پذیرش‌ها
+        $receptionsModel = $this->model("ReceptionsModel");
+
+        $data = [
+            "customer" => $this->customersModel->getCustomerById($id),
+            "receptions" => $receptionsModel->getReceptionsByCustomerId($id)
+        ];
+        return $this->view("agent/customers/update", $data);
+    }
+
+    public function update($id)
+    {
+        try {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $this->customersModel->updateCustomer($id, $_POST);
+                header("Location: " . URLROOT . "/customers/agent");
+                exit();
+            }
+            // اگر متد POST نبود، به صفحه قبل برگردد
+            header("Location: " . URLROOT . "/customers/edit/" . $id);
+            exit();
+        } catch (Exception $e) {
+            $data['errors'][] = $e->getMessage();
+            $this->view('agent/customers/update', $data);
+        }
+    }
 }

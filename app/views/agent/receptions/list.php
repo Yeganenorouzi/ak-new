@@ -1,3 +1,7 @@
+<?php
+
+use Hekmatinasser\Verta\Verta;
+?>
 <?php require_once(APPROOT . "/views/public/header.php"); ?>
 <?php require_once(APPROOT . "/views/public/sidebarAgent.php"); ?>
 
@@ -70,10 +74,13 @@
                                                 <?php echo $item->product_status; ?>
                                             </td>
                                             <td class="px-6 py-4">
-                                                <?php echo $item->created_at ?>
+                                                <?php
+                                                $shamsiDate = new Verta($item->created_at);
+                                                echo $shamsiDate->format('Y/m/d');
+                                                ?>
                                             </td>
                                             <td class="px-6 py-4">
-                                                <a href="<?php echo URLROOT; ?>/admin/receptions/edit/<?php echo $item->id; ?>" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">ویرایش</a>
+                                                <a href="<?php echo URLROOT; ?>/receptions/edit/<?php echo $item->id; ?>" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">ویرایش</a>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
