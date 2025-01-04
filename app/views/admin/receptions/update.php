@@ -1,6 +1,7 @@
 <?php
 
 use Hekmatinasser\Verta\Verta;
+
 ?>
 <?php require_once(APPROOT . "/views/public/header.php"); ?>
 
@@ -31,7 +32,7 @@ use Hekmatinasser\Verta\Verta;
                         <h4 class="mb-sm-0 text-lg font-semibold grow text-gray-800 dark:text-gray-100">فرم پذیرش </h4>
                         <div class="flex gap-2">
                             <!-- دکمه بازگشت به منو -->
-                            <a href="<?php echo ($_SESSION['is_admin'] === 1) ? URLROOT . '/dashboard/admin' : URLROOT . '/dashboard/agent'; ?>"
+                            <a href="<?php echo ($_SESSION['is_admin'] === 1) ? URLROOT . '/receptions/admin' : URLROOT . '/receptions/agent'; ?>"
                                 class="flex btn text-white bg-gray-500 border-gray-500 hover:bg-gray-600 hover:border-gray-600 focus:bg-gray-600 focus:border-gray-600 focus:ring focus:ring-gray-500/30 active:bg-gray-600 active:border-gray-600">
                                 بازگشت به منو
                             </a>
@@ -694,12 +695,14 @@ use Hekmatinasser\Verta\Verta;
         <?php require_once(APPROOT . "/views/public/footer.php"); ?>
 
         <script>
+            // تابع نمایش پیش‌نمایش تصویر آپلود شده
             function previewImage(input, previewId) {
                 const preview = document.getElementById(previewId);
 
                 if (input.files && input.files[0]) {
                     const reader = new FileReader();
 
+                    // وقتی فایل خوانده شد، تصویر را نمایش بده
                     reader.onload = function(e) {
                         preview.src = e.target.result;
                         preview.classList.remove('hidden');
@@ -708,12 +711,14 @@ use Hekmatinasser\Verta\Verta;
 
                     reader.readAsDataURL(input.files[0]);
                 } else {
+                    // اگر فایلی انتخاب نشده، پیش‌نمایش را مخفی کن
                     preview.src = '#';
                     preview.classList.add('hidden');
                     preview.style.display = 'none';
                 }
             }
 
+            // اضافه کردن event listener برای فیلدهای آپلود تصویر
             document.addEventListener('DOMContentLoaded', function() {
                 const fileInputs = ['avatar1', 'avatar2', 'avatar3'];
 
@@ -729,9 +734,11 @@ use Hekmatinasser\Verta\Verta;
         </script>
 
         <script>
+            // جستجوی اطلاعات مشتری با کد ملی
             document.getElementById('search-button').addEventListener('click', function() {
                 const codemelli = document.getElementById('codemelli').value;
 
+                // ارسال درخواست به سرور برای جستجوی مشتری
                 fetch('<?php echo URLROOT; ?>/customers/searchOrCreate', {
                         method: 'POST',
                         headers: {
@@ -742,7 +749,7 @@ use Hekmatinasser\Verta\Verta;
                     .then(response => response.json())
                     .then(data => {
                         if (data.status === 'found') {
-                            // پر کردن سایر فیلدها
+                            // اگر مشتری پیدا شد، فرم را با اطلاعات پر کن
                             document.querySelector('[name="name"]').value = data.data.name;
                             document.querySelector('[name="mobile"]').value = data.data.mobile;
                             document.querySelector('[name="phone"]').value = data.data.phone;
@@ -750,21 +757,22 @@ use Hekmatinasser\Verta\Verta;
                             document.querySelector('[name="codeposti"]').value = data.data.codeposti;
                             document.querySelector('[name="passport"]').value = data.data.passport;
 
-                            // ست کردن استان
+                            // تنظیم استان و شهر
                             const provinceSelect = document.querySelector('[name="ostan"]');
                             provinceSelect.value = data.data.ostan;
 
-                            // تریگر کردن رویداد change برای لود شدن شهرها
+                            // تریگر رویداد change برای بارگذاری شهرها
                             const event = new Event('change');
                             provinceSelect.dispatchEvent(event);
 
-                            // کمی تاخیر برای اطمینان از لود شدن شهرها و سپس ست کردن شهر
+                            // تنظیم شهر پس از بارگذاری لیست شهرها
                             setTimeout(() => {
                                 const citySelect = document.querySelector('[name="shahr"]');
                                 citySelect.value = data.data.shahr;
                             }, 100);
 
                         } else if (data.status === 'not_found') {
+                            // اگر مشتری پیدا نشد، فرم را خالی کن
                             alert('کد ملی در سیستم نیست. لطفاً اطلاعات را وارد کنید.');
                             // پاک کردن فیلدها
                             document.querySelector('[name="name"]').value = '';
@@ -804,11 +812,13 @@ use Hekmatinasser\Verta\Verta;
         </script>
 
         <script>
+            // مدیریت لیست شهرها بر اساس استان انتخاب شده
             document.addEventListener('DOMContentLoaded', function() {
                 const provinceSelect = document.querySelector('select[name="ostan"]');
                 const citySelect = document.querySelector('select[name="shahr"]');
                 const cities = <?php echo json_encode(ProvinceHelper::getCities()); ?>;
 
+                // به روزرسانی لیست شهرها وقتی استان تغییر می‌کند
                 provinceSelect.addEventListener('change', function() {
                     const selectedProvince = this.value;
                     citySelect.innerHTML = '<option value="">انتخاب شهر</option>';
@@ -827,9 +837,11 @@ use Hekmatinasser\Verta\Verta;
 
 
         <script>
+            // جستجوی اطلاعات کارت با سریال
             document.getElementById('search-button-2').addEventListener('click', function() {
                 const serial = document.getElementById('serial').value;
 
+                // ارسال درخواست به سرور برای جستجوی کارت
                 fetch('<?php echo URLROOT; ?>/cards/searchOrCreate', {
                         method: 'POST',
                         headers: {
@@ -840,7 +852,7 @@ use Hekmatinasser\Verta\Verta;
                     .then(response => response.json())
                     .then(data => {
                         if (data.status === 'found') {
-                            // پر کردن سایر فیلدها
+                            // اگر کارت پیدا شد، فرم را با اطلاعات پر کن
                             document.querySelector('[name="serial"]').value = data.data.serial;
                             document.querySelector('[name="serial2"]').value = data.data.serial2;
                             document.querySelector('[name="model"]').value = data.data.model;
@@ -856,6 +868,7 @@ use Hekmatinasser\Verta\Verta;
 
 
                         } else if (data.status === 'not_found') {
+                            // اگر کارت پیدا نشد، فرم را خالی کن
                             alert('سریال در سیستم نیست. لطفاً اطلاعات را وارد کنید.');
                             // پاک کردن فیلدها
                             document.querySelector('[name="serial"]').value = '';

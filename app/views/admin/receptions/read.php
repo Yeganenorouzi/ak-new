@@ -31,7 +31,7 @@ use Hekmatinasser\Verta\Verta;
                         <h4 class="mb-sm-0 text-lg font-semibold grow text-gray-800 dark:text-gray-100">فرم پذیرش </h4>
                         <div class="flex gap-2">
                             <!-- دکمه بازگشت به منو -->
-                            <a href="<?php echo ($_SESSION['is_admin'] === 1) ? URLROOT . '/dashboard/admin' : URLROOT . '/dashboard/agent'; ?>"
+                            <a href="<?php echo ($_SESSION['is_admin'] === 1) ? URLROOT . '/customers/index' : URLROOT . '/customers/agent'; ?>"
                                 class="flex btn text-white bg-gray-500 border-gray-500 hover:bg-gray-600 hover:border-gray-600 focus:bg-gray-600 focus:border-gray-600 focus:ring focus:ring-gray-500/30 active:bg-gray-600 active:border-gray-600">
                                 بازگشت به منو
                             </a>

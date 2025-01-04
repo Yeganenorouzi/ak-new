@@ -29,7 +29,7 @@
         </div>
       </div>
 
-      <main class="w-3/4 p-8">
+      <main class="w-full p-8">
 
         <!-- cards  -->
         <div class="grid grid-cols-4 gap-6 mb-8">
@@ -41,16 +41,64 @@
             <h3 class="text-lg font-semibold"> تعداد کل کارت گارانتی ها </h3>
             <p class="text-2xl font-bold text-yellow-600 mt-2"><?php echo $data['total_cards']; ?></p>
           </div>
-          
+
 
         </div>
 
-        <!-- end cards -->
-
-      
+        <!-- Chart Section -->
+        <div class="page-content bg-white rounded-lg shadow p-4 mb-8 dark:bg-zinc-700">
+          <h3 class="text-lg font-semibold mb-4">نمودار وضعیت پذیرش‌ها</h3>
+          <canvas id="statusChart"></canvas>
+        </div>
 
       </main>
 
 
 
-<?php require_once(APPROOT . "/views/public/footer.php"); ?>
+      <?php require_once(APPROOT . "/views/public/footer.php"); ?>
+
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <script>
+        const ctx = document.getElementById('statusChart');
+
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: <?php echo json_encode($data['status_labels']); ?>,
+            datasets: [{
+              label: 'تعداد پذیرش‌ها',
+              data: <?php echo json_encode($data['status_counts']); ?>,
+              backgroundColor: [
+                '#4B5563',
+              ],
+              borderWidth: 1
+
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  font: {
+                    family: 'IRANSans',
+                    size: 10
+                  }
+                }
+              },
+              x: {
+                ticks: {
+                  font: {
+                    family: 'IRANSans',
+                    size: 10
+                  },
+                  maxRotation: 45,
+                  minRotation: 45,
+                  padding: 10
+                }
+              }
+            }
+          }
+        });
+      </script>

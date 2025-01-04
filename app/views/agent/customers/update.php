@@ -1,3 +1,6 @@
+<?php
+use Hekmatinasser\Verta\Verta;
+?>
 <?php require_once(APPROOT . "/views/public/header.php"); ?>
 <?php require_once(APPROOT . "/views/public/sidebarAgent.php"); ?>
 
@@ -164,7 +167,7 @@
                 <!-- New Reception History Section -->
                 <div class="card dark:bg-zinc-800 dark:border-zinc-600 mt-6">
                     <div class="card-header m-4">
-                    <h4 class="mb-sm-0 text-lg font-semibold grow text-gray-800 dark:text-gray-100"> سوابق مشتری </h4>
+                        <h4 class="mb-sm-0 text-lg font-semibold grow text-gray-800 dark:text-gray-100"> سوابق مشتری </h4>
                     </div>
                     <div class="card-body">
                         <?php if (!empty($data['receptions'])): ?>
@@ -172,6 +175,7 @@
                                 <table class="w-full text-sm text-right text-gray-500 dark:text-gray-400">
                                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-zinc-700 dark:text-gray-400">
                                         <tr>
+                                            <th scope="col" class="px-6 py-3">شماره پذیرش</th>
                                             <th scope="col" class="px-6 py-3">تاریخ پذیرش</th>
                                             <th scope="col" class="px-6 py-3">شماره سریال</th>
                                             <th scope="col" class="px-6 py-3">مدل دستگاه</th>
@@ -183,7 +187,13 @@
                                     <tbody>
                                         <?php foreach ($data['receptions'] as $reception): ?>
                                             <tr class="bg-white border-b dark:bg-zinc-800 dark:border-zinc-700">
-                                                <td class="px-6 py-4"><?php echo htmlspecialchars($reception->created_at); ?></td>
+                                                <td class="px-6 py-4"><?php echo htmlspecialchars($reception->id); ?></td>
+                                                <td class="px-6 py-4">
+                                                <?php
+                                                $shamsiDate = new Verta($reception->created_at);
+                                                echo $shamsiDate->format('Y/m/d');
+                                                ?>
+                                            </td>
                                                 <td class="px-6 py-4"><?php echo htmlspecialchars($reception->serial); ?></td>
                                                 <td class="px-6 py-4"><?php echo htmlspecialchars($reception->model); ?></td>
                                                 <td class="px-6 py-4">

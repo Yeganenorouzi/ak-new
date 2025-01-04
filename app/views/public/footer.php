@@ -51,25 +51,18 @@
     <script src="<?php echo URLROOT . "/assets/js/flatpicker_fa.js" ?>"></script>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener('DOMContentLoaded', function() {
         flatpickr("#example-full-input", {
-            dateFormat: "Y-m-d",  // Only date format
-            altInput: true,
-            altFormat: "j F Y",   // Localized date display format
-            locale: {
-                firstDayOfWeek: 6,  // Saturday as first day of week
-                weekdays: {
-                    shorthand: ['شنبه', 'یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه'],
-                    longhand: ['شنبه', 'یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه']
-                },
-                months: {
-                    shorthand: ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'],
-                    longhand: ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند']
-                }
-            }
+          dateFormat: "Y/m/d",
+          altInput: true,
+          altFormat: "j F Y",
+          locale: "fa",
+          calendar: "persian",
+          defaultDate: "today",
         });
-    });
+      });
     </script>
+
 
 
 

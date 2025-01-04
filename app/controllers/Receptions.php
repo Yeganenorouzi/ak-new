@@ -193,4 +193,12 @@ class Receptions extends Controller
         ];
         return $this->view("admin/receptions/read", $data);
     }
+
+    public function print($id)
+    {
+        $data = [
+            "reception" => $this->receptionsModel->getReceptionById($id)
+        ];
+        return $this->view("agent/receptions/print", $data);
+    }
 }

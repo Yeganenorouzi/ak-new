@@ -218,33 +218,40 @@ class ReceptionsModel
 
   public function updateReception($id, $data)
   {
-    // Handle file uploads
-    $uploadedFiles = ['file1' => 'image1', 'file2' => 'image2', 'file3' => 'image3'];
-    $uploadPath = APPROOT . '/public/assets/uploads/receptions/';
+    // دریافت اطلاعات فعلی پذیرش
+    $currentReception = $this->getReceptionById($id);
 
-    foreach ($uploadedFiles as $dbField => $inputField) {
-      // Check if new file is uploaded
+    // تنظیم مسیر صحیح آپلود - اصلاح شده
+    $uploadPath = 'assets/uploads/receptions/';
+
+    // بررسی و آپلود فایل‌های جدید
+    $fileFields = ['file1' => 'image1', 'file2' => 'image2', 'file3' => 'image3'];
+
+    foreach ($fileFields as $dbField => $inputField) {
       if (isset($_FILES[$inputField]) && $_FILES[$inputField]['error'] === UPLOAD_ERR_OK) {
-        // Generate unique filename
+        // ایجاد نام یکتا برای فایل
         $extension = pathinfo($_FILES[$inputField]['name'], PATHINFO_EXTENSION);
-        $newFilename = uniqid() . '.' . $extension;
+        $newFilename = time() . '_' . uniqid() . '.' . $extension;
 
-        // Move uploaded file
+        // آپلود فایل جدید
         if (move_uploaded_file($_FILES[$inputField]['tmp_name'], $uploadPath . $newFilename)) {
-          // Delete old file if exists
-          if (!empty($data[$dbField])) {
-            $oldFile = $uploadPath . $data[$dbField];
+          // حذف فایل قدیمی اگر وجود داشته باشد
+          if (!empty($currentReception->$dbField)) {
+            $oldFile = $uploadPath . $currentReception->$dbField;
             if (file_exists($oldFile)) {
               unlink($oldFile);
             }
           }
-          // Update filename in data array
+          // به‌روزرسانی نام فایل در دیتا
           $data[$dbField] = $newFilename;
         }
+      } else {
+        // اگر فایل جدید آپلود نشده، از فایل قبلی استفاده کن
+        $data[$dbField] = $currentReception->$dbField;
       }
     }
 
-    // Update database
+    // به‌روزرسانی دیتابیس
     $this->db->query("UPDATE receptions SET 
         product_status = :product_status,
         kaar = :kaar,
@@ -257,6 +264,7 @@ class ReceptionsModel
         file3 = :file3
         WHERE id = :id");
 
+    // باندینگ پارامترها
     $this->db->bind(':id', $id);
     $this->db->bind(':product_status', $data['product_status']);
     $this->db->bind(':kaar', $data['kaar']);
@@ -280,5 +288,44 @@ class ReceptionsModel
                       ORDER BY receptions.created_at DESC");
     $this->db->bind(':customer_id', $customerId);
     return $this->db->fetchAll();
+  }
+
+  public function getReceptionCountsByStatus()
+  {
+    $this->db->query("SELECT 
+        SUM(CASE WHEN product_status = 'دریافت از دفتر مرکزی' THEN 1 ELSE 0 END) as status1,
+        SUM(CASE WHEN product_status = 'پذیرش در نمایندگی' THEN 1 ELSE 0 END) as status2,
+        SUM(CASE WHEN product_status = 'ارسال از نمایندگی به دفتر مرکزی' THEN 1 ELSE 0 END) as status3,
+        SUM(CASE WHEN product_status = 'در انتظار تکمیل مدارک' THEN 1 ELSE 0 END) as status4,
+        SUM(CASE WHEN product_status = 'ارسال از دفتر مرکزی به نمایندگی' THEN 1 ELSE 0 END) as status5,
+        SUM(CASE WHEN product_status = 'تحویل به مشتری' THEN 1 ELSE 0 END) as status6,
+        SUM(CASE WHEN product_status = 'دریافت از نمایندگی' THEN 1 ELSE 0 END) as status7,
+        SUM(CASE WHEN product_status = 'در انتظار کارشناسی' THEN 1 ELSE 0 END) as status8,
+        SUM(CASE WHEN product_status = 'در انتظار قطعه' THEN 1 ELSE 0 END) as status9,
+        SUM(CASE WHEN product_status = 'در حال تعویض' THEN 1 ELSE 0 END) as status10,
+        SUM(CASE WHEN product_status = 'در حال انجام کار در دفتر مرکزی' THEN 1 ELSE 0 END) as status11,
+        SUM(CASE WHEN product_status = 'اتمام تعمیر' THEN 1 ELSE 0 END) as status12,
+        SUM(CASE WHEN product_status = 'در انتظار تایید هزینه' THEN 1 ELSE 0 END) as status13,
+        SUM(CASE WHEN product_status = 'عدم موافقت با هزینه - مرجوع' THEN 1 ELSE 0 END) as status14
+        FROM receptions");
+
+    $result = $this->db->fetch();
+
+    return [
+      $result->status1 ?? 0,
+      $result->status2 ?? 0,
+      $result->status3 ?? 0,
+      $result->status4 ?? 0,
+      $result->status5 ?? 0,
+      $result->status6 ?? 0,
+      $result->status7 ?? 0,
+      $result->status8 ?? 0,
+      $result->status9 ?? 0,
+      $result->status10 ?? 0,
+      $result->status11 ?? 0,
+      $result->status12 ?? 0,
+      $result->status13 ?? 0,
+      $result->status14 ?? 0
+    ];
   }
 }

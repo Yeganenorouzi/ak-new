@@ -1,6 +1,7 @@
 {
     "require": {
         "morilog/jalali": "^3.4",
-        "hekmatinasser/verta": "^8.4"
+        "hekmatinasser/verta": "^8.4",
+        "shuchkin/simplexlsx": "^1.1"
     }
 }

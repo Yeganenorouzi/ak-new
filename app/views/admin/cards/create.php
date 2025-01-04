@@ -4,69 +4,38 @@
 <div class="main-content">
     <div class="page-content dark:bg-zinc-700">
 
-       
-
-           
-
-            <div class="grid grid-cols-1 mb-5">
-                <div class="flex items-center justify-between">
-                    <h4 class="mb-sm-0 text-lg font-semibold grow text-gray-800 dark:text-gray-100">تعریف کاربر جدید</h4>
-                    <nav class="flex" aria-label="Breadcrumb">
-                        <ol class="inline-flex items-center space-x-1 ltr:md:space-x-3 rtl:md:space-x-0">
-                            <li class="inline-flex items-center">
-                                <a href="#" class="inline-flex items-center text-sm font-medium text-gray-800 hover:text-gray-900 dark:text-zinc-100 dark:hover:text-white">
-                                    کارت گارانتی ها
-                                </a>
-                            </li>
-                            <li>
-                                <div class="flex items-center">
-                                    <svg class="w-4 h-4 text-gray-400 -rotate-180" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-                                    </svg>
-                                    <a href="#" class="ltr:ml-1 rtl:mr-1 text-sm font-medium text-gray-500 hover:text-gray-900 ltr:md:ml-2 rtl:md:mr-2 dark:text-gray-100 dark:hover:text-white">تعریف کارت گارانتی جدید</a>
-                                </div>
-                            </li>
-                        </ol>
-                    </nav>
-                </div>
-            </div>
 
 
-            <div class="grid grid-cols-1">
-                <div class="card dark:bg-zinc-800 dark:border-zinc-600">
-                <div class="card-body">
-            <?php if(isset($_SESSION['card_message'])): ?>
 
-                                <button type="button" class="btn bg-violet-500 border-violet-500 text-white hover:bg-violet-600 focus:ring ring-violet-50focus:bg-violet-600" data-tw-toggle="modal" data-tw-target="#modal-idCenter" id="successModal" onclick="closeModal()">با وسط‌چینی و اقدام تکی</button>
-                           
-                                <div class="modal relative z-50 hidden" id="modal-idCenter" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-                                    <div class="fixed inset-0 z-50 overflow-hidden">
-                                        <div class="absolute inset-0 bg-black bg-opacity-50 transition-opacity modal-overlay"></div>
-                                        <div class="animate-translate p-4 text-center  sm:max-w-lg mx-auto">
-                                            <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all dark:bg-zinc-700">
-                                                <div class="bg-white p-5 text-center dark:bg-zinc-700">
-                                                     <div class="h-14 w-14 rounded-full bg-green-100 mx-auto">
-                                                        <i class="mdi mdi-check-all text-2xl text-green-600 leading-[2.4]"></i>
-                                                     </div>
-                                                     <h2 class="text-xl mt-5 text-gray-700 dark:text-gray-100"><?php echo $_SESSION['card_message']; ?></h2>
-                                                     <p class="text-gray-500 dark:text-zinc-100/60 mt-2">از جزئیات مودال استفاده کنید تا پنجره‌های تعاملی و اعلان‌ها را به کاربران وب‌سایت خود نشان دهید که در اندازه‌ها، رنگ‌ها و سبک‌های مختلف موجود است.</p>
-                                                    <div class="mt-6">
-                                                        <a href="index-2.html" type="button" class="btn bg-violet-500 border-violet-500 text-white">بازگشت به داشبورد</a>     
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+
+        <div class="grid grid-cols-1 mb-5">
+            <div class="flex items-center justify-between">
+                <h4 class="mb-sm-0 text-lg font-semibold grow text-gray-800 dark:text-gray-100">تعریف کاربر جدید</h4>
+                <nav class="flex" aria-label="Breadcrumb">
+                    <ol class="inline-flex items-center space-x-1 ltr:md:space-x-3 rtl:md:space-x-0">
+                        <li class="inline-flex items-center">
+                            <a href="#" class="inline-flex items-center text-sm font-medium text-gray-800 hover:text-gray-900 dark:text-zinc-100 dark:hover:text-white">
+                                کارت گارانتی ها
+                            </a>
+                        </li>
+                        <li>
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 text-gray-400 -rotate-180" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                <a href="#" class="ltr:ml-1 rtl:mr-1 text-sm font-medium text-gray-500 hover:text-gray-900 ltr:md:ml-2 rtl:md:mr-2 dark:text-gray-100 dark:hover:text-white">تعریف کارت گارانتی جدید</a>
                             </div>
-                            <script>
-                    function closeModal() {
-                        document.getElementById('successModal').remove();
-                    }
-                </script>
-                <?php unset($_SESSION['card_message']); ?>
-            <?php endif; ?>
-                   
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+
+        <div class="grid grid-cols-1">
+            <div class="card dark:bg-zinc-800 dark:border-zinc-600">
+                <div class="card-body">
+
 
                     <div class="card-body">
                         <form action="<?php echo URLROOT; ?>/cards/create" method="POST" enctype="multipart/form-data" class="max-w-2xl">
@@ -241,7 +210,7 @@
                                             required>
                                     </div>
                                     <div class="mb-4">
-                                        <label for="att3_code" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">و��ژگی 3</label>
+                                        <label for="att3_code" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">ویژگی 3</label>
                                         <input
                                             name="att3_code"
                                             class="input-field w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
@@ -321,10 +290,16 @@
                                 </div>
                             </div>
 
-                            <div class="mt-6 mx-5">
+                            <div class="mt-6 mx-5 flex gap-4">
                                 <button type="submit" class="px-5 py-2.5 bg-violet-500 text-white rounded hover:bg-violet-600 focus:outline-none">
                                     ثبت اطلاعات
                                 </button>
+
+                                <!-- دکمه آپلود اکسل -->
+                                <label class="px-5 py-2.5 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none cursor-pointer">
+                                    <input type="file" name="excel_file" accept=".xlsx,.xls" class="hidden">
+                                    آپلود از اکسل
+                                </label>
                             </div>
                         </form>
                     </div>
@@ -344,3 +319,31 @@
 
 
             <?php require_once(APPROOT . "/views/public/footer.php"); ?>
+
+            <script>
+                document.querySelector('input[name="excel_file"]').addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const formData = new FormData();
+                    formData.append('excel_file', file);
+
+                    fetch('<?php echo URLROOT; ?>/cards/importExcel', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                alert(data.message);
+                                window.location.reload();
+                            } else {
+                                alert('خطا: ' + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            alert('خطا در آپلود فایل');
+                            console.error(error);
+                        });
+                });
+            </script>

@@ -78,9 +78,8 @@ class CardsModel
             if ($this->db->execute()) {
                 return true;
             }
-            
+
             throw new Exception("خطا در ذخیره‌سازی اطلاعات");
-            
         } catch (PDOException $e) {
             // اگر خطای تکراری بودن سریال باشد
             if ($e->getCode() == 23000) {
@@ -88,6 +87,46 @@ class CardsModel
             }
             // سایر خطاهای دیتابیس
             throw new Exception("خطا در ارتباط با پایگاه داده: " . $e->getMessage());
+        }
+    }
+
+    public function createMultipleCards($cards)
+    {
+        try {
+            $this->db->query("START TRANSACTION");
+
+            foreach ($cards as $card) {
+                $card['is_import'] = 1;        // نشان دهنده import از اکسل
+                $card['added_by_user'] = 1;
+                $card['approved'] = 1;
+                $card['did'] = 0;
+
+                $this->db->query("INSERT INTO serials
+                    (code_dastgah, title, coding_derakhtvare, model, att1_code, att1_val, 
+                    att2_code, att2_val, att3_code, att3_val, att4_code, att4_val, 
+                    serial, serial2, company, sh_sanad, code_guarantee, sharh_guarantee, 
+                    code_agent_service, agent_service, start_guarantee, expite_guarantee, 
+                    is_import, added_by_user, approved, did) 
+                    VALUES 
+                    (:code_dastgah, :title, :coding_derakhtvare, :model, :att1_code, :att1_val,
+                    :att2_code, :att2_val, :att3_code, :att3_val, :att4_code, :att4_val,
+                    :serial, :serial2, :company, :sh_sanad, :code_guarantee, :sharh_guarantee,
+                    :code_agent_service, :agent_service, :start_guarantee, :expite_guarantee,
+                    :is_import, :added_by_user, :approved, :did)");
+
+                // bind all parameters
+                foreach ($card as $key => $value) {
+                    $this->db->bind(':' . $key, $value);
+                }
+
+                $this->db->execute();
+            }
+
+            $this->db->query("COMMIT");
+            return true;
+        } catch (Exception $e) {
+            $this->db->query("ROLLBACK");
+            throw $e;
         }
     }
 }
