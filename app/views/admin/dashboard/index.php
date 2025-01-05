@@ -46,9 +46,11 @@
         </div>
 
         <!-- Chart Section -->
-        <div class="page-content bg-white rounded-lg shadow p-4 mb-8 dark:bg-zinc-700">
+        <div class="page-content bg-white rounded-lg shadow p-4 mb-8 dark:bg-zinc-700 max-w-3xl mx-auto">
           <h3 class="text-lg font-semibold mb-4">نمودار وضعیت پذیرش‌ها</h3>
-          <canvas id="statusChart"></canvas>
+          <div class="h-[600px] w-full">
+            <canvas id="statusChart" style="height: 600px !important;"></canvas>
+          </div>
         </div>
 
       </main>
@@ -69,17 +71,33 @@
               label: 'تعداد پذیرش‌ها',
               data: <?php echo json_encode($data['status_counts']); ?>,
               backgroundColor: [
-                '#4B5563',
+                '#1C4AAF',
               ],
-              borderWidth: 1
-
+              borderWidth: 1,
+              maxBarThickness: 40,
+              barThickness: 30
             }]
           },
           options: {
+            maintainAspectRatio: false,
             responsive: true,
+            height: 600,
+            plugins: {
+              legend: {
+                labels: {
+                  font: {
+                    family: 'IRANSans',
+                    size: 12
+                  }
+                }
+              }
+            },
             scales: {
               y: {
                 beginAtZero: true,
+                grid: {
+                  display: true
+                },
                 ticks: {
                   font: {
                     family: 'IRANSans',
@@ -88,6 +106,9 @@
                 }
               },
               x: {
+                grid: {
+                  display: false
+                },
                 ticks: {
                   font: {
                     family: 'IRANSans',
