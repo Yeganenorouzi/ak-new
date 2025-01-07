@@ -135,13 +135,40 @@ class Receptions extends Controller
     public function update($id)
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $this->receptionsModel->updateReception($id, $_POST);
-            header("Location: " . URLROOT . "/receptions/admin");
+            // جمع‌آوری داده‌ها
+            $data = [
+                'id' => $id,
+                'product_status' => trim($_POST['product_status'] ?? ''),
+                'sh_baar' => trim($_POST['sh_baar'] ?? ''),
+                'sh_baar2' => trim($_POST['sh_baar2'] ?? ''),
+                'kaar' => trim($_POST['kaar'] ?? ''),
+                'kaar_serial' => trim($_POST['kaar_serial'] ?? ''),
+                'kaar_at' => trim($_POST['kaar_at'] ?? '')
+            ];
+
+            try {
+                // بروزرسانی در دیتابیس
+                $result = $this->receptionsModel->updateReception($data);
+
+                // فقط در صورت موفقیت و وجود تغییرات پیام نمایش داده شود
+                if ($result === true && $this->receptionsModel->db->rowCount() > 0) {
+                    $_SESSION['reception_message'] = 'پذیرش با موفقیت بروزرسانی شد';
+                    if ($_SESSION['is_admin'] === 1) {
+                        header("Location: " . URLROOT . "/receptions/admin");
+                    } else {
+                        header("Location: " . URLROOT . "/receptions/agent");
+                    }
+                    exit();
+                } else if ($result === false) {
+                    $_SESSION['reception_message'] = 'خطا در بروزرسانی پذیرش';
+                }
+            } catch (Exception $e) {
+                $_SESSION['reception_message'] = 'خطا در بروزرسانی پذیرش';
+            }
+
+            header("Location: " . URLROOT . "/receptions/edit/" . $id);
             exit();
         }
-        // اگر متد POST نبود، به صفحه قبل برگردد
-        header("Location: " . URLROOT . "/receptions/edit/" . $id);
-        exit();
     }
 
     public function download($filename)

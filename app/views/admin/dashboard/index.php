@@ -99,6 +99,8 @@
                   display: true
                 },
                 ticks: {
+                  stepSize: 1,
+                  precision: 0,
                   font: {
                     family: 'IRANSans',
                     size: 10

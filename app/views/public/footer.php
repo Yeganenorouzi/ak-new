@@ -64,6 +64,224 @@
     </script>
 
 
+<script>
+            // تابع نمایش پیش‌نمایش تصویر آپلود شده
+            function previewImage(input, previewId) {
+                const preview = document.getElementById(previewId);
+
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+
+                    // وقتی فایل خوانده شد، تصویر را نمایش بده
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                        preview.classList.remove('hidden');
+                        preview.style.display = 'block';
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                } else {
+                    // اگر فایلی انتخاب نشده، پیش‌نمایش را مخفی کن
+                    preview.src = '#';
+                    preview.classList.add('hidden');
+                    preview.style.display = 'none';
+                }
+            }
+
+            // اضافه کردن event listener برای فیلدهای آپلود تصویر
+            document.addEventListener('DOMContentLoaded', function() {
+                const fileInputs = ['avatar1', 'avatar2', 'avatar3'];
+
+                fileInputs.forEach((inputId, index) => {
+                    const input = document.getElementById(inputId);
+                    if (input) {
+                        input.addEventListener('change', function() {
+                            previewImage(this, `preview${index + 1}`);
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <script>
+            // جستجوی اطلاعات مشتری با کد ملی
+            document.getElementById('search-button').addEventListener('click', function() {
+                const codemelli = document.getElementById('codemelli').value;
+
+                // ارسال درخواست به سرور برای جستجوی مشتری
+                fetch('<?php echo URLROOT; ?>/customers/searchOrCreate', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `codemelli=${encodeURIComponent(codemelli)}`
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'found') {
+                            // اگر مشتری پیدا شد، فرم را با اطلاعات پر کن
+                            document.querySelector('[name="name"]').value = data.data.name;
+                            document.querySelector('[name="mobile"]').value = data.data.mobile;
+                            document.querySelector('[name="phone"]').value = data.data.phone;
+                            document.querySelector('[name="address"]').value = data.data.address;
+                            document.querySelector('[name="codeposti"]').value = data.data.codeposti;
+                            document.querySelector('[name="passport"]').value = data.data.passport;
+
+                            // تنظیم استان و شهر
+                            const provinceSelect = document.querySelector('[name="ostan"]');
+                            provinceSelect.value = data.data.ostan;
+
+                            // تریگر رویداد change برای بارگذاری شهرها
+                            const event = new Event('change');
+                            provinceSelect.dispatchEvent(event);
+
+                            // تنظیم شهر پس از بارگذاری لیست شهرها
+                            setTimeout(() => {
+                                const citySelect = document.querySelector('[name="shahr"]');
+                                citySelect.value = data.data.shahr;
+                            }, 100);
+
+                        } else if (data.status === 'not_found') {
+                            // اگر مشتری پیدا نشد، فرم را خالی کن
+                            alert('کد ملی در سیستم نیست. لطفاً اطلاعات را وارد کنید.');
+                            // پاک کردن فیلدها
+                            document.querySelector('[name="name"]').value = '';
+                            document.querySelector('[name="mobile"]').value = '';
+                            document.querySelector('[name="phone"]').value = '';
+                            document.querySelector('[name="ostan"]').value = '';
+                            document.querySelector('[name="shahr"]').value = '';
+                            document.querySelector('[name="address"]').value = '';
+                            document.querySelector('[name="codeposti"]').value = '';
+                            document.querySelector('[name="passport"]').value = '';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('خطا در برقراری ارتباط با سرور');
+                    });
+            });
+
+            document.getElementById('customer-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const formData = new FormData(this);
+
+                fetch('controller.php?action=createCustomer', {
+                        method: 'POST',
+                        body: new URLSearchParams(formData)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'created') {
+                            alert('مشتری با موفقیت ایجاد شد.');
+                        } else {
+                            alert('خطا در ذخیره اطلاعات.');
+                        }
+                    });
+            });
+        </script>
+
+        <script>
+            // مدیریت لیست شهرها بر اساس استان انتخاب شده
+            document.addEventListener('DOMContentLoaded', function() {
+                const provinceSelect = document.querySelector('select[name="ostan"]');
+                const citySelect = document.querySelector('select[name="shahr"]');
+                const cities = <?php echo json_encode(ProvinceHelper::getCities()); ?>;
+
+                // به روزرسانی لیست شهرها وقتی استان تغییر می‌کند
+                provinceSelect.addEventListener('change', function() {
+                    const selectedProvince = this.value;
+                    citySelect.innerHTML = '<option value="">انتخاب شهر</option>';
+
+                    if (cities[selectedProvince]) {
+                        cities[selectedProvince].forEach(city => {
+                            const option = document.createElement('option');
+                            option.value = city;
+                            option.textContent = city;
+                            citySelect.appendChild(option);
+                        });
+                    }
+                });
+            });
+        </script>
+
+
+        <script>
+            // جستجوی اطلاعات کارت با سریال
+            document.getElementById('search-button-2').addEventListener('click', function() {
+                const serial = document.getElementById('serial').value;
+
+                // ارسال درخواست به سرور برای جستجوی کارت
+                fetch('<?php echo URLROOT; ?>/cards/searchOrCreate', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `serial=${encodeURIComponent(serial)}`
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'found') {
+                            // اگر کارت پیدا شد، فرم را با اطلاعات پر کن
+                            document.querySelector('[name="serial"]').value = data.data.serial;
+                            document.querySelector('[name="serial2"]').value = data.data.serial2;
+                            document.querySelector('[name="model"]').value = data.data.model;
+                            document.querySelector('[name="title"]').value = data.data.title;
+                            document.querySelector('[name="att1_code"]').value = data.data.att1_code;
+                            document.querySelector('[name="att2_code"]').value = data.data.att2_code;
+                            document.querySelector('[name="att3_code"]').value = data.data.att3_code;
+                            document.querySelector('[name="att4_code"]').value = data.data.att4_code;
+                            document.querySelector('[name="company"]').value = data.data.company;
+                            document.querySelector('[name="sh_sanad"]').value = data.data.sh_sanad;
+                            document.querySelector('[name="start_guarantee"]').value = data.data.start_guarantee;
+                            document.querySelector('[name="expite_guarantee"]').value = data.data.expite_guarantee;
+
+
+                        } else if (data.status === 'not_found') {
+                            // اگر کارت پیدا نشد، فرم را خالی کن
+                            alert('سریال در سیستم نیست. لطفاً اطلاعات را وارد کنید.');
+                            // پاک کردن فیلدها
+                            document.querySelector('[name="serial"]').value = '';
+                            document.querySelector('[name="serial2"]').value = '';
+                            document.querySelector('[name="model"]').value = '';
+                            document.querySelector('[name="title"]').value = '';
+                            document.querySelector('[name="att1_code"]').value = '';
+                            document.querySelector('[name="att2_code"]').value = '';
+                            document.querySelector('[name="att3_code"]').value = '';
+                            document.querySelector('[name="att4_code"]').value = '';
+                            document.querySelector('[name="company"]').value = '';
+                            document.querySelector('[name="sh_sanad"]').value = '';
+                            document.querySelector('[name="start_guarantee"]').value = '';
+                            document.querySelector('[name="expite_guarantee"]').value = '';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('خطا در برقراری ارتباط با سرور');
+                    });
+            });
+
+            document.getElementById('customer-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const formData = new FormData(this);
+
+                fetch('controller.php?action=createCard', {
+                        method: 'POST',
+                        body: new URLSearchParams(formData)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'created') {
+                            alert('کارت با موفقیت ایجاد شد.');
+                        } else {
+                            alert('خطا در ذخیره اطلاعات.');
+                        }
+                    });
+            });
+        </script>
+
+
 
 
 

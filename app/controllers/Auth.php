@@ -145,11 +145,15 @@ class Auth extends Controller
       if (empty($data["email_err"]) && empty($data["password_err"]) && empty($data["codemelli_err"]) && empty($data["name_err"]) && empty($data["mobile_err"]) && empty($data["ostan_err"]) && empty($data["shahr_err"]) && empty($data["address_err"]) && empty($data["phone_err"]) && empty($data["hours_err"]) && empty($data["codeposti_err"])) {
         $data["password"] = password_hash($data["password"], PASSWORD_DEFAULT);
         if ($this->authModel->register($data)) {
+          $_SESSION["message"] = "ثبت نام با موفقیت انجام شد";
+          $_SESSION["message_type"] = "success";
           header("location:" . URLROOT . "/auth/login");
           exit();
         } else {
-          $data["register_err"] = "خطا در ثبت نام. لطفاً دوباره تلاش کنید یا با پشتیبانی تماس بگیرید.";
-          return $this->view('auth/register', $data);
+          $_SESSION["message"] = "خطا در ثبت نام. لطفاً دوباره تلاش کنید.";
+          $_SESSION["message_type"] = "error";
+          header("location:" . URLROOT . "/auth/register");
+          exit(); 
         }
       } else {
         return $this->view('auth/register', $data);

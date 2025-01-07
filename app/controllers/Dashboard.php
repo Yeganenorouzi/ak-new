@@ -43,7 +43,24 @@ class Dashboard extends Controller
   public function agent()
   {
     $data = [
-      'total_receptions_by_agent' => $this->receptionsModel->getTotalReceptionsByAgent()
+      'total_receptions_by_agent' => $this->receptionsModel->getTotalReceptionsByAgent(),
+      'status_labels' => [
+        'دریافت از دفتر مرکزی',
+        'پذیرش در نمایندگی',
+        'ارسال از نمایندگی به دفتر مرکزی',
+        'در انتظار تکمیل مدارک',
+        'ارسال از دفتر مرکزی به نمایندگی',
+        'تحویل به مشتری',
+        'دریافت از نمایندگی',
+        'در انتظار کارشناسی',
+        'در انتظار قطعه',
+        'در حال تعویض',
+        'در حال انجام کار در دفتر مرکزی',
+        'اتمام تعمیر',
+        'در انتظار تایید هزینه',
+        'عدم موافقت با هزینه - مرجوع'
+      ],
+      'status_counts' => $this->receptionsModel->getReceptionCountsByStatusForAgent()
     ];
     return $this->view("agent/dashboard/index", $data);
   }

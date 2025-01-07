@@ -79,3 +79,41 @@ class ProvinceHelper
         ];
     }
 }
+
+/**
+ * تنظیم پیام فلش در سشن
+ * @param string $key کلید پیام
+ * @param string $message متن پیام
+ */
+function setFlashMessage($key, $message)
+{
+    if (!isset($_SESSION['flash_messages'])) {
+        $_SESSION['flash_messages'] = [];
+    }
+    $_SESSION['flash_messages'][$key] = $message;
+}
+
+/**
+ * بررسی وجود پیام فلش
+ * @param string $key کلید پیام
+ * @return bool
+ */
+function hasFlashMessage($key)
+{
+    return isset($_SESSION['flash_messages'][$key]);
+}
+
+/**
+ * دریافت و حذف پیام فلش
+ * @param string $key کلید پیام
+ * @return string|null
+ */
+function getFlashMessage($key)
+{
+    if (isset($_SESSION['flash_messages'][$key])) {
+        $message = $_SESSION['flash_messages'][$key];
+        unset($_SESSION['flash_messages'][$key]);
+        return $message;
+    }
+    return null;
+}

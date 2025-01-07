@@ -37,27 +37,90 @@
             <h3 class="text-lg font-semibold">تعداد کل پذیرش ها</h3>
             <p class="text-2xl font-bold text-blue-600 mt-2"><?php echo $data['total_receptions_by_agent']; ?></p>
           </div>
-          <div class="bg-white rounded-lg shadow p-6 text-center">
-            <h3 class="text-lg font-semibold">گوشی‌های در انتظار بررسی</h3>
-            <p class="text-2xl font-bold text-yellow-600 mt-2">۴۵</p>
-          </div>
-          <div class="bg-white rounded-lg shadow p-6 text-center">
-            <h3 class="text-lg font-semibold">گوشی‌های تعمیر شده</h3>
-            <p class="text-2xl font-bold text-green-600 mt-2">۱۰۵</p>
-          </div>
-          <div class="bg-white rounded-lg shadow p-6 text-center">
-            <h3 class="text-lg font-semibold">گوشی‌های آماده تحویل </h3>
-            <p class="text-2xl font-bold text-green-600 mt-2">50</p>
-          </div>
 
         </div>
 
+        <!-- Chart Section -->
+        <div class="page-content bg-white rounded-lg shadow p-4 mb-8 dark:bg-zinc-700 max-w-3xl mx-auto">
+          <h3 class="text-lg font-semibold mb-4">نمودار وضعیت پذیرش‌ها</h3>
+          <div class="h-[600px] w-full">
+            <canvas id="statusChart" style="height: 600px !important;"></canvas>
+          </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+          const ctx = document.getElementById('statusChart');
+
+          new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: <?php echo json_encode($data['status_labels']); ?>,
+              datasets: [{
+                label: 'تعداد پذیرش‌ها',
+                data: <?php echo json_encode($data['status_counts']); ?>,
+                backgroundColor: [
+                  '#1C4AAF',
+                ],
+                borderWidth: 1,
+                maxBarThickness: 40,
+                barThickness: 30
+              }]
+            },
+            options: {
+              maintainAspectRatio: false,
+              responsive: true,
+              height: 600,
+              plugins: {
+                legend: {
+                  labels: {
+                    font: {
+                      family: 'IRANSans',
+                      size: 12
+                    }
+                  }
+                }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  grid: {
+                    display: true
+                  },
+                  ticks: {
+                    stepSize: 1,
+                    precision: 0,
+                    font: {
+                      family: 'IRANSans',
+                      size: 10
+                    }
+                  }
+                },
+                x: {
+                  grid: {
+                    display: false
+                  },
+                  ticks: {
+                    font: {
+                      family: 'IRANSans',
+                      size: 10
+                    },
+                    maxRotation: 45,
+                    minRotation: 45,
+                    padding: 10
+                  }
+                }
+              }
+            }
+          });
+        </script>
+
         <!-- end cards -->
 
-      
+
 
       </main>
 
 
 
-<?php require_once(APPROOT . "/views/public/footer.php"); ?>
+      <?php require_once(APPROOT . "/views/public/footer.php"); ?>
