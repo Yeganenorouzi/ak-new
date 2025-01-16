@@ -11,10 +11,11 @@ class ReceptionsModel
 
   public function getAllReceptions()
   {
-    $this->db->query("SELECT receptions.*, serials.serial ,serials.model ,customers.name
+    $this->db->query("SELECT receptions.*, serials.serial ,serials.model ,customers.name As customer_name , users.name As user_name
                       FROM receptions 
                       INNER JOIN serials ON receptions.serial_id = serials.id 
                       INNER JOIN customers ON receptions.customer_id = customers.id  
+                      INNER JOIN users ON receptions.user_id =users.id
                       ORDER BY receptions.id DESC");
     $receptions = $this->db->fetchAll();
     return $receptions;

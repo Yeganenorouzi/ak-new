@@ -14,10 +14,23 @@ class CardsModel
         return $this->db->fetchAll();
     }
 
+    public function getPaginatedCards($limit, $offset)
+    {
+        // تبدیل پارامترها به عدد صحیح برای اطمینان
+        $limit = (int)$limit;
+        $offset = (int)$offset;
+
+        // استفاده از مقادیر مستقیم در کوئری به جای placeholder
+        $this->db->query("SELECT * FROM serials ORDER BY id DESC LIMIT $limit OFFSET $offset");
+        return $this->db->fetchAll();
+    }
+
+
     public function getTotalCards()
     {
-        $this->db->query("SELECT COUNT(*) AS total FROM serials");
-        return $this->db->fetch()->total;
+        $this->db->query("SELECT COUNT(*) as total FROM serials");
+        $result = $this->db->fetch();
+        return $result->total;
     }
 
     public function getCardBySerial($serial)
@@ -129,4 +142,36 @@ class CardsModel
             throw $e;
         }
     }
+
+    public function getCardById($id){
+        $this->db->query("SELECT * FROM serials WHERE id = :id");
+        $this->db->bind(':id', $id);
+        return $this->db->fetch();
+    }
+
+    public function updateCard($id, $data){
+        $this->db->query("UPDATE serials SET 
+        code_dastgah = :code_dastgah,
+        title = :title,
+        coding_derakhtvare = :coding_derakhtvare,
+        model = :model,
+        att1_code = :att1_code,
+        att1_val = :att1_val,
+        att2_code = :att2_code,
+        att2_val = :att2_val,
+        att3_code = :att3_code,
+        att3_val = :att3_val,
+        att4_code = :att4_code,
+        att4_val = :att4_val
+        WHERE id = :id");
+    }  
+
+    public function deleteCard($id){
+        $this->db->query("DELETE FROM serials WHERE id = :id");
+        $this->db->bind(':id', $id);
+        return $this->db->execute();
+    }
+
+    
 }
+

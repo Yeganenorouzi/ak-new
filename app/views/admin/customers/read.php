@@ -65,7 +65,7 @@
                                         </td>
 
                                         <td class="px-6 py-4">
-                                            <a href="<?php echo URLROOT; ?>/admin/receptions/edit/<?php echo $item->id; ?>" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">ویرایش</a>
+                                            <a href="<?php echo URLROOT; ?>/customers/edit/<?php echo $item->id; ?>" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">ویرایش</a>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

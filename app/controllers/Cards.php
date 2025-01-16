@@ -11,13 +11,33 @@ class Cards extends Controller
         $this->cardModel = $this->model("CardsModel");
     }
 
-    public function index()
+    public function index($page = 1)
     {
+        $page = (int)$page;
+
+        $cardsPerPage = 50;
+        $totalCards = $this->cardModel->getTotalCards();
+        $totalPages = ceil($totalCards / $cardsPerPage);
+
+        // اطمینان از اینکه شماره صفحه معتبر است
+        if ($page < 1) {
+            $page = 1;
+        } elseif ($page > $totalPages) {
+            $page = $totalPages;
+        }
+
+        $offset = ($page - 1) * $cardsPerPage;
+        $cards = $this->cardModel->getPaginatedCards($cardsPerPage, $offset);
+
         $data = [
-            "cards" => $this->cardModel->getAllCards()
+            "cards" => $cards,
+            "currentPage" => $page,
+            "totalPages" => $totalPages
         ];
+
         return $this->view("admin/cards/list", $data);
     }
+
 
     public function searchOrCreate()
     {
@@ -47,7 +67,6 @@ class Cards extends Controller
         ];
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // دریافت داده‌ها از فرم
             $cardData = [
                 'code_dastgah' => trim($_POST['code_dastgah'] ?? ''),
                 'title' => trim($_POST['title'] ?? ''),
@@ -77,11 +96,9 @@ class Cards extends Controller
                 'did' => 0
             ];
 
-            // اعتبارسنجی داده‌ها
             if (empty($cardData['serial'])) {
                 $data['errors'][] = 'سریال نمی‌تواند خالی باشد';
             }
-            // سایر اعتبارسنجی‌ها را اضافه کنید
 
             if (empty($data['errors'])) {
                 try {
@@ -93,10 +110,10 @@ class Cards extends Controller
                     }
                 } catch (Exception $e) {
                     $data['errors'][] = $e->getMessage();
-                    $data['data'] = $cardData; // حفظ داده‌های فرم
+                    $data['data'] = $cardData;
                 }
             } else {
-                $data['data'] = $cardData; // حفظ داده‌های فرم در صورت خطا
+                $data['data'] = $cardData;
             }
         }
 
@@ -112,34 +129,24 @@ class Cards extends Controller
         try {
             require APPROOT . '/libraries/vendor/autoload.php';
 
-            // چک کردن وجود فایل
             if (!isset($_FILES['excel_file'])) {
-                error_log('No file uploaded');
                 throw new Exception('فایلی آپلود نشده است');
             }
 
             if ($_FILES['excel_file']['error'] != 0) {
-                error_log('File upload error: ' . $_FILES['excel_file']['error']);
                 throw new Exception('خطا در آپلود فایل');
             }
 
-            // چک کردن پارس فایل
             $xlsx = SimpleXLSX::parse($_FILES['excel_file']['tmp_name']);
             if (!$xlsx) {
-                error_log('XLSX Parse Error: ' . SimpleXLSX::parseError());
                 throw new Exception('خطا در خواندن فایل اکسل: ' . SimpleXLSX::parseError());
             }
 
             $rows = $xlsx->rows();
-            error_log('Number of rows: ' . count($rows));
-
-            // حذف ردیف هدر
             array_shift($rows);
 
             $cards = [];
-            foreach ($rows as $index => $row) {
-                error_log('Processing row ' . ($index + 1));
-                // مپینگ ستون‌های اکسل به فیلدهای دیتابیس
+            foreach ($rows as $row) {
                 $cards[] = [
                     'code_dastgah' => $row[0] ?? '',
                     'title' => $row[1] ?? '',
@@ -177,11 +184,27 @@ class Cards extends Controller
                 ]);
             }
         } catch (Exception $e) {
-            error_log('Import Error: ' . $e->getMessage());
             echo json_encode([
                 'status' => 'error',
                 'message' => $e->getMessage()
             ]);
+        }
+    }
+
+    public function update($id)
+    {
+        try {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $this->cardModel->updateCard($id, $_POST);
+                header("Location: " . URLROOT . "/cards/index");
+                exit();
+            }
+            // اگر متد POST نبود، به صفحه قبل برگردد
+            header("Location: " . URLROOT . "/cards/update/" . $id);
+            exit();
+        } catch (Exception $e) {
+            $data['errors'][] = $e->getMessage();
+            $this->view('admin/cards/update', $data);
         }
     }
 }

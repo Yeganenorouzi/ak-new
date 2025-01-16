@@ -33,6 +33,10 @@ use Hekmatinasser\Verta\Verta;
                                         <th scope="col" class="px-4 py-3">
                                             شماره پذیرش
                                         </th>
+                                        <th scope="col" class="px-4 py-3">
+                                            نمایندگی
+                                        </th>
+
                                         <th scope="col" class="px-6 py-3">
                                             سریال دستگاه
                                         </th>
@@ -65,6 +69,9 @@ use Hekmatinasser\Verta\Verta;
                                             <th scope="row" class="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                 <?php echo $item->id; ?>
                                             </th>
+                                            <th scope="row" class="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                <?php echo $item->user_name; ?>
+                                            </th>
                                             <td class="px-6 py-4">
                                                 <?php echo $item->serial; ?>
                                             </td>
@@ -72,7 +79,7 @@ use Hekmatinasser\Verta\Verta;
                                                 <?php echo $item->model; ?>
                                             </td>
                                             <td class="px-6 py-4">
-                                                <?php echo $item->name; ?>
+                                                <?php echo $item->customer_name; ?>
                                             </td>
                                             <td class="px-6 py-4">
                                                 <?php echo $item->product_status; ?>
@@ -84,7 +91,8 @@ use Hekmatinasser\Verta\Verta;
                                                 ?>
                                             </td>
                                             <td class="px-6 py-4">
-                                                <a href="<?php echo URLROOT; ?>/receptions/edit/<?php echo $item->id; ?>" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">ویرایش</a>
+                                                <a href="<?php echo URLROOT; ?>/receptions/edit/<?php echo $item->id; ?>" class="font-medium text-blue-600 dark:text-blue-500 hover:underline ml-2">ویرایش</a>
+                                                <a href="<?php echo URLROOT; ?>/receptions/print/<?php echo $item->id; ?>" class="font-medium text-green-600 dark:text-green-500 hover:underline">پرینت</a>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
