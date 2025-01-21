@@ -38,7 +38,7 @@ use Hekmatinasser\Verta\Verta;
                             </a>
                             <!-- دکمه ثبت پذیرش -->
                             <button type="submit" class="flex btn text-white bg-violet-500 border-violet-500 hover:bg-violet-600 hover:border-violet-600 focus:bg-violet-600 focus:border-violet-600 focus:ring focus:ring-violet-500/30 active:bg-violet-600 active:border-violet-600"
-                            
+
                                 <?php if (hasFlashMessage('reception_message')): ?>
                                 disabled
                                 <?php endif; ?>>
@@ -713,6 +713,6 @@ use Hekmatinasser\Verta\Verta;
             </script>
             <?php unset($_SESSION['reception_message']); ?>
         <?php endif; ?>
-        
-        
+
+
         <?php require_once(APPROOT . "/views/public/footer.php"); ?>

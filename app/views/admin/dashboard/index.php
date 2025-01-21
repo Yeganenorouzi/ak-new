@@ -42,6 +42,8 @@
             <p class="text-2xl font-bold text-yellow-600 mt-2"><?php echo $data['total_cards']; ?></p>
           </div>
 
+          
+
 
         </div>
 
