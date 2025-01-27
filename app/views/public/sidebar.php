@@ -100,7 +100,7 @@
               <a href="<?php echo URLROOT . "/tickets/index" ?>" class="pr-14 pl-4 py-2 block text-sm font-medium text-gray-700 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">لیست تیکت ها </a>
             </li>
             <li>
-              <a href="tables-datatable.html" class="pr-14 pl-4  py-2 block text-sm font-medium text-gray-700 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">ارسال تیکت جدید </a>
+              <a href="<?php echo URLROOT . "/tickets/create" ?>" class="pr-14 pl-4  py-2 block text-sm font-medium text-gray-700 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">ارسال تیکت جدید </a>
             </li>
             
           </ul>
