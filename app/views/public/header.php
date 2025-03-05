@@ -27,6 +27,8 @@
   <!-- datepicker css -->
   <link rel="stylesheet" href="<?php echo URLROOT . "/assets/libs/flatpickr/flatpickr.min.css" ?>">
 
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 
 
@@ -58,7 +60,7 @@
         <button type="button" class="text-gray-600 dark:text-white h-[70px] ltr:-ml-10 ltr:mr-6 rtl:-mr-10 rtl:ml-10 vertical-menu-btn" id="vertical-menu-btn">
           <i class="fa fa-fw fa-bars"></i>
         </button>
-       
+
       </div>
       <div class="flex items-center">
         <div>

@@ -13,7 +13,7 @@ class Core
         $this->currentController = ucwords($url[0]);
         unset($url[0]);
       }
-      require_once "../app/controllers/" . $this->currentController . ".php"; 
+      require_once "../app/controllers/" . $this->currentController . ".php";
       $this->currentController = new $this->currentController;
       if (isset($url[1])) {
         if (method_exists($this->currentController, $url[1])) {

@@ -295,11 +295,7 @@
                                     ثبت اطلاعات
                                 </button>
 
-                                <!-- دکمه آپلود اکسل -->
-                                <label class="px-5 py-2.5 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none cursor-pointer">
-                                    <input type="file" name="excel_file" accept=".xlsx,.xls" class="hidden">
-                                    آپلود از اکسل
-                                </label>
+
                             </div>
                         </form>
                     </div>
@@ -319,31 +315,3 @@
 
 
             <?php require_once(APPROOT . "/views/public/footer.php"); ?>
-
-            <script>
-                document.querySelector('input[name="excel_file"]').addEventListener('change', function(e) {
-                    const file = e.target.files[0];
-                    if (!file) return;
-
-                    const formData = new FormData();
-                    formData.append('excel_file', file);
-
-                    fetch('<?php echo URLROOT; ?>/cards/importExcel', {
-                            method: 'POST',
-                            body: formData
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.status === 'success') {
-                                alert(data.message);
-                                window.location.reload();
-                            } else {
-                                alert('خطا: ' + data.message);
-                            }
-                        })
-                        .catch(error => {
-                            alert('خطا در آپلود فایل');
-                            console.error(error);
-                        });
-                });
-            </script>

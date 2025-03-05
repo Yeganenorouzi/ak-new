@@ -70,6 +70,7 @@ class Receptions extends Controller
 
             $accessories = isset($_POST['accessories']) ? implode(',', $_POST['accessories']) : '';
 
+
             $data = [
                 "serial" => $_POST["serial"],
                 "serial_id" => $serial_id,
@@ -98,6 +99,7 @@ class Receptions extends Controller
                 "file2" => '',
                 "file3" => '',
                 "created_at" => date('Y-m-d H:i:s')
+
             ];
 
             // آپلود فایل‌ها - اصلاح شده
@@ -105,7 +107,7 @@ class Receptions extends Controller
             foreach ($fileKeys as $uploadKey => $dataKey) {
                 if (isset($_FILES[$uploadKey])) {
                     $result = $this->uploadFile($_FILES[$uploadKey], substr($uploadKey, -1));
-                    if (strlen($result) > 0 && !str_contains($result, '.')) {
+                    if (strlen($result) > 0 && strpos($result, '.') === false) {
                         $errors[] = $result;
                     } else {
                         $data[$dataKey] = $result;
@@ -126,8 +128,15 @@ class Receptions extends Controller
 
     public function edit($id)
     {
+        $reception = $this->receptionsModel->getReceptionById($id);
+        if (!$reception) {
+            $_SESSION['reception_message'] = 'پذیرش مورد نظر یافت نشد';
+            header("Location: " . URLROOT . "/receptions/admin");
+            exit();
+        }
+
         $data = [
-            "reception" => $this->receptionsModel->getReceptionById($id)
+            "reception" => $reception
         ];
         return $this->view("admin/receptions/update", $data);
     }
@@ -135,7 +144,8 @@ class Receptions extends Controller
     public function update($id)
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // جمع‌آوری داده‌ها
+            $currentReception = $this->receptionsModel->getReceptionById($id);
+
             $data = [
                 'id' => $id,
                 'product_status' => trim($_POST['product_status'] ?? ''),
@@ -143,33 +153,67 @@ class Receptions extends Controller
                 'sh_baar2' => trim($_POST['sh_baar2'] ?? ''),
                 'kaar' => trim($_POST['kaar'] ?? ''),
                 'kaar_serial' => trim($_POST['kaar_serial'] ?? ''),
-                'kaar_at' => trim($_POST['kaar_at'] ?? '')
+                'kaar_at' => trim($_POST['kaar_at'] ?? ''),
+                'file1' => $currentReception->file1,
+                'file2' => $currentReception->file2,
+                'file3' => $currentReception->file3,
             ];
 
-            try {
-                // بروزرسانی در دیتابیس
-                $result = $this->receptionsModel->updateReception($data);
+            $errors = [];
 
-                // فقط در صورت موفقیت و وجود تغییرات پیام نمایش داده شود
-                if ($result === true && $this->receptionsModel->db->rowCount() > 0) {
-                    $_SESSION['reception_message'] = 'پذیرش با موفقیت بروزرسانی شد';
-                    if ($_SESSION['is_admin'] === 1) {
-                        header("Location: " . URLROOT . "/receptions/admin");
-                    } else {
-                        header("Location: " . URLROOT . "/receptions/agent");
+            $fileKeys = ['image1' => 'file1', 'image2' => 'file2', 'image3' => 'file3'];
+            foreach ($fileKeys as $uploadKey => $dataKey) {
+                if (isset($_FILES[$uploadKey]) && $_FILES[$uploadKey]['error'] === UPLOAD_ERR_OK) {
+                    if (!empty($currentReception->$dataKey)) {
+                        $oldFilePath = 'uploads/receptions/' . $currentReception->$dataKey;
+                        if (file_exists($oldFilePath)) {
+                            unlink($oldFilePath);
+                        }
                     }
-                    exit();
-                } else if ($result === false) {
-                    $_SESSION['reception_message'] = 'خطا در بروزرسانی پذیرش';
+                    $result = $this->uploadFile($_FILES[$uploadKey], substr($uploadKey, -1));
+                    if (strlen($result) > 0 && strpos($result, '.') === false) {
+                        $errors[] = $result;
+                    } else {
+                        $data[$dataKey] = $result;
+                    }
                 }
-            } catch (Exception $e) {
-                $_SESSION['reception_message'] = 'خطا در بروزرسانی پذیرش';
             }
 
-            header("Location: " . URLROOT . "/receptions/edit/" . $id);
+            header('Content-Type: application/json');
+
+            if (empty($errors)) {
+                $result = $this->receptionsModel->updateReception($id, $data);
+
+                if ($result === true) { // فقط در صورت موفقیت کامل
+                    $redirectUrl = $_SESSION['is_admin'] === 1
+                        ? URLROOT . "/receptions/admin"
+                        : URLROOT . "/receptions/agent";
+
+                    echo json_encode([
+                        'success' => true,
+                        'message' => 'پذیرش با موفقیت بروزرسانی شد',
+                        'redirect' => $redirectUrl
+                    ]);
+                } else {
+                    // اگر نتیجه آرایه خطا باشد یا false
+                    $errorMessage = is_array($result) ? $result[2] : 'مشکل ناشناخته در دیتابیس';
+                    echo json_encode([
+                        'success' => false,
+                        'message' => 'خطا در بروزرسانی پذیرش: ' . $errorMessage
+                    ]);
+                }
+            } else {
+                echo json_encode([
+                    'success' => false,
+                    'message' => implode('<br>', $errors)
+                ]);
+            }
             exit();
         }
     }
+
+
+
 
     public function download($filename)
     {
@@ -218,7 +262,10 @@ class Receptions extends Controller
         $data = [
             "reception" => $this->receptionsModel->getReceptionById($id)
         ];
+
         return $this->view("admin/receptions/read", $data);
+        
+        
     }
 
     public function print($id)

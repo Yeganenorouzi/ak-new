@@ -11,15 +11,33 @@ class ReceptionsModel
 
   public function getAllReceptions()
   {
-    $this->db->query("SELECT receptions.*, serials.serial ,serials.model ,customers.name As customer_name , users.name As user_name
-                      FROM receptions 
-                      INNER JOIN serials ON receptions.serial_id = serials.id 
-                      INNER JOIN customers ON receptions.customer_id = customers.id  
-                      INNER JOIN users ON receptions.user_id =users.id
-                      ORDER BY receptions.id DESC");
-    $receptions = $this->db->fetchAll();
-    return $receptions;
+    try {
+      $query = "
+            SELECT 
+                receptions.*, 
+                serials.serial, 
+                serials.model, 
+                customers.name AS customer_name,
+                customers.codemelli,
+                customers.mobile,
+                customers.address,
+                users.name AS user_name
+            FROM receptions
+            INNER JOIN serials ON receptions.serial_id = serials.id
+            INNER JOIN customers ON receptions.customer_id = customers.id
+            INNER JOIN users ON receptions.user_id = users.id
+            ORDER BY receptions.id DESC
+        ";
+
+      $this->db->query($query);
+      $receptions = $this->db->fetchAll();
+      return $receptions;
+    } catch (Exception $e) {
+      // در صورت بروز خطا، پیام خطا را می‌گیرد
+      echo 'خطا در دریافت اطلاعات: ' . $e->getMessage();
+    }
   }
+
 
   public function getTotalReceptions()
   {
@@ -217,31 +235,6 @@ class ReceptionsModel
     return $this->db->fetch();
   }
 
-  public function updateReception($data)
-  {
-    $this->db->query("UPDATE receptions SET 
-            product_status = :product_status,
-            kaar = :kaar,
-            kaar_serial = :kaar_serial,
-            kaar_at = :kaar_at,
-            sh_baar2 = :sh_baar2,
-            sh_baar = :sh_baar
-            WHERE id = :id");
-
-    // باندینگ پارامترها
-    $this->db->bind(':id', $data['id']);
-    $this->db->bind(':product_status', $data['product_status']);
-    $this->db->bind(':kaar', $data['kaar']);
-    $this->db->bind(':kaar_serial', $data['kaar_serial']);
-    $this->db->bind(':kaar_at', $data['kaar_at']);
-    $this->db->bind(':sh_baar2', $data['sh_baar2']);
-    $this->db->bind(':sh_baar', $data['sh_baar']);
-
-    return $this->db->execute();
-    return $this->db->rowCount();
-
-    
-  }
 
   public function getReceptionsByCustomerId($customerId)
   {
@@ -331,5 +324,41 @@ class ReceptionsModel
       $result->status13 ?? 0,
       $result->status14 ?? 0
     ];
+  }
+
+  public function updateReception($id, $data)
+  {
+    $this->db->query("UPDATE receptions SET  
+        product_status = :product_status, 
+        kaar = :kaar, 
+        kaar_serial = :kaar_serial, 
+        kaar_at = :kaar_at,  
+        sh_baar2 = :sh_baar2, 
+        sh_baar = :sh_baar,
+        file1 = :file1,
+        file2 = :file2,
+        file3 = :file3,
+        updated_at = :updated_at 
+        WHERE id = :id");
+
+    $this->db->bind(':id', $id);
+    $this->db->bind(':product_status', $data['product_status']);
+    $this->db->bind(':kaar', $data['kaar']);
+    $this->db->bind(':kaar_serial', $data['kaar_serial']);
+    $this->db->bind(':kaar_at', $data['kaar_at']);
+    $this->db->bind(':sh_baar2', $data['sh_baar2']);
+    $this->db->bind(':sh_baar', $data['sh_baar']);
+    $this->db->bind(':file1', $data['file1'] ?? '');
+    $this->db->bind(':file2', $data['file2'] ?? '');
+    $this->db->bind(':file3', $data['file3'] ?? '');
+    $this->db->bind(':updated_at', date('Y-m-d H:i:s'));
+
+    $result = $this->db->execute();
+    if (!$result) {
+      $errorInfo = $this->db->errorInfo(); // دریافت اطلاعات خطا
+      error_log("خطا در به‌روزرسانی دیتابیس: " . print_r($errorInfo, true));
+      return $errorInfo; // برگرداندن خطا برای کنترلر
+    }
+    return $result; // true در صورت موفقیت
   }
 }

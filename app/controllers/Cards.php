@@ -19,6 +19,10 @@ class Cards extends Controller
         $totalCards = $this->cardModel->getTotalCards();
         $totalPages = ceil($totalCards / $cardsPerPage);
 
+
+
+
+
         // اطمینان از اینکه شماره صفحه معتبر است
         if ($page < 1) {
             $page = 1;
@@ -93,7 +97,9 @@ class Cards extends Controller
                 'is_import' => 0,
                 'added_by_user' => 0,
                 'approved' => 1,
-                'did' => 0
+                'did' => 0,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
             ];
 
             if (empty($cardData['serial'])) {
@@ -120,91 +126,47 @@ class Cards extends Controller
         $this->view('admin/cards/create', $data);
     }
 
-    public function importExcel()
+    public function import()
     {
-        if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-            die('Invalid request method');
-        }
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Check if file was uploaded without errors
+            if (isset($_FILES['excel_file']) && $_FILES['excel_file']['error'] == 0) {
+                $fileName = $_FILES['excel_file']['name'];
+                $fileTmpName = $_FILES['excel_file']['tmp_name'];
+                $fileSize = $_FILES['excel_file']['size'];
+                $fileType = $_FILES['excel_file']['type'];
+                $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
 
-        try {
-            require APPROOT . '/libraries/vendor/autoload.php';
+                // Define allowed file extensions
+                $allowedExtensions = ['xlsx', 'xls'];
 
-            if (!isset($_FILES['excel_file'])) {
-                throw new Exception('فایلی آپلود نشده است');
+                if (in_array($fileExtension, $allowedExtensions)) {
+                    // Process the file (e.g., move it to a directory, read its contents, etc.)
+                    $uploadDir = APPROOT . '/uploads/';
+                    
+                    // Check if the directory exists, if not, create it
+                    if (!is_dir($uploadDir)) {
+                        mkdir($uploadDir, 0777, true);
+                    }
+
+                    $uploadFile = $uploadDir . basename($fileName);
+
+                    if (move_uploaded_file($fileTmpName, $uploadFile)) {
+                        // File successfully uploaded
+                        // Add your file processing logic here
+                        echo "File successfully uploaded.";
+                    } else {
+                        echo "Error uploading the file.";
+                    }
+                } else {
+                    echo "Invalid file type. Only .xlsx and .xls files are allowed.";
+                }
+            } else {
+                echo "No file uploaded or there was an error uploading the file.";
             }
-
-            if ($_FILES['excel_file']['error'] != 0) {
-                throw new Exception('خطا در آپلود فایل');
-            }
-
-            $xlsx = SimpleXLSX::parse($_FILES['excel_file']['tmp_name']);
-            if (!$xlsx) {
-                throw new Exception('خطا در خواندن فایل اکسل: ' . SimpleXLSX::parseError());
-            }
-
-            $rows = $xlsx->rows();
-            array_shift($rows);
-
-            $cards = [];
-            foreach ($rows as $row) {
-                $cards[] = [
-                    'code_dastgah' => $row[0] ?? '',
-                    'title' => $row[1] ?? '',
-                    'coding_derakhtvare' => $row[2] ?? '',
-                    'model' => $row[3] ?? '',
-                    'att1_code' => $row[4] ?? '',
-                    'att1_val' => $row[5] ?? '',
-                    'att2_code' => $row[6] ?? '',
-                    'att2_val' => $row[7] ?? '',
-                    'att3_code' => $row[8] ?? '',
-                    'att3_val' => $row[9] ?? '',
-                    'att4_code' => $row[10] ?? '',
-                    'att4_val' => $row[11] ?? '',
-                    'serial' => $row[12] ?? '',
-                    'serial2' => $row[13] ?? '',
-                    'company' => $row[14] ?? '',
-                    'sh_sanad' => $row[15] ?? '',
-                    'code_guarantee' => $row[16] ?? '',
-                    'sharh_guarantee' => $row[17] ?? '',
-                    'code_agent_service' => $row[18] ?? '',
-                    'agent_service' => $row[19] ?? '',
-                    'start_guarantee' => $row[20] ?? '',
-                    'expite_guarantee' => $row[21] ?? ''
-                ];
-            }
-
-            if (empty($cards)) {
-                throw new Exception('هیچ داده‌ای در فایل اکسل یافت نشد');
-            }
-
-            if ($this->cardModel->createMultipleCards($cards)) {
-                echo json_encode([
-                    'status' => 'success',
-                    'message' => 'فایل اکسل با موفقیت آپلود شد'
-                ]);
-            }
-        } catch (Exception $e) {
-            echo json_encode([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ]);
-        }
-    }
-
-    public function update($id)
-    {
-        try {
-            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $this->cardModel->updateCard($id, $_POST);
-                header("Location: " . URLROOT . "/cards/index");
-                exit();
-            }
-            // اگر متد POST نبود، به صفحه قبل برگردد
-            header("Location: " . URLROOT . "/cards/update/" . $id);
-            exit();
-        } catch (Exception $e) {
-            $data['errors'][] = $e->getMessage();
-            $this->view('admin/cards/update', $data);
+        } else {
+            // Load the import view
+            $this->view('admin/cards/import');
         }
     }
 }

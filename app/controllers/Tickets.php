@@ -10,12 +10,20 @@ class Tickets extends Controller
         $this->usersModel = $this->model("UsersModel");
     }
 
-    public function index()
+    public function admin()
     {
         $data = [
             "tickets" => $this->ticketModel->getAllTickets()
         ];
         return $this->view("admin/tickets/list", $data);
+    }
+
+    public function agent()
+    {
+        $data = [
+            "tickets" => $this->ticketModel->getAllTickets()
+        ];
+        return $this->view("agent/tickets/list", $data);
     }
 
     // نمایش فرم ایجاد تیکت
@@ -24,7 +32,7 @@ class Tickets extends Controller
         $users = $this->usersModel->getAllUsers();
 
         $data = [
-            
+
             'users' => $users,
             'data' => []
         ];

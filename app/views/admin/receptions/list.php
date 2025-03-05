@@ -19,6 +19,9 @@ use Hekmatinasser\Verta\Verta;
                     <div class="card-body pb-0">
                         <h6 class="mb-1 text-15 text-gray-700 dark:text-gray-100">لیست پذیرش ها </h6>
                     </div>
+
+                    <a href="<?php echo URLROOT; ?>/export/exportReceptions">دانلود خروجی اکسل</a>
+
                     <div class="card-body">
                         <div class="relative overflow-x-auto rounded-lg">
                             <table class="w-full text-sm text-right text-gray-500">
