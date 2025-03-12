@@ -7,17 +7,20 @@
             <div class="col-span-12 xl:col-span-6">
                 <div class="card dark:bg-zinc-800 dark:border-zinc-600">
                     <form class="app-search hidden xl:block px-5">
-                        <div class="relative inline-block">
-                            <input type="text" class="bg-gray-50/30 dark:bg-zinc-700/50 border-0 rounded focus:ring-0 placeholder:text-sm px-4 dark:placeholder:text-gray-200 dark:text-gray-100 dark:border-zinc-700 " placeholder="جستجو...">
-                            <button class="py-1.5 px-2.5 text-white bg-violet-500 inline-block absolute ltr:right-1 top-1 rounded shadow shadow-violet-100 dark:shadow-gray-900 rtl:left-1 rtl:right-auto" type="button"><i class="bx bx-search-alt align-middle"></i></button>
-                        </div>
+                        
+                        <div class="text-left mt-4">
+                        <a href="<?php echo URLROOT; ?>/export/exportcards" class="inline-block px-8 py-2 mb-0 font-bold text-center uppercase align-middle transition-all bg-transparent border border-solid rounded-lg shadow-none cursor-pointer leading-pro ease-soft-in text-xs hover:scale-102 active:shadow-soft-xs tracking-tight-soft border-violet-500 text-violet-500 hover:border-violet-500 hover:bg-transparent hover:text-violet-500 hover:opacity-75 hover:shadow-none active:bg-violet-500 active:text-white active:hover:bg-transparent active:hover:text-violet-500">
+                            <i class="fas fa-file-excel ml-2"></i>
+                            دانلود خروجی اکسل
+                        </a>
+                    </div>
                     </form>
                     <div class="card-body">
                         <div class="relative overflow-x-auto rounded-lg">
                             <table class="w-full text-sm text-right text-gray-500">
                                 <thead class="text-xs text-gray-700 dark:text-gray-100 uppercase bg-gray-50/50 dark:bg-zinc-700/50">
                                     <tr>
-                                        <th scope="col" class="p-4">
+                                         <th scope="col" class="p-4">
                                             <div class="flex items-center">
                                                 <input id="checkbox-all" type="checkbox" class="w-4 h-4 focus:ring-0 focus:outline-0 border-gray-100 focus:ring-offset-0 rounded dark:bg-zinc-700 dark:border-zinc-500 dark:checked:bg-violet-500">
                                                 <label for="checkbox-all" class="sr-only">چک باکس</label>

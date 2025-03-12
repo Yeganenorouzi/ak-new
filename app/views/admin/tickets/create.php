@@ -35,6 +35,11 @@
 
                     <div class="card-body">
                         <form action="<?php echo URLROOT; ?>/tickets/create" method="POST" enctype="multipart/form-data" class="max-w-2xl">
+                            <!-- Add hidden fields for default values -->
+                            <input type="hidden" name="vb_user" value="1">
+                            <input type="hidden" name="vb_admin" value="0">
+                            <input type="hidden" name="status" value="0">
+                            
                             <?php if (!empty($data['errors'])): ?>
                                 <div class="mb-6 p-4 rounded-lg bg-red-50 border border-red-200 dark:bg-red-900/20 dark:border-red-500/30">
                                     <div class="flex items-center mb-2">
@@ -58,17 +63,14 @@
                                     <div class="mb-4">
                                         <label for="user_id" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">کاربر گیرنده تیکت </label>
                                         <select name="user_id" id="user_id" class="input-field w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100 text-right" required>
-                                            <option value="">انتخاب کاربر</option>
-                                            <?php foreach ($data['users'] as $user): ?>
-                                                <option value="<?php echo htmlspecialchars($user->id); ?>" <?php echo (isset($data['data']['user_id']) && $data['data']['user_id'] == $user->id) ? 'selected' : ''; ?>>
-                                                    <?php echo htmlspecialchars($user->name); ?>
-                                                </option>
-                                            <?php endforeach; ?>
-                                            <?php foreach ($data['agents'] as $agent): ?>
-                                                <option value="<?php echo htmlspecialchars($agent->id); ?>" <?php echo (isset($data['data']['user_id']) && $data['data']['user_id'] == $agent->id) ? 'selected' : ''; ?>>
-                                                    <?php echo htmlspecialchars($agent->name); ?> (Agent)
-                                                </option>
-                                            <?php endforeach; ?>
+                                            <option value="">انتخاب ادمین</option>
+                                                <?php foreach ($data['users'] as $user): ?>
+                                                    <?php if ($user->admin == 1): ?>
+                                                        <option value="<?php echo htmlspecialchars($user->id); ?>" <?php echo (isset($data['data']['user_id']) && $data['data']['user_id'] == $user->id) ? 'selected' : ''; ?>>
+                                                            <?php echo htmlspecialchars($user->name); ?>
+                                                        </option>
+                                                    <?php endif; ?>
+                                                <?php endforeach; ?>
                                         </select>
                                     </div>
                                     <div class="mb-4">

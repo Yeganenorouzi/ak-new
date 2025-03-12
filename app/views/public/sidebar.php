@@ -131,26 +131,6 @@
         </li>
 
 
-        <li>
-          <a href="javascript: void(0);" aria-expanded="false" class="nav-menu pl-6 pr-4 py-3 block text-sm font-medium text-gray-700 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">
-            <i data-feather="cpu"></i>
-            <span data-key="t-icons">گزارشات مدیریتی</span>
-          </a>
-          <ul>
-            <li>
-              <a href="icons-boxicons.html" class="pr-14 pl-4 py-2 block text-sm font-medium text-gray-700 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">گزارش پذیرش ها</a>
-            </li>
-            <li>
-              <a href="icons-materialdesign.html" class="pr-14 pl-4  py-2 block text-sm font-medium text-gray-700 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">گزارش کارت های گارانتی </a>
-            </li>
-            <li>
-              <a href="icons-dripicons.html" class="pr-14 pl-4  py-2 block text-sm font-medium text-gray-700 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white"> گزارش تغییر وضعیت ها</a>
-            </li>
-          </ul>
-        </li>
-
-
-
       </ul>
 
 

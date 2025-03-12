@@ -20,7 +20,12 @@ use Hekmatinasser\Verta\Verta;
                         <h6 class="mb-1 text-15 text-gray-700 dark:text-gray-100">لیست پذیرش ها </h6>
                     </div>
 
-                    <a href="<?php echo URLROOT; ?>/export/exportReceptions">دانلود خروجی اکسل</a>
+                    <div class="text-left mt-4">
+                        <a href="<?php echo URLROOT; ?>/export/exportReceptions" class="inline-block px-8 py-2 mb-0 font-bold text-center uppercase align-middle transition-all bg-transparent border border-solid rounded-lg shadow-none cursor-pointer leading-pro ease-soft-in text-xs hover:scale-102 active:shadow-soft-xs tracking-tight-soft border-violet-500 text-violet-500 hover:border-violet-500 hover:bg-transparent hover:text-violet-500 hover:opacity-75 hover:shadow-none active:bg-violet-500 active:text-white active:hover:bg-transparent active:hover:text-violet-500">
+                            <i class="fas fa-file-excel ml-2"></i>
+                            دانلود خروجی اکسل
+                        </a>
+                    </div>
 
                     <div class="card-body">
                         <div class="relative overflow-x-auto rounded-lg">

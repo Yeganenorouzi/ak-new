@@ -192,4 +192,10 @@ class CardsModel
         $this->db->bind(':id', $id);
         return $this->db->execute();
     }
+
+    public function getAllCardsWithoutPagination()
+    {
+        $this->db->query("SELECT * FROM serials");
+        return $this->db->fetchAll(); 
+       }
 }
