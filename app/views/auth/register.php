@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="<?php echo URLROOT . "/assets/css/icons.css" ?>" />
     <link rel="stylesheet" href="<?php echo URLROOT . "/assets/css/tailwind.css" ?>" />
 
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+
 
 </head>
 
@@ -35,18 +37,19 @@
                         <div class="flex h-[90vh] flex-col">
                             <div class="mx-auto">
                                 <a href="#" class="">
-                                    <img src="assets/images/logo-sm.svg" alt="" class="h-8 inline"> <span class="text-xl align-middle font-medium ltr:ml-2 rtl:mr-2 dark:text-white">ثبت نام سامانه گارانتی آک</span>
+                                    <img src="assets/images/logo-sm.svg" alt="" class="h-6 inline"> 
+                                    <span class="text-lg align-middle font-medium ltr:ml-2 rtl:mr-2 dark:text-white">ثبت نام سامانه گارانتی آک</span>
                                 </a>
                             </div>
                             <div class="my-auto">
                                 <div class="text-center">
-                                    <h5 class="text-gray-600 dark:text-gray-100">فرم زیر را تکمیل کنید و ثبت نام را کلیک کنید</h5>
+                                    <h5 class="text-gray-600 text-sm dark:text-gray-100">فرم زیر را تکمیل کنید و ثبت نام را کلیک کنید</h5>
                                 </div>
 
-                                <form class="mt-4 pt-2" action="<?php echo URLROOT . "/auth/register" ?>" method="POST">
-                                    <div class="mb-4">
-                                        <label class="text-gray-600 font-medium mb-2 block dark:text-gray-100">ایمیل</label>
-                                        <input type="text" class="w-full border-gray-100 rounded placeholder:text-sm py-2 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-gray-100 dark:placeholder:text-zinc-100/60" id="email" name="email" placeholder="ایمیل خود را وارد کنید" value="<?php echo $data["email"]; ?>">
+                                <form class="mt-3" action="<?php echo URLROOT . "/auth/register" ?>" method="POST">
+                                    <div class="mb-2">
+                                        <label class="text-gray-600 text-sm font-medium mb-1 block dark:text-gray-100">ایمیل</label>
+                                        <input type="text" class="w-full border-gray-100 rounded placeholder:text-sm py-1.5 text-sm dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-gray-100 dark:placeholder:text-zinc-100/60" id="email" name="email" placeholder="ایمیل خود را وارد کنید" value="<?php echo $data["email"]; ?>">
 
                                     </div>
                                     <div class="text-danger">
@@ -54,14 +57,14 @@
                                             <?php echo htmlspecialchars($data["email_err"]); ?>
                                         <?php endif; ?>
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-2">
                                         <div>
                                             <div class="flex-grow-1">
-                                                <label class="text-gray-600 font-medium mb-2 block dark:text-gray-100">رمز عبور</label>
+                                                <label class="text-gray-600 text-sm font-medium mb-1 block dark:text-gray-100">رمز عبور</label>
                                             </div>
                                         </div>
                                         <div class="flex">
-                                            <input type="password" class="w-full border-gray-100 rounded ltr:rounded-r-none rtl:rounded-l-none placeholder:text-sm py-2 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-gray-100 dark:placeholder:text-zinc-100/60" placeholder="رمز عبور خود را وارد کنید" aria-label="رمز عبور" aria-describedby="password-addon" id="password" name="password" value="<?php echo $data["password"]; ?>">
+                                            <input type="password" class="w-full border-gray-100 rounded ltr:rounded-r-none rtl:rounded-l-none placeholder:text-sm py-1.5 text-sm dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-gray-100 dark:placeholder:text-zinc-100/60" placeholder="رمز عبور خود را وارد کنید" aria-label="رمز عبور" aria-describedby="password-addon" id="password" name="password" value="<?php echo $data["password"]; ?>">
                                             <button class="bg-gray-50 px-4 rounded ltr:rounded-l-none rtl:rounded-r-none border border-gray-100 ltr:border-l-0 rtl:border-r-0 dark:bg-zinc-700 dark:border-zinc-600 dark:text-gray-100" type="button" id="password-addon" onclick="togglePassword()"><i class="mdi mdi-eye-outline">
                                                 </i></button>
                                         </div>
@@ -72,14 +75,14 @@
                                         <?php endif; ?>
                                     </div>
 
-                                    <div class="mb-3">
+                                    <div class="mb-2">
                                         <div>
                                             <div class="flex-grow-1">
-                                                <label class="text-gray-600 font-medium mb-2 block dark:text-gray-100">نام و نام خانوادگی </label>
+                                                <label class="text-gray-600 text-sm font-medium mb-1 block dark:text-gray-100">نام و نام خانوادگی </label>
                                             </div>
                                         </div>
                                         <div class="flex">
-                                            <input type="text" class="w-full border-gray-100 rounded ltr:rounded-r-none rtl:rounded-l-none placeholder:text-sm py-2 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-gray-100 dark:placeholder:text-zinc-100/60" placeholder="نام و نام خانوادگی خود را وارد کنید" aria-label="نام و نام خانوادگی" aria-describedby="password-addon" id="name" name="name" value="<?php echo $data["name"]; ?>">
+                                            <input type="text" class="w-full border-gray-100 rounded ltr:rounded-r-none rtl:rounded-l-none placeholder:text-sm py-1.5 text-sm dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-gray-100 dark:placeholder:text-zinc-100/60" placeholder="نام و نام خانوادگی خود را وارد کنید" aria-label="نام و نام خانوادگی" aria-describedby="password-addon" id="name" name="name" value="<?php echo $data["name"]; ?>">
                                         </div>
                                     </div>
                                     <div class="text-danger">
@@ -89,9 +92,9 @@
                                     </div>
 
 
-                                    <div class="mb-4">
-                                        <label class="text-gray-600 font-medium mb-2 block dark:text-gray-100">کد ملی</label>
-                                        <input type="text" class="w-full border-gray-100 rounded placeholder:text-sm py-2 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-gray-100 dark:placeholder:text-zinc-100/60" id="codemelli" name="codemelli" placeholder="کد ملی خود را وارد کنید" value="<?php echo $data["codemelli"]; ?>">
+                                    <div class="mb-2">
+                                        <label class="text-gray-600 text-sm font-medium mb-1 block dark:text-gray-100">کد ملی</label>
+                                        <input type="text" class="w-full border-gray-100 rounded placeholder:text-sm py-1.5 text-sm dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-gray-100 dark:placeholder:text-zinc-100/60" id="codemelli" name="codemelli" placeholder="کد ملی خود را وارد کنید" value="<?php echo $data["codemelli"]; ?>">
 
                                     </div>
                                     <div class="text-danger">
@@ -100,14 +103,14 @@
                                         <?php endif; ?>
                                     </div>
 
-                                    <div class="mb-3">
+                                    <div class="mb-2">
                                         <div>
                                             <div class="flex-grow-1">
-                                                <label class="text-gray-600 font-medium mb-2 block dark:text-gray-100"> شماره موبایل </label>
+                                                <label class="text-gray-600 text-sm font-medium mb-1 block dark:text-gray-100"> شماره موبایل </label>
                                             </div>
                                         </div>
                                         <div class="flex">
-                                            <input type="text" class="w-full border-gray-100 rounded ltr:rounded-r-none rtl:rounded-l-none placeholder:text-sm py-2 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-gray-100 dark:placeholder:text-zinc-100/60" placeholder="شماره موبایل خود را وارد کنید" aria-label="شماره موبایل" aria-describedby="password-addon" id="mobile" name="mobile" value="<?php echo $data["mobile"]; ?>">
+                                            <input type="text" class="w-full border-gray-100 rounded ltr:rounded-r-none rtl:rounded-l-none placeholder:text-sm py-1.5 text-sm dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-gray-100 dark:placeholder:text-zinc-100/60" placeholder="شماره موبایل خود را وارد کنید" aria-label="شماره موبایل" aria-describedby="password-addon" id="mobile" name="mobile" value="<?php echo $data["mobile"]; ?>">
                                         </div>
                                     </div>
                                     <div class="text-danger">
@@ -116,10 +119,10 @@
                                         <?php endif; ?>
                                     </div>
 
-                                    <div class="mb-3">
+                                    <div class="mb-2">
                                         <div>
                                             <div class="flex-grow-1">
-                                                <label class="text-gray-600 font-medium mb-2 block dark:text-gray-100">استان</label>
+                                                <label class="text-gray-600 text-sm font-medium mb-1 block dark:text-gray-100">استان</label>
                                             </div>
                                         </div>
                                         <div class="flex">
@@ -167,10 +170,10 @@
                                     </div>
 
 
-                                    <div class="mb-3">
+                                    <div class="mb-2">
                                         <div>
                                             <div class="flex-grow-1">
-                                                <label class="text-gray-600 font-medium mb-2 block dark:text-gray-100">شهر</label>
+                                                <label class="text-gray-600 text-sm font-medium mb-1 block dark:text-gray-100">شهر</label>
                                             </div>
                                         </div>
                                         <div class="flex">
@@ -186,15 +189,15 @@
                                     </div>
 
 
-                                    <div class="mb-3">
+                                    <div class="mb-2">
                                         <div>
                                             <div class="flex-grow-1">
-                                                <label class="text-gray-600 font-medium mb-2 block dark:text-gray-100"> آدرس </label>
+                                                <label class="text-gray-600 text-sm font-medium mb-1 block dark:text-gray-100"> آدرس </label>
                                             </div>
                                         </div>
                                         <div class="flex">
                                             <textarea
-                                                class="w-full border-gray-100 rounded ltr:rounded-r-none rtl:rounded-l-none placeholder:text-sm py-2 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-gray-100 dark:placeholder:text-zinc-100/60 min-h-[100px] resize-none"
+                                                class="w-full border-gray-100 rounded placeholder:text-sm py-1.5 text-sm dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-gray-100 dark:placeholder:text-zinc-100/60 min-h-[60px] resize-none"
                                                 placeholder=" آدرس کامل خود را وارد کنید"
                                                 aria-label="آدرس"
                                                 id="address"
@@ -208,14 +211,14 @@
                                     </div>
 
 
-                                    <div class="mb-3">
+                                    <div class="mb-2">
                                         <div>
                                             <div class="flex-grow-1">
-                                                <label class="text-gray-600 font-medium mb-2 block dark:text-gray-100"> شماره تلفن ثابت </label>
+                                                <label class="text-gray-600 text-sm font-medium mb-1 block dark:text-gray-100"> شماره تلفن ثابت </label>
                                             </div>
                                         </div>
                                         <div class="flex">
-                                            <input type="text" class="w-full border-gray-100 rounded ltr:rounded-r-none rtl:rounded-l-none placeholder:text-sm py-2 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-gray-100 dark:placeholder:text-zinc-100/60" placeholder=" شماره تلفن ثابت  خود را وارد کنید" aria-label="شماره تلفن ثابت" aria-describedby="password-addon" id="phone" name="phone" value="<?php echo $data["phone"]; ?>">
+                                            <input type="text" class="w-full border-gray-100 rounded ltr:rounded-r-none rtl:rounded-l-none placeholder:text-sm py-1.5 text-sm dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-gray-100 dark:placeholder:text-zinc-100/60" placeholder=" شماره تلفن ثابت  خود را وارد کنید" aria-label="شماره تلفن ثابت" aria-describedby="password-addon" id="phone" name="phone" value="<?php echo $data["phone"]; ?>">
                                         </div>
                                     </div>
                                     <div class="text-danger">
@@ -224,14 +227,14 @@
                                         <?php endif; ?>
                                     </div>
 
-                                    <div class="mb-3">
+                                    <div class="mb-2">
                                         <div>
                                             <div class="flex-grow-1">
-                                                <label class="text-gray-600 font-medium mb-2 block dark:text-gray-100"> ساعت کاری </label>
+                                                <label class="text-gray-600 text-sm font-medium mb-1 block dark:text-gray-100"> ساعت کاری </label>
                                             </div>
                                         </div>
                                         <div class="flex">
-                                            <input type="text" class="w-full border-gray-100 rounded ltr:rounded-r-none rtl:rounded-l-none placeholder:text-sm py-2 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-gray-100 dark:placeholder:text-zinc-100/60" placeholder=" ساعت کاری خود را وارد کنید" aria-label="شماره تلفن ثابت" aria-describedby="password-addon" id="hours" name="hours" value="<?php echo $data["hours"]; ?>">
+                                            <input type="text" class="w-full border-gray-100 rounded ltr:rounded-r-none rtl:rounded-l-none placeholder:text-sm py-1.5 text-sm dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-gray-100 dark:placeholder:text-zinc-100/60" placeholder=" ساعت کاری خود را وارد کنید" aria-label="شماره تلفن ثابت" aria-describedby="password-addon" id="hours" name="hours" value="<?php echo $data["hours"]; ?>">
                                         </div>
                                     </div>
                                     <div class="text-danger">
@@ -240,14 +243,14 @@
                                         <?php endif; ?>
                                     </div>
 
-                                    <div class="mb-3">
+                                    <div class="mb-2">
                                         <div>
                                             <div class="flex-grow-1">
-                                                <label class="text-gray-600 font-medium mb-2 block dark:text-gray-100"> کد پستی </label>
+                                                <label class="text-gray-600 text-sm font-medium mb-1 block dark:text-gray-100"> کد پستی </label>
                                             </div>
                                         </div>
                                         <div class="flex">
-                                            <input type="text" class="w-full border-gray-100 rounded ltr:rounded-r-none rtl:rounded-l-none placeholder:text-sm py-2 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-gray-100 dark:placeholder:text-zinc-100/60" placeholder=" کد پستی خود را وارد کنید" aria-label="کد پستی" aria-describedby="password-addon" id="codeposti" name="codeposti" value="<?php echo $data["codeposti"]; ?>">
+                                            <input type="text" class="w-full border-gray-100 rounded ltr:rounded-r-none rtl:rounded-l-none placeholder:text-sm py-1.5 text-sm dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-gray-100 dark:placeholder:text-zinc-100/60" placeholder=" کد پستی خود را وارد کنید" aria-label="کد پستی" aria-describedby="password-addon" id="codeposti" name="codeposti" value="<?php echo $data["codeposti"]; ?>">
                                         </div>
                                     </div>
                                     <div class="text-danger">
@@ -259,19 +262,19 @@
 
 
                                     <div class="mb-3">
-                                        <button class="btn border-transparent bg-violet-500 w-full py-2.5 text-white w-100 waves-effect waves-light shadow-md shadow-violet-200 dark:shadow-zinc-600" type="submit">ثبت نام</button>
+                                        <button class="btn border-transparent bg-violet-500 w-full py-2 text-sm text-white w-100 waves-effect waves-light shadow-md shadow-violet-200 dark:shadow-zinc-600" type="submit">ثبت نام</button>
                                     </div>
-                                    <div class="mt-12 text-center">
-                                        <p class="text-gray-500 dark:text-zinc-100/60">حساب کاربری دارید؟ <a href="<?php echo URLROOT . "/auth/login" ?>" class="text-violet-500 font-semibold"> ورود </a> </p>
+                                    <div class="mt-3text-center">
+                                        <p class="text-gray-500 text-sm dark:text-zinc-100/60">حساب کاربری دارید؟ <a href="<?php echo URLROOT . "/auth/login" ?>" class="text-violet-500 font-semibold"> ورود </a> </p>
                                     </div>
                                 </form>
                             </div>
                         </div>
-                        <div class=" text-center">
-                            <p class="text-gray-500 relative mb-5 dark:text-gray-100">© <script>
+                        <!-- <div class=" text-center">
+                            <p class="text-gray-500 text-xs relative mb-3 dark:text-gray-100">© <script>
                                     document.write(new Date().getFullYear())
                                 </script> AK WARRANTY . با احساس <i class="mdi mdi-heart text-red-400"></i> توسط YEGI ساخته شده است</p>
-                        </div>
+                        </div> -->
 
                     </div>
                 </div>
@@ -388,6 +391,94 @@
                     }
                 }
             </script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.querySelector('form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // نمایش loading
+    Swal.fire({
+        title: 'لطفاً صبر کنید...',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+    
+    fetch(this.action, {
+        method: 'POST',
+        body: new FormData(this)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            Swal.fire({
+                title: 'موفقیت‌آمیز!',
+                text: 'ثبت نام شما با موفقیت انجام شد',
+                icon: 'success',
+                confirmButtonText: 'تایید',
+                customClass: {
+                    popup: 'rtl-alert',
+                    confirmButton: 'btn border-transparent bg-violet-500 text-white'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '<?php echo URLROOT . "/auth/login" ?>';
+                }
+            });
+        } else {
+            // نمایش پیام خطای دقیق
+            let errorMessage = data.message || 'مشکلی در ثبت نام رخ داده است';
+            if (data.errors) {
+                errorMessage += '<br><ul class="mt-2 text-right">';
+                Object.values(data.errors).forEach(error => {
+                    if (error) {
+                        errorMessage += `<li class="text-sm">${error}</li>`;
+                    }
+                });
+                errorMessage += '</ul>';
+            }
+            
+            Swal.fire({
+                title: 'خطا!',
+                html: errorMessage,
+                icon: 'error',
+                confirmButtonText: 'تلاش مجدد',
+                customClass: {
+                    popup: 'rtl-alert',
+                    confirmButton: 'btn border-transparent bg-violet-500 text-white'
+                }
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire({
+            title: 'خطا!',
+            text: 'مشکلی در ارتباط با سرور رخ داده است',
+            icon: 'error',
+            confirmButtonText: 'تلاش مجدد',
+            customClass: {
+                popup: 'rtl-alert',
+                confirmButton: 'btn border-transparent bg-violet-500 text-white'
+            }
+        });
+    });
+});
+
+// اضافه کردن استایل برای RTL
+const style = document.createElement('style');
+style.textContent = `
+    .rtl-alert {
+        direction: rtl;
+        font-family: inherit;
+    }
+`;
+document.head.appendChild(style);
+</script>
+
 </body>
 
 </html>

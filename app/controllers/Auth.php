@@ -87,9 +87,10 @@ class Auth extends Controller
         "phone_err" => "",
         "hours_err" => "",
         "codeposti_err" => "",
-
       ];
 
+      // اضافه کردن لاگ برای بررسی داده‌های ورودی
+      error_log('Register Data: ' . print_r($data, true));
 
       if (empty($data["email"])) {
         $data["email_err"] = "لطفا ایمیل را وارد کنید....!";
@@ -141,22 +142,58 @@ class Auth extends Controller
         $data["codeposti_err"] = "کد پستی نامعتبر است";
       }
 
-
       if (empty($data["email_err"]) && empty($data["password_err"]) && empty($data["codemelli_err"]) && empty($data["name_err"]) && empty($data["mobile_err"]) && empty($data["ostan_err"]) && empty($data["shahr_err"]) && empty($data["address_err"]) && empty($data["phone_err"]) && empty($data["hours_err"]) && empty($data["codeposti_err"])) {
         $data["password"] = password_hash($data["password"], PASSWORD_DEFAULT);
-        if ($this->authModel->register($data)) {
-          $_SESSION["message"] = "ثبت نام با موفقیت انجام شد";
-          $_SESSION["message_type"] = "success";
-          header("location:" . URLROOT . "/auth/login");
+        
+        try {
+          if ($this->authModel->register($data)) {
+            echo json_encode([
+              'success' => true,
+              'message' => 'ثبت نام با موفقیت انجام شد'
+            ]);
+            exit();
+          } else {
+            error_log('Register Error: Failed to save user');
+            echo json_encode([
+              'success' => false,
+              'message' => 'خطا در ذخیره اطلاعات. لطفاً با پشتیبانی تماس بگیرید.',
+              'debug' => 'Check server logs for more details'
+            ]);
+            exit();
+          }
+        } catch (Exception $e) {
+          error_log('Register Exception: ' . $e->getMessage());
+          echo json_encode([
+            'success' => false,
+            'message' => $e->getMessage(),
+            'debug' => 'Server error logged'
+          ]);
           exit();
-        } else {
-          $_SESSION["message"] = "خطا در ثبت نام. لطفاً دوباره تلاش کنید.";
-          $_SESSION["message_type"] = "error";
-          header("location:" . URLROOT . "/auth/register");
-          exit(); 
         }
       } else {
-        return $this->view('auth/register', $data);
+        // اضافه کردن لاگ برای خطاهای اعتبارسنجی
+        error_log('Validation Errors: ' . print_r(array_filter($data, function($key) {
+          return strpos($key, '_err') !== false && !empty($data[$key]);
+        }, ARRAY_FILTER_USE_KEY), true));
+
+        echo json_encode([
+          'success' => false,
+          'message' => 'لطفاً خطاهای زیر را برطرف کنید',
+          'errors' => [
+            'email' => $data["email_err"],
+            'password' => $data["password_err"],
+            'name' => $data["name_err"],
+            'codemelli' => $data["codemelli_err"],
+            'mobile' => $data["mobile_err"],
+            'ostan' => $data["ostan_err"],
+            'shahr' => $data["shahr_err"],
+            'address' => $data["address_err"],
+            'phone' => $data["phone_err"],
+            'hours' => $data["hours_err"],
+            'codeposti' => $data["codeposti_err"]
+          ]
+        ]);
+        exit();
       }
     } else {
       $data = [
@@ -182,7 +219,6 @@ class Auth extends Controller
         "phone_err" => "",
         "hours_err" => "",
         "codeposti_err" => ""
-
       ];
       return $this->view('auth/register', $data);
     }
