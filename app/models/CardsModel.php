@@ -5,7 +5,7 @@ class CardsModel
     private $db;
     public function __construct()
     {
-        $this->db = new DataBase;
+        $this->db = new Database;
     }
 
     public function getAllCards()

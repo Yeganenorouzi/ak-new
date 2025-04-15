@@ -1,6 +1,6 @@
 <?php
 
-class TicketsModel
+class Ticketsmodel
 {
     private $db;
 

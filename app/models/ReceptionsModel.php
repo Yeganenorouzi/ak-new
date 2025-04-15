@@ -1,6 +1,6 @@
 <?php
 
-class ReceptionsModel
+class Receptionsmodel
 {
   private $db;
   public function __construct()

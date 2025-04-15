@@ -1,6 +1,7 @@
 <ifModule mod_rewrite.c>
 Options -Multiviews
 RewriteEngine On
+#RewriteBase /
 RewriteBase /ak-new/assets 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

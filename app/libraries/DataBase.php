@@ -1,5 +1,5 @@
 <?php
-class DataBase
+class Database
 {
   private $localhost = DB__Host;
   private $username = DB__USER;
