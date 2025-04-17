@@ -328,37 +328,44 @@ class Receptionsmodel
 
   public function updateReception($id, $data)
   {
-    $this->db->query("UPDATE receptions SET  
-        product_status = :product_status, 
-        kaar = :kaar, 
-        kaar_serial = :kaar_serial, 
-        kaar_at = :kaar_at,  
-        sh_baar2 = :sh_baar2, 
-        sh_baar = :sh_baar,
-        file1 = :file1,
-        file2 = :file2,
-        file3 = :file3,
-        updated_at = :updated_at 
-        WHERE id = :id");
+    try {
+      $this->db->query("UPDATE receptions SET  
+          product_status = :product_status, 
+          kaar = :kaar, 
+          kaar_serial = :kaar_serial, 
+          kaar_at = :kaar_at,  
+          sh_baar2 = :sh_baar2, 
+          sh_baar = :sh_baar,
+          file1 = :file1,
+          file2 = :file2,
+          file3 = :file3,
+          updated_at = :updated_at 
+          WHERE id = :id");
 
-    $this->db->bind(':id', $id);
-    $this->db->bind(':product_status', $data['product_status']);
-    $this->db->bind(':kaar', $data['kaar']);
-    $this->db->bind(':kaar_serial', $data['kaar_serial']);
-    $this->db->bind(':kaar_at', $data['kaar_at']);
-    $this->db->bind(':sh_baar2', $data['sh_baar2']);
-    $this->db->bind(':sh_baar', $data['sh_baar']);
-    $this->db->bind(':file1', $data['file1'] ?? '');
-    $this->db->bind(':file2', $data['file2'] ?? '');
-    $this->db->bind(':file3', $data['file3'] ?? '');
-    $this->db->bind(':updated_at', date('Y-m-d H:i:s'));
+      $this->db->bind(':id', $id);
+      $this->db->bind(':product_status', $data['product_status']);
+      $this->db->bind(':kaar', $data['kaar']);
+      $this->db->bind(':kaar_serial', $data['kaar_serial']);
+      $this->db->bind(':kaar_at', $data['kaar_at']);
+      $this->db->bind(':sh_baar2', $data['sh_baar2']);
+      $this->db->bind(':sh_baar', $data['sh_baar']);
+      $this->db->bind(':file1', $data['file1'] ?? '');
+      $this->db->bind(':file2', $data['file2'] ?? '');
+      $this->db->bind(':file3', $data['file3'] ?? '');
+      $this->db->bind(':updated_at', date('Y-m-d H:i:s'));
 
-    $result = $this->db->execute();
-    if (!$result) {
-      $errorInfo = $this->db->errorInfo(); // دریافت اطلاعات خطا
-      error_log("خطا در به‌روزرسانی دیتابیس: " . print_r($errorInfo, true));
-      return $errorInfo; // برگرداندن خطا برای کنترلر
+      $result = $this->db->execute();
+      if (!$result) {
+        $errorInfo = $this->db->errorInfo(); // دریافت اطلاعات خطا
+        error_log("خطا در به‌روزرسانی دیتابیس: " . print_r($errorInfo, true));
+        error_log("SQL Query: UPDATE receptions SET product_status = '{$data['product_status']}', kaar = '{$data['kaar']}', kaar_serial = '{$data['kaar_serial']}', kaar_at = '{$data['kaar_at']}', sh_baar2 = '{$data['sh_baar2']}', sh_baar = '{$data['sh_baar']}', file1 = '{$data['file1']}', file2 = '{$data['file2']}', file3 = '{$data['file3']}', updated_at = '" . date('Y-m-d H:i:s') . "' WHERE id = $id");
+        return $errorInfo; // برگرداندن خطا برای کنترلر
+      }
+      return $result; // true در صورت موفقیت
+    } catch (Exception $e) {
+      error_log("Exception in updateReception: " . $e->getMessage());
+      error_log("Stack trace: " . $e->getTraceAsString());
+      return [0, 0, $e->getMessage()];
     }
-    return $result; // true در صورت موفقیت
   }
 }

@@ -44,14 +44,25 @@ class Receptions extends Controller
             } else {
                 $fileName = time() . '_' . $index . '_' . $file['name'];
                 $uploadPath = 'uploads/receptions/' . $fileName;
+                
+                // Log the absolute path for debugging
+                error_log("Upload path: " . realpath(dirname($uploadPath)) . "/" . basename($uploadPath));
+                error_log("Current directory: " . getcwd());
 
                 if (!is_dir('uploads/receptions')) {
-                    mkdir('uploads/receptions', 0777, true);
+                    $mkdir_result = mkdir('uploads/receptions', 0777, true);
+                    error_log("Creating directory result: " . ($mkdir_result ? 'Success' : 'Failed'));
+                    error_log("Directory exists after creation: " . (is_dir('uploads/receptions') ? 'Yes' : 'No'));
+                    error_log("Directory permissions: " . substr(sprintf('%o', fileperms('uploads/receptions')), -4));
                 }
 
                 if (move_uploaded_file($file['tmp_name'], $uploadPath)) {
+                    error_log("File successfully uploaded to: " . $uploadPath);
                     return $fileName;
                 } else {
+                    $error = error_get_last();
+                    error_log("Error uploading file: " . ($error ? $error['message'] : 'Unknown error'));
+                    error_log("Upload path writable: " . (is_writable(dirname($uploadPath)) ? 'Yes' : 'No'));
                     return "خطا در آپلود فایل.";
                 }
             }
@@ -141,74 +152,146 @@ class Receptions extends Controller
         return $this->view("admin/receptions/update", $data);
     }
 
+    private function testDatabaseConnection()
+    {
+        try {
+            $db = new Database();
+            $db->query("SELECT 1");
+            $db->execute();
+            return [
+                'success' => true,
+                'message' => 'Database connection successful',
+                'config' => [
+                    'host' => DB__Host,
+                    'database' => DB__NAME,
+                    'user' => DB__USER
+                ]
+            ];
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Database connection failed: ' . $e->getMessage(),
+                'config' => [
+                    'host' => DB__Host,
+                    'database' => DB__NAME,
+                    'user' => DB__USER
+                ]
+            ];
+        }
+    }
+
     public function update($id)
     {
+        // Test database connection first
+        $dbTest = $this->testDatabaseConnection();
+        if (!$dbTest['success']) {
+            header('Content-Type: application/json');
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Database connection failed',
+                'debug_info' => $dbTest
+            ]);
+            return;
+        }
+
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $currentReception = $this->receptionsModel->getReceptionById($id);
+            try {
+                $currentReception = $this->receptionsModel->getReceptionById($id);
+                if (!$currentReception) {
+                    throw new Exception('Reception not found');
+                }
 
-            $data = [
-                'id' => $id,
-                'product_status' => trim($_POST['product_status'] ?? ''),
-                'sh_baar' => trim($_POST['sh_baar'] ?? ''),
-                'sh_baar2' => trim($_POST['sh_baar2'] ?? ''),
-                'kaar' => trim($_POST['kaar'] ?? ''),
-                'kaar_serial' => trim($_POST['kaar_serial'] ?? ''),
-                'kaar_at' => trim($_POST['kaar_at'] ?? ''),
-                'file1' => $currentReception->file1,
-                'file2' => $currentReception->file2,
-                'file3' => $currentReception->file3,
-            ];
+                $data = [
+                    'id' => $id,
+                    'product_status' => trim($_POST['product_status'] ?? ''),
+                    'sh_baar' => trim($_POST['sh_baar'] ?? ''),
+                    'sh_baar2' => trim($_POST['sh_baar2'] ?? ''),
+                    'kaar' => trim($_POST['kaar'] ?? ''),
+                    'kaar_serial' => trim($_POST['kaar_serial'] ?? ''),
+                    'kaar_at' => trim($_POST['kaar_at'] ?? ''),
+                    'file1' => $currentReception->file1,
+                    'file2' => $currentReception->file2,
+                    'file3' => $currentReception->file3,
+                ];
 
-            $errors = [];
+                $errors = [];
+                $debug_info = []; // Add debug information array
 
-            $fileKeys = ['image1' => 'file1', 'image2' => 'file2', 'image3' => 'file3'];
-            foreach ($fileKeys as $uploadKey => $dataKey) {
-                if (isset($_FILES[$uploadKey]) && $_FILES[$uploadKey]['error'] === UPLOAD_ERR_OK) {
-                    if (!empty($currentReception->$dataKey)) {
-                        $oldFilePath = 'uploads/receptions/' . $currentReception->$dataKey;
-                        if (file_exists($oldFilePath)) {
-                            unlink($oldFilePath);
+                $fileKeys = ['image1' => 'file1', 'image2' => 'file2', 'image3' => 'file3'];
+                foreach ($fileKeys as $uploadKey => $dataKey) {
+                    if (isset($_FILES[$uploadKey]) && $_FILES[$uploadKey]['error'] === UPLOAD_ERR_OK) {
+                        $debug_info[] = "Processing file: " . $uploadKey;
+                        
+                        if (!empty($currentReception->$dataKey)) {
+                            $oldFilePath = 'uploads/receptions/' . $currentReception->$dataKey;
+                            $debug_info[] = "Old file path: " . $oldFilePath;
+                            $debug_info[] = "File exists: " . (file_exists($oldFilePath) ? 'Yes' : 'No');
+                            
+                            if (file_exists($oldFilePath)) {
+                                $unlink_result = unlink($oldFilePath);
+                                $debug_info[] = "Unlink result: " . ($unlink_result ? 'Success' : 'Failed');
+                            }
                         }
-                    }
-                    $result = $this->uploadFile($_FILES[$uploadKey], substr($uploadKey, -1));
-                    if (strlen($result) > 0 && strpos($result, '.') === false) {
-                        $errors[] = $result;
-                    } else {
-                        $data[$dataKey] = $result;
+                        
+                        $result = $this->uploadFile($_FILES[$uploadKey], substr($uploadKey, -1));
+                        $debug_info[] = "Upload result for " . $uploadKey . ": " . $result;
+                        
+                        if (strlen($result) > 0 && strpos($result, '.') === false) {
+                            $errors[] = $result;
+                        } else {
+                            $data[$dataKey] = $result;
+                        }
+                    } else if (isset($_FILES[$uploadKey])) {
+                        $debug_info[] = "File upload error for " . $uploadKey . ": " . $_FILES[$uploadKey]['error'];
                     }
                 }
-            }
 
-            header('Content-Type: application/json');
+                header('Content-Type: application/json');
 
-            if (empty($errors)) {
-                $result = $this->receptionsModel->updateReception($id, $data);
+                if (empty($errors)) {
+                    $debug_info[] = "Attempting to update reception with ID: " . $id;
+                    $result = $this->receptionsModel->updateReception($id, $data);
+                    $debug_info[] = "Update result: " . (is_bool($result) ? ($result ? 'true' : 'false') : 'array');
 
-                if ($result === true) { // فقط در صورت موفقیت کامل
-                    $redirectUrl = $_SESSION['is_admin'] === 1
-                        ? URLROOT . "/receptions/admin"
-                        : URLROOT . "/receptions/agent";
+                    if ($result === true) {
+                        $redirectUrl = $_SESSION['is_admin'] === 1
+                            ? URLROOT . "/receptions/admin"
+                            : URLROOT . "/receptions/agent";
 
-                    echo json_encode([
-                        'success' => true,
-                        'message' => 'پذیرش با موفقیت بروزرسانی شد',
-                        'redirect' => $redirectUrl
-                    ]);
+                        echo json_encode([
+                            'success' => true,
+                            'message' => 'اطلاعات با موفقیت به روز شد',
+                            'redirect' => $redirectUrl,
+                            'debug' => $debug_info
+                        ]);
+                    } else {
+                        $errorMessage = is_array($result) ? $result[2] : 'مشکل ناشناخته در دیتابیس';
+                        echo json_encode([
+                            'success' => false,
+                            'message' => $errorMessage,
+                            'debug' => $debug_info
+                        ]);
+                    }
                 } else {
-                    // اگر نتیجه آرایه خطا باشد یا false
-                    $errorMessage = is_array($result) ? $result[2] : 'مشکل ناشناخته در دیتابیس';
                     echo json_encode([
                         'success' => false,
-                        'message' => 'خطا در بروزرسانی پذیرش: ' . $errorMessage
+                        'message' => implode('<br>', $errors),
+                        'debug' => $debug_info
                     ]);
                 }
-            } else {
+            } catch (Exception $e) {
+                error_log('Error updating reception: ' . $e->getMessage());
+                header('Content-Type: application/json');
                 echo json_encode([
                     'success' => false,
-                    'message' => implode('<br>', $errors)
+                    'message' => $e->getMessage(),
+                    'debug_info' => [
+                        'error' => $e->getMessage(),
+                        'trace' => $e->getTraceAsString()
+                    ]
                 ]);
             }
-            exit();
+            return;
         }
     }
 
