@@ -8,6 +8,20 @@ class Receptions extends Controller
         $this->receptionsModel = $this->model("ReceptionsModel");
     }
 
+    public function index(){
+        if(isset($_SESSION['is_admin'])) {
+            if($_SESSION['is_admin'] == 1) {
+                $this->admin();
+            } else {
+                $this->agent();
+            }
+        } else {
+            // در صورت عدم دسترسی، هدایت به صفحه لاگین
+            header("Location: " . URLROOT . "/auth/login");
+            exit();
+        }
+    }
+
     public function admin()
     {
         $data = [
@@ -68,6 +82,46 @@ class Receptions extends Controller
             }
         }
         return '';
+    }
+
+    /**
+     * Handle file uploads for receptions
+     * @return array Array containing file information or error
+     */
+    private function handleFileUploads()
+    {
+        $result = [
+            'file1' => '',
+            'file2' => '',
+            'file3' => ''
+        ];
+        
+        // Process each file upload
+        if (isset($_FILES['image1']) && $_FILES['image1']['error'] !== UPLOAD_ERR_NO_FILE) {
+            $uploadResult = $this->uploadFile($_FILES['image1'], 1);
+            if (is_string($uploadResult) && strpos($uploadResult, 'خطا') !== false) {
+                return ['error' => $uploadResult];
+            }
+            $result['file1'] = $uploadResult;
+        }
+        
+        if (isset($_FILES['image2']) && $_FILES['image2']['error'] !== UPLOAD_ERR_NO_FILE) {
+            $uploadResult = $this->uploadFile($_FILES['image2'], 2);
+            if (is_string($uploadResult) && strpos($uploadResult, 'خطا') !== false) {
+                return ['error' => $uploadResult];
+            }
+            $result['file2'] = $uploadResult;
+        }
+        
+        if (isset($_FILES['image3']) && $_FILES['image3']['error'] !== UPLOAD_ERR_NO_FILE) {
+            $uploadResult = $this->uploadFile($_FILES['image3'], 3);
+            if (is_string($uploadResult) && strpos($uploadResult, 'خطا') !== false) {
+                return ['error' => $uploadResult];
+            }
+            $result['file3'] = $uploadResult;
+        }
+        
+        return $result;
     }
 
     public function store()
@@ -180,119 +234,90 @@ class Receptions extends Controller
         }
     }
 
-    public function update($id)
+    public function update()
     {
-        // Test database connection first
-        $dbTest = $this->testDatabaseConnection();
-        if (!$dbTest['success']) {
-            header('Content-Type: application/json');
+        // Start output buffering to catch any unwanted output
+        ob_start();
+        
+        // Set content type to JSON to ensure proper response
+        header('Content-Type: application/json');
+        
+        try {
+            // Check if the request is POST
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                throw new Exception("Invalid request method. Only POST is allowed.");
+            }
+            
+            $id = $_POST['id'] ?? null;
+            if (!$id) {
+                throw new Exception("شناسه پذیرش نامعتبر است");
+            }
+
+            // بررسی وجود پذیرش
+            $reception = $this->receptionsModel->getReceptionById($id);
+            if (!$reception) {
+                throw new Exception("پذیرش مورد نظر یافت نشد");
+            }
+
+            // پردازش فایل‌ها
+            $files = $this->handleFileUploads();
+            if (isset($files['error'])) {
+                throw new Exception($files['error']);
+            }
+
+            // آماده‌سازی داده‌ها
+            $data = [
+                'product_status' => $_POST['product_status'] ?? '',
+                'kaar' => $_POST['kaar'] ?? '',
+                'kaar_serial' => $_POST['kaar_serial'] ?? '',
+                'kaar_at' => $_POST['kaar_at'] ?? '',
+                'sh_baar2' => $_POST['sh_baar2'] ?? '',
+                'sh_baar' => $_POST['sh_baar'] ?? '',
+                'file1' => $files['file1'] ?? '',
+                'file2' => $files['file2'] ?? '',
+                'file3' => $files['file3'] ?? ''
+            ];
+
+            // به‌روزرسانی پذیرش
+            $result = $this->receptionsModel->updateReception($id, $data);
+            
+            if (!$result['success']) {
+                throw new Exception($result['error'] ?? "خطا در به‌روزرسانی پذیرش");
+            }
+
+            // Clear any output buffers
+            ob_clean();
+            
+            // پاسخ موفقیت
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'اطلاعات با موفقیت به‌روزرسانی شد',
+                'redirect' => URLROOT . '/receptions/show/' . $id,
+                'debug' => [
+                    'id' => $id,
+                    'data' => $data
+                ]
+            ]);
+
+        } catch (Exception $e) {
+            // Clear any output buffers
+            ob_clean();
+            
+            error_log("Error in Receptions::update: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
+            
             echo json_encode([
                 'status' => 'error',
-                'message' => 'Database connection failed',
-                'debug_info' => $dbTest
+                'message' => $e->getMessage(),
+                'debug' => [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]
             ]);
-            return;
         }
-
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            try {
-                $currentReception = $this->receptionsModel->getReceptionById($id);
-                if (!$currentReception) {
-                    throw new Exception('Reception not found');
-                }
-
-                $data = [
-                    'id' => $id,
-                    'product_status' => trim($_POST['product_status'] ?? ''),
-                    'sh_baar' => trim($_POST['sh_baar'] ?? ''),
-                    'sh_baar2' => trim($_POST['sh_baar2'] ?? ''),
-                    'kaar' => trim($_POST['kaar'] ?? ''),
-                    'kaar_serial' => trim($_POST['kaar_serial'] ?? ''),
-                    'kaar_at' => trim($_POST['kaar_at'] ?? ''),
-                    'file1' => $currentReception->file1,
-                    'file2' => $currentReception->file2,
-                    'file3' => $currentReception->file3,
-                ];
-
-                $errors = [];
-                $debug_info = []; // Add debug information array
-
-                $fileKeys = ['image1' => 'file1', 'image2' => 'file2', 'image3' => 'file3'];
-                foreach ($fileKeys as $uploadKey => $dataKey) {
-                    if (isset($_FILES[$uploadKey]) && $_FILES[$uploadKey]['error'] === UPLOAD_ERR_OK) {
-                        $debug_info[] = "Processing file: " . $uploadKey;
-                        
-                        if (!empty($currentReception->$dataKey)) {
-                            $oldFilePath = 'uploads/receptions/' . $currentReception->$dataKey;
-                            $debug_info[] = "Old file path: " . $oldFilePath;
-                            $debug_info[] = "File exists: " . (file_exists($oldFilePath) ? 'Yes' : 'No');
-                            
-                            if (file_exists($oldFilePath)) {
-                                $unlink_result = unlink($oldFilePath);
-                                $debug_info[] = "Unlink result: " . ($unlink_result ? 'Success' : 'Failed');
-                            }
-                        }
-                        
-                        $result = $this->uploadFile($_FILES[$uploadKey], substr($uploadKey, -1));
-                        $debug_info[] = "Upload result for " . $uploadKey . ": " . $result;
-                        
-                        if (strlen($result) > 0 && strpos($result, '.') === false) {
-                            $errors[] = $result;
-                        } else {
-                            $data[$dataKey] = $result;
-                        }
-                    } else if (isset($_FILES[$uploadKey])) {
-                        $debug_info[] = "File upload error for " . $uploadKey . ": " . $_FILES[$uploadKey]['error'];
-                    }
-                }
-
-                header('Content-Type: application/json');
-
-                if (empty($errors)) {
-                    $debug_info[] = "Attempting to update reception with ID: " . $id;
-                    $result = $this->receptionsModel->updateReception($id, $data);
-                    $debug_info[] = "Update result: " . (is_bool($result) ? ($result ? 'true' : 'false') : 'array');
-
-                    if ($result === true) {
-                        $redirectUrl = $_SESSION['is_admin'] === 1
-                            ? URLROOT . "/receptions/admin"
-                            : URLROOT . "/receptions/agent";
-
-                        echo json_encode([
-                            'success' => true,
-                            'message' => 'اطلاعات با موفقیت به روز شد',
-                            'redirect' => $redirectUrl,
-                            'debug' => $debug_info
-                        ]);
-                    } else {
-                        $errorMessage = is_array($result) ? $result[2] : 'مشکل ناشناخته در دیتابیس';
-                        echo json_encode([
-                            'success' => false,
-                            'message' => $errorMessage,
-                            'debug' => $debug_info
-                        ]);
-                    }
-                } else {
-                    echo json_encode([
-                        'success' => false,
-                        'message' => implode('<br>', $errors),
-                        'debug' => $debug_info
-                    ]);
-                }
-            } catch (Exception $e) {
-                error_log('Error updating reception: ' . $e->getMessage());
-                header('Content-Type: application/json');
-                echo json_encode([
-                    'success' => false,
-                    'message' => $e->getMessage(),
-                    'debug_info' => [
-                        'error' => $e->getMessage(),
-                        'trace' => $e->getTraceAsString()
-                    ]
-                ]);
-            }
-            return;
-        }
+        
+        // End output buffering and flush
+        ob_end_flush();
     }
 
 

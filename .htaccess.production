@@ -1,0 +1,18 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # فقط وقتی از دامنه اصلی اومده
+  RewriteCond %{HTTP_HOST} ^(www\.)?pfsh\.ir$ [NC]
+
+  # هدایت روت به assets/index.php
+  RewriteRule ^$ assets/index.php [L]
+
+  # هدایت سایر فایل‌ها به assets
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.*)$ assets/$1 [L]
+</IfModule>
+
+<IfModule mime_module>
+  AddHandler application/x-httpd-ea-php82___lsphp .php .php8 .phtml
+</IfModule>

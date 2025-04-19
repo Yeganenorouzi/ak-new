@@ -111,13 +111,21 @@
                                             </div>
                                         </div>
                                         <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">شماره پاسپورت</label>
-                                            <input
-                                                class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
-                                                type="text"
-                                                id="example-date-input"
-                                                name="passport"
-                                                value="<?php echo htmlspecialchars($data['passport'] ?? ''); ?>">
+                                            <label for="passport" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">شماره پاسپورت</label>
+                                            <div class="relative">
+                                                <input
+                                                    class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100 pr-[90px]"
+                                                    type="text"
+                                                    id="passport"
+                                                    name="passport"
+                                                    value="<?php echo htmlspecialchars($data['passport'] ?? ''); ?>">
+                                                <button
+                                                    type="button"
+                                                    class="btn absolute left-0 top-0 h-full px-3 text-white bg-violet-500 border-violet-500 hover:bg-violet-600 hover:border-violet-600 focus:bg-violet-600 focus:border-violet-600 focus:ring focus:ring-violet-500/30 active:bg-violet-600 active:border-violet-600 rounded-l"
+                                                    id="search-passport-button">
+                                                    استعلام
+                                                </button>
+                                            </div>
                                         </div>
                                         <div class="mb-4">
                                             <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">کد پستی</label>
@@ -672,5 +680,65 @@
                     alert('خطا در ذخیره اطلاعات.');
                 }
             });
+    });
+</script>
+
+<script>
+    document.getElementById('search-passport-button').addEventListener('click', function() {
+        const passport = document.getElementById('passport').value;
+        
+        if (!passport) {
+            alert('لطفا شماره پاسپورت را وارد کنید');
+            return;
+        }
+
+        fetch('<?php echo URLROOT; ?>/customers/searchOrCreate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `search_type=passport&passport=${encodeURIComponent(passport)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'found') {
+                // پر کردن سایر فیلدها
+                document.querySelector('[name="name"]').value = data.data.name;
+                document.querySelector('[name="mobile"]').value = data.data.mobile;
+                document.querySelector('[name="phone"]').value = data.data.phone;
+                document.querySelector('[name="address"]').value = data.data.address;
+                document.querySelector('[name="codeposti"]').value = data.data.codeposti;
+                document.querySelector('[name="codemelli"]').value = data.data.codemelli;
+
+                // ست کردن استان
+                const provinceSelect = document.querySelector('[name="ostan"]');
+                provinceSelect.value = data.data.ostan;
+
+                // تریگر کردن رویداد change برای لود شدن شهرها
+                const event = new Event('change');
+                provinceSelect.dispatchEvent(event);
+
+                // کمی تاخیر برای اطمینان از لود شدن شهرها و سپس ست کردن شهر
+                setTimeout(() => {
+                    const citySelect = document.querySelector('[name="shahr"]');
+                    citySelect.value = data.data.shahr;
+                }, 100);
+            } else if (data.status === 'not_found') {
+                alert('شماره پاسپورت در سیستم نیست. لطفاً اطلاعات را وارد کنید.');
+                // پاک کردن فیلدها
+                document.querySelector('[name="name"]').value = '';
+                document.querySelector('[name="mobile"]').value = '';
+                document.querySelector('[name="phone"]').value = '';
+                document.querySelector('[name="ostan"]').value = '';
+                document.querySelector('[name="shahr"]').value = '';
+                document.querySelector('[name="address"]').value = '';
+                document.querySelector('[name="codeposti"]').value = '';
+                document.querySelector('[name="codemelli"]').value = '';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('خطا در برقراری ارتباط با سرور');
+        });
     });
 </script>

@@ -14,7 +14,8 @@ use Hekmatinasser\Verta\Verta;
             <?php if (!$data['reception']): ?>
                 <div class="alert alert-danger">پذیرش مورد نظر یافت نشد</div>
             <?php else: ?>
-                <form action="<?php echo URLROOT; ?>/receptions/update/<?php echo $data['reception']->id; ?>" method="POST" enctype="multipart/form-data" id="reception-form">
+                <form action="<?php echo URLROOT; ?>/receptions/update" method="POST" enctype="multipart/form-data" id="reception-form">
+                    <input type="hidden" name="id" value="<?php echo $data['reception']->id; ?>">
                     <!-- Header section with title and button -->
                     <nav class="flex" aria-label="Breadcrumb">
                         <ol class="inline-flex items-center space-x-3 ltr:md:space-x-3 rtl:md:space-x-0">
@@ -43,13 +44,9 @@ use Hekmatinasser\Verta\Verta;
                                 </a>
                                 <!-- دکمه ثبت پذیرش -->
                                 <button type="submit" class="flex btn text-white bg-violet-500 border-violet-500 hover:bg-violet-600 hover:border-violet-600 focus:bg-violet-600 focus:border-violet-600 focus:ring focus:ring-violet-500/30 active:bg-violet-600 active:border-violet-600">
-
-
                                     تایید
                                 </button>
                             </div>
-
-
                         </div>
                     </div>
 
@@ -131,10 +128,6 @@ use Hekmatinasser\Verta\Verta;
                                                     </select>
                                                 </div>
                                             </div>
-
-
-
-
                                         </div>
                                         <div class="col-span-12 lg:col-span-6">
                                             <div class="mb-4">
@@ -147,7 +140,6 @@ use Hekmatinasser\Verta\Verta;
                                                         name="codemelli"
                                                         readonly
                                                         value="<?php echo htmlspecialchars($data['reception']->codemelli ?? ''); ?>">
-
                                                 </div>
                                             </div>
                                             <div class="mb-4">
@@ -181,10 +173,7 @@ use Hekmatinasser\Verta\Verta;
                                                     readonly
                                                     name="address"><?php echo htmlspecialchars($data['reception']->address ?? ''); ?>
                                                 </textarea>
-
                                             </div>
-
-
                                         </div>
                                     </div>
                                 </div>
@@ -208,7 +197,6 @@ use Hekmatinasser\Verta\Verta;
                                                         name="serial"
                                                         readonly
                                                         value="<?php echo htmlspecialchars($data['reception']->serial ?? ''); ?>">
-
                                                 </div>
                                             </div>
 
@@ -264,8 +252,6 @@ use Hekmatinasser\Verta\Verta;
                                                     value="<?php echo htmlspecialchars($data['reception']->start_guarantee ?? ''); ?>"
                                                     id="example-text-input">
                                             </div>
-
-
                                         </div>
                                         <div class="col-span-12 lg:col-span-6">
                                             <div class="mb-4">
@@ -351,9 +337,6 @@ use Hekmatinasser\Verta\Verta;
                                                     name="paziresh_status"
                                                     readonly
                                                     value="<?php echo htmlspecialchars($data['reception']->paziresh_status ?? ''); ?>">
-
-                                                </input>
-
                                             </div>
                                         </div>
                                         <div class="mb-4">
@@ -373,14 +356,10 @@ use Hekmatinasser\Verta\Verta;
                                                     name="guarantee_status"
                                                     readonly
                                                     value="<?php echo htmlspecialchars($data['reception']->guarantee_status ?? ''); ?>">
-
-                                                </input>
                                             </div>
                                         </div>
-
                                     </div>
                                     <div class="col-span-12 lg:col-span-2">
-
                                         <div class="mb-4">
                                             <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">زمان تقریبی تعمیر </label>
                                             <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="example-month-input"
@@ -402,8 +381,6 @@ use Hekmatinasser\Verta\Verta;
                                                 readonly
                                                 value="<?php echo htmlspecialchars($data['reception']->dex ?? ''); ?>">
                                         </div>
-
-
                                     </div>
                                     <div class="col-span-12 lg:col-span-3">
                                         <div class="mb-4">
@@ -411,7 +388,6 @@ use Hekmatinasser\Verta\Verta;
                                             <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="example-date-input"
                                                 name="situation"
                                                 readonly
-
                                                 value="<?php echo htmlspecialchars($data['reception']->situation ?? ''); ?>">
                                         </div>
                                         <div class="mb-4">
@@ -497,7 +473,6 @@ use Hekmatinasser\Verta\Verta;
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                     <div class="col-span-12 lg:col-span-2 pr-4 border-r border-gray-200">
                                         <div class="mb-4">
@@ -506,7 +481,6 @@ use Hekmatinasser\Verta\Verta;
                                                 <select class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
                                                     name="product_status"
                                                     required>
-
                                                     <option value="">انتخاب کنید</option>
                                                     <option value="دریافت از دفتر مرکزی" <?php echo (isset($data['reception']->product_status) && $data['reception']->product_status === 'دریافت از دفتر مرکزی') ? 'selected' : ''; ?>>دریافت از دفتر مرکزی</option>
                                                     <option value="پذیرش در نمایندگی" <?php echo (isset($data['reception']->product_status) && $data['reception']->product_status === 'پذیرش در نمایندگی') ? 'selected' : ''; ?>>پذیرش در نمایندگی</option>
@@ -522,10 +496,7 @@ use Hekmatinasser\Verta\Verta;
                                                     <option value="اتمام تعمیر" <?php echo (isset($data['reception']->product_status) && $data['reception']->product_status === 'اتمام تعمیر') ? 'selected' : ''; ?>>اتمام تعمیر</option>
                                                     <option value="در انتظار تایید هزینه" <?php echo (isset($data['reception']->product_status) && $data['reception']->product_status === 'در انتظار تایید هزینه') ? 'selected' : ''; ?>>در انتظار تایید هزینه</option>
                                                     <option value="عدم موافقت با هزینه - مرجوع" <?php echo (isset($data['reception']->product_status) && $data['reception']->product_status === 'عدم موافقت با هزینه - مرجوع') ? 'selected' : ''; ?>>عدم موافقت با هزینه - مرجوع</option>
-
-
                                                 </select>
-
                                             </div>
                                         </div>
                                         <div class="mb-4">
@@ -539,10 +510,8 @@ use Hekmatinasser\Verta\Verta;
                                             <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" name="sh_baar2"
                                                 value="<?php echo htmlspecialchars($data['reception']->sh_baar2 ?? ''); ?>">
                                         </div>
-
                                     </div>
                                     <div class="col-span-12 lg:col-span-3">
-
                                         <div class="mb-4">
                                             <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">تعمیرات انجام شده </label>
                                             <input class="w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text"
@@ -565,7 +534,6 @@ use Hekmatinasser\Verta\Verta;
                                                 value="<?php echo htmlspecialchars($data['reception']->kaar_at ?? ''); ?>">
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -616,7 +584,6 @@ use Hekmatinasser\Verta\Verta;
                                     </div>
 
                                     <!-- تصویر فاکتور خرید -->
-
                                     <div class="col-span-12 lg:col-span-4">
                                         <div class="mb-4">
                                             <label for="avatar2" class="block font-medium text-gray-700 dark:text-gray-100 mb-2"> تصویر فاکتور خرید</label>
@@ -652,7 +619,6 @@ use Hekmatinasser\Verta\Verta;
                                             </div>
                                         </div>
                                     </div>
-
 
                                     <!-- تصویر ایراد -->
                                     <div class="col-span-12 lg:col-span-4">
@@ -692,72 +658,77 @@ use Hekmatinasser\Verta\Verta;
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
-                <?php endif; ?>
-
-
-
+                </form>
+            <?php endif; ?>
         </div>
-        </form>
+    </div>
+</div>
 
+<script>
+    document.getElementById('reception-form').addEventListener('submit', function(e) {
+        e.preventDefault();
 
-        <script>
-            document.getElementById('reception-form').addEventListener('submit', function(e) {
-                e.preventDefault();
+        const form = this;
+        const formData = new FormData(form);
 
-                const form = this;
-                const formData = new FormData(form);
+        // Show loading indicator
+        Swal.fire({
+            title: 'در حال پردازش...',
+            text: 'لطفاً صبر کنید',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
 
-                fetch(form.action, {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('پاسخ سرور ناموفق: ' + response.status);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log('پاسخ سرور:', data); // برای دیباگ
-                        if (data.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'موفقیت!',
-                                text: data.message,
-                                confirmButtonText: 'باشه',
-                                confirmButtonColor: '#8B5CF6'
-                            }).then(() => {
-                                if (data.redirect) {
-                                    window.location.href = data.redirect;
-                                }
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'خطا!',
-                                text: data.message,
-                                confirmButtonText: 'باشه',
-                                confirmButtonColor: '#EF4444'
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        console.error('خطا:', error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'خطا!',
-                            text: 'مشکلی در ارتباط با سرور رخ داد: ' + error.message,
-                            confirmButtonText: 'باشه',
-                            confirmButtonColor: '#EF4444'
-                        });
+        fetch(form.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('پاسخ سرور ناموفق: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('پاسخ سرور:', data); // برای دیباگ
+                if (data.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'موفقیت!',
+                        text: data.message,
+                        confirmButtonText: 'باشه',
+                        confirmButtonColor: '#8B5CF6'
+                    }).then(() => {
+                        // Stay on the current page instead of redirecting
+                        window.location.reload();
                     });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'خطا!',
+                        text: data.message,
+                        confirmButtonText: 'باشه',
+                        confirmButtonColor: '#EF4444'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('خطا:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'خطا!',
+                    text: 'مشکلی در ارتباط با سرور رخ داد: ' + error.message,
+                    confirmButtonText: 'باشه',
+                    confirmButtonColor: '#EF4444'
+                });
             });
-        </script>
+    });
+</script>
 
-
-
-        <?php require_once(APPROOT . "/views/public/footer.php"); ?>
+<?php require_once(APPROOT . "/views/public/footer.php"); ?>

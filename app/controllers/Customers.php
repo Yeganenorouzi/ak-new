@@ -20,10 +20,16 @@ class Customers extends Controller
     public function searchOrCreate()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $codemelli = $_POST['codemelli'];
-
-            // Search for national code in the database
-            $customer = $this->customersModel->getCustomerBycodemelli($codemelli);
+            // تعیین نوع جستجو
+            $search_type = $_POST['search_type'] ?? 'codemelli';
+            
+            if ($search_type === 'passport') {
+                $passport = $_POST['passport'] ?? '';
+                $customer = $this->customersModel->getCustomerByPassport($passport);
+            } else {
+                $codemelli = $_POST['codemelli'] ?? '';
+                $customer = $this->customersModel->getCustomerBycodemelli($codemelli);
+            }
 
             if ($customer) {
                 echo json_encode([

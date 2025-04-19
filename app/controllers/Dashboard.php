@@ -14,6 +14,22 @@ class Dashboard extends Controller
     $this->receptionsModel = $this->model("ReceptionsModel");
     $this->cardsModel = $this->model("CardsModel");
   }
+
+  public function index()
+  {
+    if (!isset($_SESSION['admin']) || empty($_SESSION['admin'])) {
+      header("Location: " . URLROOT . "/auth/login");
+      exit();
+    }
+
+    if ($_SESSION['is_admin'] == 1) {
+      $this->admin();
+    } else {
+      $this->agent();
+    }
+  }
+
+
   public function admin()
   {
     $data = [
@@ -64,4 +80,6 @@ class Dashboard extends Controller
     ];
     return $this->view("agent/dashboard/index", $data);
   }
+
+ 
 }

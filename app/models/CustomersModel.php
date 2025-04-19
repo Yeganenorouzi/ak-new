@@ -65,4 +65,11 @@ class CustomersModel{
         $this->db->bind(':codeposti', $data['codeposti']);
         return $this->db->execute();
     }
+
+    public function getCustomerByPassport($passport)
+    {
+        $this->db->query("SELECT * FROM customers WHERE passport = :passport");
+        $this->db->bind(':passport', $passport);
+        return $this->db->fetch();
+    }
 }
