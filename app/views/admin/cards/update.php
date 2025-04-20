@@ -3,11 +3,6 @@
 
 <div class="main-content">
     <div class="page-content dark:bg-zinc-700">
-
-
-
-
-
         <div class="grid grid-cols-1 mb-5">
             <div class="flex items-center justify-between">
                 <h4 class="mb-sm-0 text-lg font-semibold grow text-gray-800 dark:text-gray-100">ویرایش کارت گارانتی</h4>
@@ -31,14 +26,11 @@
             </div>
         </div>
 
-
         <div class="grid grid-cols-1">
             <div class="card dark:bg-zinc-800 dark:border-zinc-600">
                 <div class="card-body">
-
-
                     <div class="card-body">
-                        <form action="<?php echo URLROOT; ?>/cards/update/<?php echo $data['card']['id']; ?>" method="POST" enctype="multipart/form-data" class="max-w-2xl">
+                        <form action="<?php echo URLROOT; ?>/cards/update/<?php echo $data['card']->id; ?>" method="POST" enctype="multipart/form-data" class="max-w-2xl">
                             <div class="grid grid-cols-2 gap-5 mx-5">
                                 <div class="col-span-1">
                                     <div class="mb-4">
@@ -49,7 +41,7 @@
                                             type="text"
                                             placeholder="سریال را وارد کنید"
                                             id="serial"
-                                            value="<?php echo htmlspecialchars($data['card']['serial'] ?? ''); ?>"
+                                            value="<?php echo isset($data['card']->serial) ? htmlspecialchars($data['card']->serial) : ''; ?>"
                                             required>
                                     </div>
                                     <div class="mb-4">
@@ -60,7 +52,7 @@
                                             type="text"
                                             placeholder="سریال 2 را وارد کنید"
                                             id="serial2"
-                                            value="<?php echo htmlspecialchars($data['card']['serial2'] ?? ''); ?>"
+                                            value="<?php echo htmlspecialchars($data['card']->serial2 ?? ''); ?>"
                                             required>
                                     </div>
                                     <div class="mb-4">
@@ -71,7 +63,7 @@
                                             type="text"
                                             placeholder="شرکت واردکننده را وارد کنید"
                                             id="company"
-                                            value="<?php echo htmlspecialchars($data['card']['company'] ?? ''); ?>"
+                                            value="<?php echo htmlspecialchars($data['card']->company ?? ''); ?>"
                                             required>
                                     </div>
                                     <div class="mb-4">
@@ -82,7 +74,7 @@
                                             type="text"
                                             placeholder="شماره سند را وارد کنید"
                                             id="sh_sanad"
-                                            value="<?php echo htmlspecialchars($data['card']['sh_sanad'] ?? ''); ?>"
+                                            value="<?php echo htmlspecialchars($data['card']->sh_sanad ?? ''); ?>"
                                             required>
                                     </div>
                                     <div class="mb-4">
@@ -93,7 +85,7 @@
                                             type="text"
                                             placeholder="کد دستگاه را وارد کنید"
                                             id="code_dastgah"
-                                            value="<?php echo htmlspecialchars($data['card']['code_dastgah'] ?? ''); ?>"
+                                            value="<?php echo htmlspecialchars($data['card']->code_dastgah ?? ''); ?>"
                                             required>
                                     </div>
                                     <div class="mb-4">
@@ -104,7 +96,7 @@
                                             type="text"
                                             placeholder="نام دستگاه را وارد کنید"
                                             id="title"
-                                            value="<?php echo htmlspecialchars($data['card']['title'] ?? ''); ?>"
+                                            value="<?php echo htmlspecialchars($data['card']->title ?? ''); ?>"
                                             required>
                                     </div>
                                     <div class="mb-4">
@@ -115,7 +107,7 @@
                                             type="text"
                                             placeholder="کد درختواره را وارد کنید"
                                             id="coding_derakhtvare"
-                                            value="<?php echo htmlspecialchars($data['card']['coding_derakhtvare'] ?? ''); ?>"
+                                            value="<?php echo htmlspecialchars($data['card']->coding_derakhtvare ?? ''); ?>"
                                             required>
                                     </div>
                                     <div class="mb-4">
@@ -126,7 +118,7 @@
                                             type="text"
                                             placeholder="مدل را وارد کنید"
                                             id="model"
-                                            value="<?php echo htmlspecialchars($data['data']['model'] ?? ''); ?>"
+                                            value="<?php echo htmlspecialchars($data['card']->model ?? ''); ?>"
                                             required>
                                     </div>
                                     <div class="mb-4">
@@ -136,8 +128,9 @@
                                             class="input-field w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                             type="text"
                                             placeholder="تاریخ شروع گارانتی را وارد کنید"
-                                            id="example-full-input" readonly="readonly"
-                                            value="<?php echo htmlspecialchars($data['data']['start_guarantee'] ?? ''); ?>"
+                                            id="example-full-input"
+                                            readonly="readonly"
+                                            value="<?php echo htmlspecialchars($data['card']->start_guarantee ?? ''); ?>"
                                             required>
                                     </div>
                                     <div class="mb-4">
@@ -147,8 +140,9 @@
                                             class="input-field w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                             type="text"
                                             placeholder="تاریخ انقضای گارانتی را وارد کنید"
-                                            id="example-full-input" readonly="readonly"
-                                            value="<?php echo htmlspecialchars($data['data']['expite_guarantee'] ?? ''); ?>"
+                                            id="example-full-input"
+                                            readonly="readonly"
+                                            value="<?php echo htmlspecialchars($data['card']->expite_guarantee ?? ''); ?>"
                                             required>
                                     </div>
                                     <div class="mb-4">
@@ -159,10 +153,9 @@
                                             type="text"
                                             placeholder="کد نماینده خدمات را وارد کنید"
                                             id="code_agent_service"
-                                            value="<?php echo htmlspecialchars($data['data']['code_agent_service'] ?? ''); ?>"
+                                            value="<?php echo htmlspecialchars($data['card']->code_agent_service ?? ''); ?>"
                                             required>
                                     </div>
-
                                 </div>
                                 <div class="col-span-1">
                                     <div class="mb-4">
@@ -173,7 +166,7 @@
                                             type="text"
                                             placeholder=" ویژگی 1 را وارد کنید"
                                             id="att1_code"
-                                            value="<?php echo htmlspecialchars($data['data']['att1_code'] ?? ''); ?>"
+                                            value="<?php echo htmlspecialchars($data['card']->att1_code ?? ''); ?>"
                                             required>
                                     </div>
                                     <div class="mb-4">
@@ -184,7 +177,7 @@
                                             type="text"
                                             placeholder="کد ویژگی 1 را وارد کنید"
                                             id="att1_val"
-                                            value="<?php echo htmlspecialchars($data['data']['att1_val'] ?? ''); ?>"
+                                            value="<?php echo htmlspecialchars($data['card']->att1_val ?? ''); ?>"
                                             required>
                                     </div>
                                     <div class="mb-4">
@@ -195,7 +188,7 @@
                                             type="text"
                                             placeholder=" ویژگی 2 را وارد کنید"
                                             id="att2_code"
-                                            value="<?php echo htmlspecialchars($data['data']['att2_code'] ?? ''); ?>"
+                                            value="<?php echo htmlspecialchars($data['card']->att2_code ?? ''); ?>"
                                             required>
                                     </div>
                                     <div class="mb-4">
@@ -206,7 +199,7 @@
                                             type="text"
                                             placeholder="کد ویژگی 2 را وارد کنید"
                                             id="att2_val"
-                                            value="<?php echo htmlspecialchars($data['data']['att2_val'] ?? ''); ?>"
+                                            value="<?php echo htmlspecialchars($data['card']->att2_val ?? ''); ?>"
                                             required>
                                     </div>
                                     <div class="mb-4">
@@ -217,7 +210,7 @@
                                             type="text"
                                             placeholder=" ویژگی 3 را وارد کنید"
                                             id="att3_code"
-                                            value="<?php echo htmlspecialchars($data['data']['att3_code'] ?? ''); ?>"
+                                            value="<?php echo htmlspecialchars($data['card']->att3_code ?? ''); ?>"
                                             required>
                                     </div>
                                     <div class="mb-4">
@@ -228,7 +221,7 @@
                                             type="text"
                                             placeholder="کد ویژگی 3 را وارد کنید"
                                             id="att3_val"
-                                            value="<?php echo htmlspecialchars($data['data']['att3_val'] ?? ''); ?>"
+                                            value="<?php echo htmlspecialchars($data['card']->att3_val ?? ''); ?>"
                                             required>
                                     </div>
                                     <div class="mb-4">
@@ -239,7 +232,7 @@
                                             type="text"
                                             placeholder=" ویژگی 4 را وارد کنید"
                                             id="att4_code"
-                                            value="<?php echo htmlspecialchars($data['data']['att4_code'] ?? ''); ?>"
+                                            value="<?php echo htmlspecialchars($data['card']->att4_code ?? ''); ?>"
                                             required>
                                     </div>
                                     <div class="mb-4">
@@ -250,7 +243,7 @@
                                             type="text"
                                             placeholder="کد ویژگی 4 را وارد کنید"
                                             id="att4_val"
-                                            value="<?php echo htmlspecialchars($data['data']['att4_val'] ?? ''); ?>"
+                                            value="<?php echo htmlspecialchars($data['card']->att4_val ?? ''); ?>"
                                             required>
                                     </div>
                                     <div class="mb-4">
@@ -261,7 +254,7 @@
                                             type="text"
                                             placeholder="کد گارانتی را وارد کنید"
                                             id="code_guarantee"
-                                            value="<?php echo htmlspecialchars($data['data']['code_guarantee'] ?? ''); ?>"
+                                            value="<?php echo htmlspecialchars($data['card']->code_guarantee ?? ''); ?>"
                                             required>
                                     </div>
                                     <div class="mb-4">
@@ -272,10 +265,9 @@
                                             type="text"
                                             placeholder="شرح گارانتی را وارد کنید"
                                             id="sharh_guarantee"
-                                            value="<?php echo htmlspecialchars($data['data']['sharh_guarantee'] ?? ''); ?>"
+                                            value="<?php echo htmlspecialchars($data['card']->sharh_guarantee ?? ''); ?>"
                                             required>
                                     </div>
-
                                     <div class="mb-4">
                                         <label for="agent_service" class="block font-medium text-gray-700 dark:text-gray-100 mb-2"> نام نماینده خدمات</label>
                                         <input
@@ -284,7 +276,7 @@
                                             type="text"
                                             placeholder="نام نماینده خدمات را وارد کنید"
                                             id="agent_service"
-                                            value="<?php echo htmlspecialchars($data['data']['agent_service'] ?? ''); ?>"
+                                            value="<?php echo htmlspecialchars($data['card']->agent_service ?? ''); ?>"
                                             required>
                                     </div>
                                 </div>
@@ -292,22 +284,15 @@
 
                             <div class="mt-6 mx-5 flex gap-4">
                                 <button type="submit" class="px-5 py-2.5 bg-violet-500 text-white rounded hover:bg-violet-600 focus:outline-none">
-                                    ثبت اطلاعات
+                                    ویرایش اطلاعات
                                 </button>
-
-                                <!-- دکمه آپلود اکسل -->
-                                <label class="px-5 py-2.5 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none cursor-pointer">
-                                    <input type="file" name="excel_file" accept=".xlsx,.xls" class="hidden">
-                                    آپلود از اکسل
-                                </label>
                             </div>
                         </form>
                     </div>
                 </div>
-
             </div>
+        </div>
+    </div>
+</div>
 
-
-
-
-            <?php require_once(APPROOT . "/views/public/footer.php"); ?>
+<?php require_once(APPROOT . "/views/public/footer.php"); ?>

@@ -100,7 +100,7 @@ class Export extends Controller
     }
 
 
-    public function exportCards()
+    public function exportCards($filters = [])
     {
         // پاک کردن هرگونه خروجی قبلی برای جلوگیری از خرابی فایل
         ob_start();
@@ -129,8 +129,8 @@ class Export extends Controller
         $sheet->setCellValue('R1', 'تاریخ پایان گارانتی');
 
         $row = 2;
-        $receptions = $this->cardsModel->getAllCardsWithoutPagination();
-        foreach ($receptions as $item) {
+        $cards = $this->cardsModel->getFilteredCardsWithoutPagination($filters);
+        foreach ($cards as $item) {
             $sheet->setCellValue('A' . $row, $item->model ?? 'N/A');
             $sheet->setCellValue('B' . $row, $item->code_dastgah ?? 'N/A');
             $sheet->setCellValue('C' . $row, $item->title ?? 'N/A');

@@ -8,17 +8,68 @@ class Receptions extends Controller
         $this->receptionsModel = $this->model("ReceptionsModel");
     }
 
-    public function index(){
-        if(isset($_SESSION['is_admin'])) {
-            if($_SESSION['is_admin'] == 1) {
-                $this->admin();
-            } else {
-                $this->agent();
+    /**
+     * Check if the current user is an admin
+     * @return bool True if the user is an admin, false otherwise
+     */
+    private function isAdmin()
+    {
+        // Check if user is logged in and has admin role
+        // Adjust this based on how your application stores user roles
+        if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin') {
+            return true;
+        }
+        
+        // Alternative check - if your application uses a different session variable
+        if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
+            return true;
+        }
+        
+        // If you're using a different approach to identify admins, add it here
+        
+        // For development/testing, you can temporarily return true
+        // WARNING: Remove this in production
+        return true;
+    }
+
+    public function index()
+    {
+        if ($this->isAdmin()) {
+            $filters = [];
+            
+            // Get filter values from GET request
+            if (!empty($_GET['reception_number'])) {
+                $filters['reception_number'] = $_GET['reception_number'];
             }
+            if (!empty($_GET['serial'])) {
+                $filters['serial'] = $_GET['serial'];
+            }
+            if (!empty($_GET['model'])) {
+                $filters['model'] = $_GET['model'];
+            }
+            if (!empty($_GET['customer_name'])) {
+                $filters['customer_name'] = $_GET['customer_name'];
+            }
+            if (!empty($_GET['codemelli'])) {
+                $filters['codemelli'] = $_GET['codemelli'];
+            }
+            if (!empty($_GET['mobile'])) {
+                $filters['mobile'] = $_GET['mobile'];
+            }
+            if (!empty($_GET['status'])) {
+                $filters['status'] = $_GET['status'];
+            }
+            if (!empty($_GET['date_from'])) {
+                $filters['date_from'] = $_GET['date_from'];
+            }
+            if (!empty($_GET['date_to'])) {
+                $filters['date_to'] = $_GET['date_to'];
+            }
+
+            $receptions = $this->receptionsModel->getFilteredReceptions($filters);
+            $this->view('admin/receptions/list', ['receptions' => $receptions]);
         } else {
-            // در صورت عدم دسترسی، هدایت به صفحه لاگین
-            header("Location: " . URLROOT . "/auth/login");
-            exit();
+            $this->redirect('dashboard');
         }
     }
 

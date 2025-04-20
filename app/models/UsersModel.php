@@ -282,4 +282,11 @@ class UsersModel
     $this->db->bind(":id", $id);
     return $this->db->execute();
   }
+
+  public function updatePassword($userId, $newPassword) {
+    $this->db->query('UPDATE users SET password = :password WHERE id = :id');
+    $this->db->bind(':password', $newPassword);
+    $this->db->bind(':id', $userId);
+    return $this->db->execute();
+  }
 }

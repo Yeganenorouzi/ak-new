@@ -128,11 +128,11 @@
             </button>
             <div class="dropdown-menu absolute top-0 ltr:-left-3 rtl:left-0 z-50 hidden w-40 list-none rounded bg-white shadow dark:bg-zinc-800" id="profile/log">
               <div class="border border-gray-50 dark:border-zinc-600" aria-labelledby="navNotifications">
-                <!-- <div class="dropdown-item dark:text-gray-100">
+                <div class="dropdown-item dark:text-gray-100">
                   <a class="px-3 py-2 hover:bg-gray-50/50 block dark:hover:bg-zinc-700/50" href="<?php echo URLROOT . "/users/profile" ?>">
                     <i class="mdi mdi-face-man text-16 align-middle mr-1"></i> پروفایل
                   </a>
-                </div> -->
+                </div>
                 <!-- <div class="dropdown-item dark:text-gray-100">
                   <a class="px-3 py-2 hover:bg-gray-50/50 block dark:hover:bg-zinc-700/50" href="lock-screen.html">
                     <i class="mdi mdi-lock text-16 align-middle mr-1"></i> قفل صفحه

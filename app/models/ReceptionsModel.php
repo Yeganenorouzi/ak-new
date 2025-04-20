@@ -1,6 +1,6 @@
 <?php
 
-class Receptionsmodel
+class ReceptionsModel
 {
   private $db;
   public function __construct()
@@ -377,6 +377,89 @@ class Receptionsmodel
         'error' => $e->getMessage(),
         'trace' => $e->getTraceAsString()
       ];
+    }
+  }
+
+  public function getFilteredReceptions($filters)
+  {
+    try {
+      $query = "
+            SELECT 
+                receptions.*, 
+                serials.serial, 
+                serials.model, 
+                customers.name AS customer_name,
+                customers.codemelli,
+                customers.mobile,
+                customers.address,
+                users.name AS user_name
+            FROM receptions
+            INNER JOIN serials ON receptions.serial_id = serials.id
+            INNER JOIN customers ON receptions.customer_id = customers.id
+            INNER JOIN users ON receptions.user_id = users.id
+            WHERE 1=1
+        ";
+
+      $params = [];
+
+      if (!empty($filters['reception_number'])) {
+        $query .= " AND receptions.id LIKE :reception_number";
+        $params[':reception_number'] = "%{$filters['reception_number']}%";
+      }
+
+      if (!empty($filters['serial'])) {
+        $query .= " AND serials.serial LIKE :serial";
+        $params[':serial'] = "%{$filters['serial']}%";
+      }
+
+      if (!empty($filters['model'])) {
+        $query .= " AND serials.model LIKE :model";
+        $params[':model'] = "%{$filters['model']}%";
+      }
+
+      if (!empty($filters['customer_name'])) {
+        $query .= " AND customers.name LIKE :customer_name";
+        $params[':customer_name'] = "%{$filters['customer_name']}%";
+      }
+
+      if (!empty($filters['codemelli'])) {
+        $query .= " AND customers.codemelli LIKE :codemelli";
+        $params[':codemelli'] = "%{$filters['codemelli']}%";
+      }
+
+      if (!empty($filters['mobile'])) {
+        $query .= " AND customers.mobile LIKE :mobile";
+        $params[':mobile'] = "%{$filters['mobile']}%";
+      }
+
+      if (!empty($filters['status'])) {
+        $query .= " AND receptions.product_status = :status";
+        $params[':status'] = $filters['status'];
+      }
+
+      if (!empty($filters['date_from'])) {
+        $query .= " AND DATE(receptions.created_at) >= :date_from";
+        $params[':date_from'] = $filters['date_from'];
+      }
+
+      if (!empty($filters['date_to'])) {
+        $query .= " AND DATE(receptions.created_at) <= :date_to";
+        $params[':date_to'] = $filters['date_to'];
+      }
+
+      $query .= " ORDER BY receptions.id DESC";
+
+      $this->db->query($query);
+      
+      // Bind all parameters
+      foreach ($params as $key => $value) {
+        $this->db->bind($key, $value);
+      }
+      
+      return $this->db->fetchAll();
+    } catch (Exception $e) {
+      echo 'خطا در دریافت اطلاعات: ' . $e->getMessage();
+      return [];
     }
   }
 }

@@ -33,6 +33,190 @@ class CardsModel
         return $result->total;
     }
 
+    public function getFilteredCards($filters, $limit, $offset)
+    {
+        // تبدیل پارامترها به عدد صحیح برای اطمینان
+        $limit = (int)$limit;
+        $offset = (int)$offset;
+        
+        $sql = "SELECT * FROM serials WHERE 1=1";
+        $params = [];
+        
+        // فیلتر بر اساس سریال اول
+        if (!empty($filters['serial'])) {
+            $sql .= " AND serial LIKE :serial";
+            $params[':serial'] = '%' . $filters['serial'] . '%';
+        }
+        
+        // فیلتر بر اساس سریال دوم
+        if (!empty($filters['serial2'])) {
+            $sql .= " AND serial2 LIKE :serial2";
+            $params[':serial2'] = '%' . $filters['serial2'] . '%';
+        }
+        
+        // فیلتر بر اساس مدل دستگاه
+        if (!empty($filters['model'])) {
+            $sql .= " AND model LIKE :model";
+            $params[':model'] = '%' . $filters['model'] . '%';
+        }
+        
+        // فیلتر بر اساس شرکت وارد کننده
+        if (!empty($filters['company'])) {
+            $sql .= " AND company LIKE :company";
+            $params[':company'] = '%' . $filters['company'] . '%';
+        }
+        
+        // فیلتر بر اساس شماره سند
+        if (!empty($filters['sh_sanad'])) {
+            $sql .= " AND sh_sanad LIKE :sh_sanad";
+            $params[':sh_sanad'] = '%' . $filters['sh_sanad'] . '%';
+        }
+        
+        // فیلتر بر اساس تاریخ صدور کارت گارانتی (از تاریخ)
+        if (!empty($filters['start_guarantee_from'])) {
+            $sql .= " AND start_guarantee >= :start_guarantee_from";
+            $params[':start_guarantee_from'] = $filters['start_guarantee_from'];
+        }
+        
+        // فیلتر بر اساس تاریخ صدور کارت گارانتی (تا تاریخ)
+        if (!empty($filters['start_guarantee_to'])) {
+            $sql .= " AND start_guarantee <= :start_guarantee_to";
+            $params[':start_guarantee_to'] = $filters['start_guarantee_to'];
+        }
+        
+        // فیلتر بر اساس تاریخ انقضا کارت گارانتی (از تاریخ)
+        if (!empty($filters['expite_guarantee_from'])) {
+            $sql .= " AND expite_guarantee >= :expite_guarantee_from";
+            $params[':expite_guarantee_from'] = $filters['expite_guarantee_from'];
+        }
+        
+        // فیلتر بر اساس تاریخ انقضا کارت گارانتی (تا تاریخ)
+        if (!empty($filters['expite_guarantee_to'])) {
+            $sql .= " AND expite_guarantee <= :expite_guarantee_to";
+            $params[':expite_guarantee_to'] = $filters['expite_guarantee_to'];
+        }
+        
+        // فیلتر بر اساس وضعیت گارانتی (منقضی شده، فعال، نزدیک به انقضا)
+        if (!empty($filters['guarantee_status'])) {
+            $today = date('Y-m-d');
+            
+            if ($filters['guarantee_status'] == 'expired') {
+                $sql .= " AND expite_guarantee < :today";
+                $params[':today'] = $today;
+            } elseif ($filters['guarantee_status'] == 'active') {
+                $sql .= " AND expite_guarantee >= :today";
+                $params[':today'] = $today;
+            } elseif ($filters['guarantee_status'] == 'expiring_soon') {
+                $thirtyDaysLater = date('Y-m-d', strtotime('+30 days'));
+                $sql .= " AND expite_guarantee >= :today AND expite_guarantee <= :thirtyDaysLater";
+                $params[':today'] = $today;
+                $params[':thirtyDaysLater'] = $thirtyDaysLater;
+            }
+        }
+        
+        // اضافه کردن مرتب‌سازی و محدودیت
+        $sql .= " ORDER BY id DESC LIMIT $limit OFFSET $offset";
+        
+        // اجرای کوئری با پارامترها
+        $this->db->query($sql);
+        
+        // بایند کردن پارامترها
+        foreach ($params as $key => $value) {
+            $this->db->bind($key, $value);
+        }
+        
+        return $this->db->fetchAll();
+    }
+    
+    public function getTotalFilteredCards($filters)
+    {
+        $sql = "SELECT COUNT(*) as total FROM serials WHERE 1=1";
+        $params = [];
+        
+        // فیلتر بر اساس سریال اول
+        if (!empty($filters['serial'])) {
+            $sql .= " AND serial LIKE :serial";
+            $params[':serial'] = '%' . $filters['serial'] . '%';
+        }
+        
+        // فیلتر بر اساس سریال دوم
+        if (!empty($filters['serial2'])) {
+            $sql .= " AND serial2 LIKE :serial2";
+            $params[':serial2'] = '%' . $filters['serial2'] . '%';
+        }
+        
+        // فیلتر بر اساس مدل دستگاه
+        if (!empty($filters['model'])) {
+            $sql .= " AND model LIKE :model";
+            $params[':model'] = '%' . $filters['model'] . '%';
+        }
+        
+        // فیلتر بر اساس شرکت وارد کننده
+        if (!empty($filters['company'])) {
+            $sql .= " AND company LIKE :company";
+            $params[':company'] = '%' . $filters['company'] . '%';
+        }
+        
+        // فیلتر بر اساس شماره سند
+        if (!empty($filters['sh_sanad'])) {
+            $sql .= " AND sh_sanad LIKE :sh_sanad";
+            $params[':sh_sanad'] = '%' . $filters['sh_sanad'] . '%';
+        }
+        
+        // فیلتر بر اساس تاریخ صدور کارت گارانتی (از تاریخ)
+        if (!empty($filters['start_guarantee_from'])) {
+            $sql .= " AND start_guarantee >= :start_guarantee_from";
+            $params[':start_guarantee_from'] = $filters['start_guarantee_from'];
+        }
+        
+        // فیلتر بر اساس تاریخ صدور کارت گارانتی (تا تاریخ)
+        if (!empty($filters['start_guarantee_to'])) {
+            $sql .= " AND start_guarantee <= :start_guarantee_to";
+            $params[':start_guarantee_to'] = $filters['start_guarantee_to'];
+        }
+        
+        // فیلتر بر اساس تاریخ انقضا کارت گارانتی (از تاریخ)
+        if (!empty($filters['expite_guarantee_from'])) {
+            $sql .= " AND expite_guarantee >= :expite_guarantee_from";
+            $params[':expite_guarantee_from'] = $filters['expite_guarantee_from'];
+        }
+        
+        // فیلتر بر اساس تاریخ انقضا کارت گارانتی (تا تاریخ)
+        if (!empty($filters['expite_guarantee_to'])) {
+            $sql .= " AND expite_guarantee <= :expite_guarantee_to";
+            $params[':expite_guarantee_to'] = $filters['expite_guarantee_to'];
+        }
+        
+        // فیلتر بر اساس وضعیت گارانتی (منقضی شده، فعال، نزدیک به انقضا)
+        if (!empty($filters['guarantee_status'])) {
+            $today = date('Y-m-d');
+            
+            if ($filters['guarantee_status'] == 'expired') {
+                $sql .= " AND expite_guarantee < :today";
+                $params[':today'] = $today;
+            } elseif ($filters['guarantee_status'] == 'active') {
+                $sql .= " AND expite_guarantee >= :today";
+                $params[':today'] = $today;
+            } elseif ($filters['guarantee_status'] == 'expiring_soon') {
+                $thirtyDaysLater = date('Y-m-d', strtotime('+30 days'));
+                $sql .= " AND expite_guarantee >= :today AND expite_guarantee <= :thirtyDaysLater";
+                $params[':today'] = $today;
+                $params[':thirtyDaysLater'] = $thirtyDaysLater;
+            }
+        }
+        
+        // اجرای کوئری با پارامترها
+        $this->db->query($sql);
+        
+        // بایند کردن پارامترها
+        foreach ($params as $key => $value) {
+            $this->db->bind($key, $value);
+        }
+        
+        $result = $this->db->fetch();
+        return $result->total;
+    }
+
     public function getCardBySerial($serial)
     {
         $this->db->query("SELECT * FROM serials WHERE serial = :serial");
@@ -166,24 +350,27 @@ class CardsModel
         att3_code = :att3_code,
         att3_val = :att3_val,
         att4_code = :att4_code,
-        att4_val = :att4_val
+        att4_val = :att4_val,
+        serial = :serial,
+        serial2 = :serial2,
+        company = :company,
+        sh_sanad = :sh_sanad,
+        code_guarantee = :code_guarantee,
+        sharh_guarantee = :sharh_guarantee,
+        code_agent_service = :code_agent_service,
+        agent_service = :agent_service,
+        start_guarantee = :start_guarantee,
+        expite_guarantee = :expite_guarantee,
+        updated_at = NOW()
         WHERE id = :id");
 
-        $this->db->bind(':code_dastgah', $data['code_dastgah']);
-        $this->db->bind(':title', $data['title']);
-        $this->db->bind(':coding_derakhtvare', $data['coding_derakhtvare']);
-        $this->db->bind(':model', $data['model']);
-        $this->db->bind(':att1_code', $data['att1_code']);
-        $this->db->bind(':att1_val', $data['att1_val']);
-        $this->db->bind(':att2_code', $data['att2_code']);
-        $this->db->bind(':att2_val', $data['att2_val']);
-        $this->db->bind(':att3_code', $data['att3_code']);
-        $this->db->bind(':att3_val', $data['att3_val']);
-        $this->db->bind(':att4_code', $data['att4_code']);
-        $this->db->bind(':att4_val', $data['att4_val']);
+        // Bind all parameters
+        foreach ($data as $key => $value) {
+            $this->db->bind(':' . $key, $value);
+        }
         $this->db->bind(':id', $id);
 
-        $this->db->execute();
+        return $this->db->execute();
     }
 
     public function deleteCard($id)
@@ -197,5 +384,96 @@ class CardsModel
     {
         $this->db->query("SELECT * FROM serials");
         return $this->db->fetchAll(); 
-       }
+    }
+
+    public function getFilteredCardsWithoutPagination($filters)
+    {
+        $sql = "SELECT * FROM serials WHERE 1=1";
+        $params = [];
+        
+        // فیلتر بر اساس سریال اول
+        if (!empty($filters['serial'])) {
+            $sql .= " AND serial LIKE :serial";
+            $params[':serial'] = '%' . $filters['serial'] . '%';
+        }
+        
+        // فیلتر بر اساس سریال دوم
+        if (!empty($filters['serial2'])) {
+            $sql .= " AND serial2 LIKE :serial2";
+            $params[':serial2'] = '%' . $filters['serial2'] . '%';
+        }
+        
+        // فیلتر بر اساس مدل دستگاه
+        if (!empty($filters['model'])) {
+            $sql .= " AND model LIKE :model";
+            $params[':model'] = '%' . $filters['model'] . '%';
+        }
+        
+        // فیلتر بر اساس شرکت وارد کننده
+        if (!empty($filters['company'])) {
+            $sql .= " AND company LIKE :company";
+            $params[':company'] = '%' . $filters['company'] . '%';
+        }
+        
+        // فیلتر بر اساس شماره سند
+        if (!empty($filters['sh_sanad'])) {
+            $sql .= " AND sh_sanad LIKE :sh_sanad";
+            $params[':sh_sanad'] = '%' . $filters['sh_sanad'] . '%';
+        }
+        
+        // فیلتر بر اساس تاریخ صدور کارت گارانتی (از تاریخ)
+        if (!empty($filters['start_guarantee_from'])) {
+            $sql .= " AND start_guarantee >= :start_guarantee_from";
+            $params[':start_guarantee_from'] = $filters['start_guarantee_from'];
+        }
+        
+        // فیلتر بر اساس تاریخ صدور کارت گارانتی (تا تاریخ)
+        if (!empty($filters['start_guarantee_to'])) {
+            $sql .= " AND start_guarantee <= :start_guarantee_to";
+            $params[':start_guarantee_to'] = $filters['start_guarantee_to'];
+        }
+        
+        // فیلتر بر اساس تاریخ انقضا کارت گارانتی (از تاریخ)
+        if (!empty($filters['expite_guarantee_from'])) {
+            $sql .= " AND expite_guarantee >= :expite_guarantee_from";
+            $params[':expite_guarantee_from'] = $filters['expite_guarantee_from'];
+        }
+        
+        // فیلتر بر اساس تاریخ انقضا کارت گارانتی (تا تاریخ)
+        if (!empty($filters['expite_guarantee_to'])) {
+            $sql .= " AND expite_guarantee <= :expite_guarantee_to";
+            $params[':expite_guarantee_to'] = $filters['expite_guarantee_to'];
+        }
+        
+        // فیلتر بر اساس وضعیت گارانتی (منقضی شده، فعال، نزدیک به انقضا)
+        if (!empty($filters['guarantee_status'])) {
+            $today = date('Y-m-d');
+            
+            if ($filters['guarantee_status'] == 'expired') {
+                $sql .= " AND expite_guarantee < :today";
+                $params[':today'] = $today;
+            } elseif ($filters['guarantee_status'] == 'active') {
+                $sql .= " AND expite_guarantee >= :today";
+                $params[':today'] = $today;
+            } elseif ($filters['guarantee_status'] == 'expiring_soon') {
+                $thirtyDaysLater = date('Y-m-d', strtotime('+30 days'));
+                $sql .= " AND expite_guarantee >= :today AND expite_guarantee <= :thirtyDaysLater";
+                $params[':today'] = $today;
+                $params[':thirtyDaysLater'] = $thirtyDaysLater;
+            }
+        }
+        
+        // اضافه کردن مرتب‌سازی
+        $sql .= " ORDER BY id DESC";
+        
+        // اجرای کوئری با پارامترها
+        $this->db->query($sql);
+        
+        // بایند کردن پارامترها
+        foreach ($params as $key => $value) {
+            $this->db->bind($key, $value);
+        }
+        
+        return $this->db->fetchAll();
+    }
 }

@@ -10,8 +10,27 @@ class Users extends Controller
 
     public function index()
     {
+        $filters = [];
+        
+        // دریافت فیلترها از درخواست
+        if ($_SERVER["REQUEST_METHOD"] == "GET") {
+            if (!empty($_GET['name'])) {
+                $filters['name'] = $_GET['name'];
+            }
+            if (!empty($_GET['codemelli'])) {
+                $filters['codemelli'] = $_GET['codemelli'];
+            }
+            if (!empty($_GET['mobile'])) {
+                $filters['mobile'] = $_GET['mobile'];
+            }
+            if (!empty($_GET['email'])) {
+                $filters['email'] = $_GET['email'];
+            }
+        }
+        
         $data = [
-            "users" => $this->usersModel->getAllUsers()
+            "users" => $this->usersModel->getFilteredUsers($filters),
+            "filters" => $filters
         ];
         return $this->view("admin/users/list", $data);
     }
@@ -99,8 +118,27 @@ class Users extends Controller
 
     public function indexAgents()
     {
+        $filters = [];
+        
+        // دریافت فیلترها از درخواست
+        if ($_SERVER["REQUEST_METHOD"] == "GET") {
+            if (!empty($_GET['name'])) {
+                $filters['name'] = $_GET['name'];
+            }
+            if (!empty($_GET['codemelli'])) {
+                $filters['codemelli'] = $_GET['codemelli'];
+            }
+            if (!empty($_GET['mobile'])) {
+                $filters['mobile'] = $_GET['mobile'];
+            }
+            if (!empty($_GET['email'])) {
+                $filters['email'] = $_GET['email'];
+            }
+        }
+        
         $data = [
-            "agents" => $this->usersModel->getAllAgents()
+            "agents" => $this->usersModel->getFilteredAgents($filters),
+            "filters" => $filters
         ];
         return $this->view("admin/agents/list", $data);
     }
