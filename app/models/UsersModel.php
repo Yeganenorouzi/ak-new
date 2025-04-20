@@ -22,6 +22,92 @@ class UsersModel
     return $this->db->fetchAll();
   }
 
+  public function getFilteredUsers($filters)
+  {
+    $sql = "SELECT * FROM users WHERE admin = 1";
+    $params = [];
+    
+    // فیلتر بر اساس نام
+    if (!empty($filters['name'])) {
+      $sql .= " AND name LIKE :name";
+      $params[':name'] = '%' . $filters['name'] . '%';
+    }
+    
+    // فیلتر بر اساس کد ملی
+    if (!empty($filters['codemelli'])) {
+      $sql .= " AND codemelli LIKE :codemelli";
+      $params[':codemelli'] = '%' . $filters['codemelli'] . '%';
+    }
+    
+    // فیلتر بر اساس موبایل
+    if (!empty($filters['mobile'])) {
+      $sql .= " AND mobile LIKE :mobile";
+      $params[':mobile'] = '%' . $filters['mobile'] . '%';
+    }
+    
+    // فیلتر بر اساس ایمیل
+    if (!empty($filters['email'])) {
+      $sql .= " AND email LIKE :email";
+      $params[':email'] = '%' . $filters['email'] . '%';
+    }
+    
+    // اضافه کردن مرتب‌سازی
+    $sql .= " ORDER BY id DESC";
+    
+    // اجرای کوئری با پارامترها
+    $this->db->query($sql);
+    
+    // بایند کردن پارامترها
+    foreach ($params as $key => $value) {
+      $this->db->bind($key, $value);
+    }
+    
+    return $this->db->fetchAll();
+  }
+  
+  public function getFilteredAgents($filters)
+  {
+    $sql = "SELECT * FROM users WHERE admin = 0";
+    $params = [];
+    
+    // فیلتر بر اساس نام
+    if (!empty($filters['name'])) {
+      $sql .= " AND name LIKE :name";
+      $params[':name'] = '%' . $filters['name'] . '%';
+    }
+    
+    // فیلتر بر اساس کد ملی
+    if (!empty($filters['codemelli'])) {
+      $sql .= " AND codemelli LIKE :codemelli";
+      $params[':codemelli'] = '%' . $filters['codemelli'] . '%';
+    }
+    
+    // فیلتر بر اساس موبایل
+    if (!empty($filters['mobile'])) {
+      $sql .= " AND mobile LIKE :mobile";
+      $params[':mobile'] = '%' . $filters['mobile'] . '%';
+    }
+    
+    // فیلتر بر اساس ایمیل
+    if (!empty($filters['email'])) {
+      $sql .= " AND email LIKE :email";
+      $params[':email'] = '%' . $filters['email'] . '%';
+    }
+    
+    // اضافه کردن مرتب‌سازی
+    $sql .= " ORDER BY id DESC";
+    
+    // اجرای کوئری با پارامترها
+    $this->db->query($sql);
+    
+    // بایند کردن پارامترها
+    foreach ($params as $key => $value) {
+      $this->db->bind($key, $value);
+    }
+    
+    return $this->db->fetchAll();
+  }
+
   public function createUser($data)
   {
     try {
@@ -289,4 +375,5 @@ class UsersModel
     $this->db->bind(':id', $userId);
     return $this->db->execute();
   }
+
 }
