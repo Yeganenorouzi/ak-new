@@ -10,6 +10,7 @@ class ComposerStaticInit26fc85295a553842b5dcb1d886f1f289
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '23f09fe3194f8c2f70923f90d6702129' => __DIR__ . '/..' . '/illuminate/collections/functions.php',
         '60799491728b879e74601d83e38b2cad' => __DIR__ . '/..' . '/illuminate/collections/helpers.php',
+        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '662a729f963d39afe703c9d9b7ab4a8c' => __DIR__ . '/..' . '/symfony/polyfill-php83/bootstrap.php',
         '2203a247e6fda86070a5e4e07aed533a' => __DIR__ . '/..' . '/symfony/clock/Resources/now.php',
         'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
@@ -18,9 +19,9 @@ class ComposerStaticInit26fc85295a553842b5dcb1d886f1f289
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
         '06a34129a50df3d9257ee706cf3c875b' => __DIR__ . '/..' . '/illuminate/filesystem/functions.php',
-        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         '4364d9898253482270d33c3e7d349234' => __DIR__ . '/..' . '/hekmatinasser/notowo/src/helpers.php',
         'a4ecaeafb8cfb009ad0e052c90355e98' => __DIR__ . '/..' . '/beberlei/assert/lib/Assert/functions.php',
+        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         '508dab6c0a7dfd955e775df925e6d583' => __DIR__ . '/..' . '/hekmatinasser/jalali/src/helpers.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -64,6 +65,7 @@ class ComposerStaticInit26fc85295a553842b5dcb1d886f1f289
         ),
         'M' => 
         array (
+            'MyCLabs\\Enum\\' => 13,
             'Morilog\\Jalali\\' => 15,
             'Matrix\\' => 7,
         ),
@@ -199,6 +201,10 @@ class ComposerStaticInit26fc85295a553842b5dcb1d886f1f289
         array (
             0 => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet',
         ),
+        'MyCLabs\\Enum\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/myclabs/php-enum/src',
+        ),
         'Morilog\\Jalali\\' => 
         array (
             0 => __DIR__ . '/..' . '/morilog/jalali/src',
@@ -292,6 +298,16 @@ class ComposerStaticInit26fc85295a553842b5dcb1d886f1f289
         ),
     );
 
+    public static $prefixesPsr0 = array (
+        'H' => 
+        array (
+            'HTMLPurifier' => 
+            array (
+                0 => __DIR__ . '/..' . '/ezyang/htmlpurifier/library',
+            ),
+        ),
+    );
+
     public static $classMap = array (
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
@@ -319,6 +335,7 @@ class ComposerStaticInit26fc85295a553842b5dcb1d886f1f289
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit26fc85295a553842b5dcb1d886f1f289::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit26fc85295a553842b5dcb1d886f1f289::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit26fc85295a553842b5dcb1d886f1f289::$prefixesPsr0;
             $loader->classMap = ComposerStaticInit26fc85295a553842b5dcb1d886f1f289::$classMap;
 
         }, null, ClassLoader::class);

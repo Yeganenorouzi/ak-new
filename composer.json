@@ -1,10 +1,10 @@
 {
     "require": {
         "morilog/jalali": "^3.4",
-        "hekmatinasser/verta": "^8.4",
+        "hekmatinasser/verta": "^8.3",
         "shuchkin/simplexlsx": "^1.1",
-        "vlucas/phpdotenv": "^5.6",
-        "phpoffice/phpspreadsheet": "^4.2",
-        "maennchen/zipstream-php": "^3.1"
+        "vlucas/phpdotenv": "^5.5",
+        "phpoffice/phpspreadsheet": "^1.29",
+        "maennchen/zipstream-php": "^2.4"
     }
 }
