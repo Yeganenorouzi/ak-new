@@ -1,5 +1,5 @@
-    <!-- Footer Start -->
-    <footer class="footer fixed bottom-0 right-0 left-0 border-t border-gray-50 py-5 px-5 bg-white dark:bg-zinc-700 dark:border-zinc-600 dark:text-gray-200">
+ <!-- Footer Start -->
+ <footer class="footer fixed bottom-0 right-0 left-0 border-t border-gray-50 py-5 px-5 bg-white dark:bg-zinc-700 dark:border-zinc-600 dark:text-gray-200">
         <div class="grid grid-cols-2">
 
             <div class="hidden md:inline-block text-start">دیزاین و توسعه توسط <a href="#" class="text-violet-500 underline">Yegi</a></div>
@@ -42,29 +42,23 @@
 
     <script src="<?php echo URLROOT . "/assets/js/app.js" ?>"></script>
 
-    
-    <!-- datepicker js -->
-    <script src="<?php echo URLROOT . "/assets/js/jdate.min.js" ?>"></script>
-    <script>
-        window.Date = window.JDate;
-    </script>
-    <script src="<?php echo URLROOT . "/assets/libs/flatpickr/flatpickr.min.js" ?>"></script>
-    <script src="<?php echo URLROOT . "/assets/js/flatpicker_fa.js" ?>"></script>
+
+    <!-- Jalali Date Picker -->
+    <link rel="stylesheet" href="https://unpkg.com/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.css">
+    <script type="text/javascript" src="https://unpkg.com/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.js"></script>
+
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            flatpickr("#example-full-input", {
-                dateFormat: "Y/m/d",
-                altInput: true,
-                altFormat: "j F Y",
-                locale: "fa",
-                calendar: "persian",
-                minDate: "today",
-                
-              
-            });
-        });
-    </script>
+    // Initialize Jalali Date Picker
+    jalaliDatepicker.startWatch({
+        daysTitleFormat: 'YYYY/MM/DD',
+        monthTitleFormat: 'YYYY/MM',
+        autoClose: true,
+        position: 'auto',
+        showTodayBtn: true,
+        showEmptyBtn: true
+    });
+</script>
 
 
     <script>
@@ -286,9 +280,8 @@
 
 
 
-
-
     </body>
 
 
     </html>
+

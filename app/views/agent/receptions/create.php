@@ -40,7 +40,8 @@
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                                 type="tel"
-                                                id="example-date-input"
+                                                
+                                                
                                                 name="mobile"
                                                 value="<?php echo htmlspecialchars($data['mobile'] ?? ''); ?>"
                                                 required>
@@ -50,7 +51,8 @@
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                                 type="tel"
-                                                id="example-date-input"
+                                                
+                                                
                                                 name="phone"
                                                 value="<?php echo htmlspecialchars($data['phone'] ?? ''); ?>"
                                                 required>
@@ -132,7 +134,6 @@
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                                 type="text"
-                                                id="example-date-input"
                                                 name="codeposti"
                                                 value="<?php echo htmlspecialchars($data['codeposti'] ?? ''); ?>"
                                                 required>
@@ -142,7 +143,7 @@
                                             <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">آدرس</label>
                                             <textarea
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
-                                                style="height: 156px; resize: none;"
+                                                style="height: 210px; resize: none;"
                                                 name="address"
                                                 required><?php echo htmlspecialchars($data['address'] ?? ''); ?></textarea>
                                         </div>
@@ -303,14 +304,14 @@
                                     </div>
                                     <div class="mb-4">
                                         <label for="activation-date" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">تاریخ فعالسازی </label>
-                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="activation-date" name="activation_start_date" required
-                                            value="<?php echo htmlspecialchars($data['activation_start_date'] ?? ''); ?>">
+                                        <input data-jdp class=" w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100 flatpickr-input"
+                                               type="text" 
+                                               name="activation_start_date" 
+                                               id="datepicker"
+                                               required
+                                               value="<?php echo htmlspecialchars($data['activation_start_date'] ?? ''); ?>" 
+                                               >
                                     </div>
-                                    <!-- <script>
-                                           flatpickr("#activation-date", {
-                                               dateFormat: "Y-m-d", // فرمت تاریخ
-                                           });
-                                       </script> -->
                                     <div class="mb-4">
                                         <div class="mb-3">
                                             <label class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">وضعیت گارانتی</label>
@@ -329,7 +330,7 @@
                                 <div class="col-span-12 lg:col-span-4">
                                     <div class="mb-4">
                                         <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">شرایط فیزیکی دستگاه</label>
-                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="example-date-input"
+                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" 
                                             name="situation"
                                             required
                                             value="<?php echo htmlspecialchars($data['situation'] ?? ''); ?>">
@@ -399,7 +400,8 @@
                                 <div class="col-span-12 lg:col-span-4">
                                     <div class="mb-4">
                                         <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">توضیحات </label>
-                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="example-date-input"
+                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" 
+                                        
                                             name="dex"
 
                                             value="<?php echo htmlspecialchars($data['dex'] ?? ''); ?>">
@@ -485,11 +487,48 @@
                         </div>
                     </div>
                 </div>
-
-
         </div>
     </div>
 </div>
+
+<!-- Tracking Log Section -->
+<div class="grid grid-cols-1 mt-5">
+                    <div class="card dark:bg-zinc-800 dark:border-zinc-600">
+                        <div class="card-body pb-0">
+                            <h6 class="mb-1 text-15 text-gray-700 dark:text-gray-100">تاریخچه تغییرات</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-right text-gray-500 dark:text-gray-400">
+                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-zinc-700 dark:text-gray-400">
+                                        <tr>
+                                            <th scope="col" class="px-6 py-3">تاریخ</th>
+                                            <th scope="col" class="px-6 py-3">کاربر</th>
+                                            <th scope="col" class="px-6 py-3">عملیات</th>
+                                            <th scope="col" class="px-6 py-3">جزئیات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php if (isset($data['reception']->tracking_log) && !empty($data['reception']->tracking_log)): ?>
+                                            <?php foreach (json_decode($data['reception']->tracking_log, true) as $log): ?>
+                                                <tr class="bg-white border-b dark:bg-zinc-800 dark:border-zinc-700">
+                                                    <td class="px-6 py-4"><?php echo $log['date']; ?></td>
+                                                    <td class="px-6 py-4"><?php echo $log['user']; ?></td>
+                                                    <td class="px-6 py-4"><?php echo $log['action']; ?></td>
+                                                    <td class="px-6 py-4"><?php echo $log['details']; ?></td>
+                                                </tr>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <tr class="bg-white border-b dark:bg-zinc-800 dark:border-zinc-700">
+                                                <td colspan="4" class="px-6 py-4 text-center">هیچ تاریخچه‌ای یافت نشد</td>
+                                            </tr>
+                                        <?php endif; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 </form>
 
 <?php require_once(APPROOT . "/views/public/footer.php"); ?>
@@ -740,5 +779,23 @@
             console.error('Error:', error);
             alert('خطا در برقراری ارتباط با سرور');
         });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add data-jdp attribute to date inputs
+        const startGuarantee = document.querySelector('[name="start_guarantee"]');
+        const expireGuarantee = document.querySelector('[name="expite_guarantee"]');
+        
+        if (startGuarantee) {
+            startGuarantee.setAttribute('data-jdp', '');
+            startGuarantee.setAttribute('placeholder', 'تاریخ شروع گارانتی');
+        }
+        
+        if (expireGuarantee) {
+            expireGuarantee.setAttribute('data-jdp', '');
+            expireGuarantee.setAttribute('placeholder', 'تاریخ پایان گارانتی');
+        }
     });
 </script>

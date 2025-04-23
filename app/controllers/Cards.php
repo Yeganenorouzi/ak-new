@@ -1,6 +1,9 @@
 <?php
 
 use Shuchkin\SimpleXLSX;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class Cards extends Controller
 {
@@ -168,7 +171,9 @@ class Cards extends Controller
     {
         $data = [
             'data' => [],
-            'errors' => []
+            'errors' => [],
+            'success' => false,
+            'message' => ''
         ];
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -210,8 +215,9 @@ class Cards extends Controller
             if (empty($data['errors'])) {
                 try {
                     if ($this->cardModel->createCard($cardData)) {
-                        header("Location: " . URLROOT . "/cards/index");
-                        exit();
+                        $data['success'] = true;
+                        $data['message'] = 'کارت گارانتی با موفقیت افزوده شد';
+                        $data['data'] = []; // Clear form data after successful submission
                     } else {
                         throw new Exception('خطا در ثبت کارت');
                     }
@@ -227,48 +233,137 @@ class Cards extends Controller
         $this->view('admin/cards/create', $data);
     }
 
-    public function import()
-    {
+    public function import() {
+        $data = [
+            'success' => false,
+            'message' => '',
+            'errors' => []
+        ];
+        
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Check if file was uploaded without errors
-            if (isset($_FILES['excel_file']) && $_FILES['excel_file']['error'] == 0) {
-                $fileName = $_FILES['excel_file']['name'];
-                $fileTmpName = $_FILES['excel_file']['tmp_name'];
-                $fileSize = $_FILES['excel_file']['size'];
-                $fileType = $_FILES['excel_file']['type'];
-                $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
-
-                // Define allowed file extensions
-                $allowedExtensions = ['xlsx', 'xls'];
-
-                if (in_array($fileExtension, $allowedExtensions)) {
-                    // Process the file (e.g., move it to a directory, read its contents, etc.)
-                    $uploadDir = APPROOT . '/uploads/';
-                    
-                    // Check if the directory exists, if not, create it
-                    if (!is_dir($uploadDir)) {
-                        mkdir($uploadDir, 0777, true);
-                    }
-
-                    $uploadFile = $uploadDir . basename($fileName);
-
-                    if (move_uploaded_file($fileTmpName, $uploadFile)) {
-                        // File successfully uploaded
-                        // Add your file processing logic here
-                        echo "File successfully uploaded.";
-                    } else {
-                        echo "Error uploading the file.";
-                    }
-                } else {
-                    echo "Invalid file type. Only .xlsx and .xls files are allowed.";
-                }
-            } else {
-                echo "No file uploaded or there was an error uploading the file.";
+            if (!isset($_FILES['excel_file']) || $_FILES['excel_file']['error'] !== UPLOAD_ERR_OK) {
+                $data['errors'][] = 'لطفاً یک فایل اکسل انتخاب کنید.';
+                $this->view('admin/cards/import', $data);
+                return;
             }
-        } else {
-            // Load the import view
-            $this->view('admin/cards/import');
+            
+            $file = $_FILES['excel_file'];
+            $allowedTypes = ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+            
+            if (!in_array($file['type'], $allowedTypes)) {
+                $data['errors'][] = 'لطفاً یک فایل اکسل معتبر انتخاب کنید.';
+                $this->view('admin/cards/import', $data);
+                return;
+            }
+            
+            // تغییر مسیر اتولود
+            // require_once APPROOT . '/vendor/autoload.php';
+            
+            try {
+                $spreadsheet = IOFactory::load($file['tmp_name']);
+                $worksheet = $spreadsheet->getActiveSheet();
+                $rows = $worksheet->toArray();
+                
+                array_shift($rows); // Remove header row
+                
+                $successCount = 0;
+                $errorCount = 0;
+                
+                foreach ($rows as $row) {
+                    if (empty($row[0])) continue; // Skip empty rows
+                    
+                    // تبدیل تاریخ‌ها به فرمت مناسب
+                    $start_guarantee = '';
+                    $expite_guarantee = '';
+                    
+                    // تبدیل تاریخ شروع
+                    if (!empty($row[20])) {
+                        try {
+                            // اگر تاریخ در اکسل به فرمت میلادی باشد
+                            if (strpos($row[20], '/') !== false) {
+                                // تبدیل تاریخ شمسی به میلادی
+                                $date_parts = explode('/', $row[20]);
+                                if (count($date_parts) == 3) {
+                                    $start_guarantee = $date_parts[0] . '/' . 
+                                                     str_pad($date_parts[1], 2, '0', STR_PAD_LEFT) . '/' . 
+                                                     str_pad($date_parts[2], 2, '0', STR_PAD_LEFT);
+                                }
+                            } else {
+                                // اگر تاریخ به فرمت اکسل باشد
+                                $UNIX_DATE = ($row[20] - 25569) * 86400;
+                                $start_guarantee = date('Y/m/d', $UNIX_DATE);
+                            }
+                        } catch (Exception $e) {
+                            $start_guarantee = '';
+                        }
+                    }
+                    
+                    // تبدیل تاریخ پایان
+                    if (!empty($row[21])) {
+                        try {
+                            if (strpos($row[21], '/') !== false) {
+                                $date_parts = explode('/', $row[21]);
+                                if (count($date_parts) == 3) {
+                                    $expite_guarantee = $date_parts[0] . '/' . 
+                                                      str_pad($date_parts[1], 2, '0', STR_PAD_LEFT) . '/' . 
+                                                      str_pad($date_parts[2], 2, '0', STR_PAD_LEFT);
+                                }
+                            } else {
+                                $UNIX_DATE = ($row[21] - 25569) * 86400;
+                                $expite_guarantee = date('Y/m/d', $UNIX_DATE);
+                            }
+                        } catch (Exception $e) {
+                            $expite_guarantee = '';
+                        }
+                    }
+                    
+                    $cardData = [
+                        'serial' => trim($row[0] ?? ''),
+                        'serial2' => trim($row[1] ?? ''),
+                        'company' => trim($row[2] ?? ''),
+                        'sh_sanad' => trim($row[3] ?? ''),
+                        'code_dastgah' => trim($row[4] ?? ''),
+                        'title' => trim($row[5] ?? ''),
+                        'coding_derakhtvare' => trim($row[6] ?? ''),
+                        'model' => trim($row[7] ?? ''),
+                        'att1_code' => trim($row[8] ?? ''),
+                        'att1_val' => trim($row[9] ?? ''),
+                        'att2_code' => trim($row[10] ?? ''),
+                        'att2_val' => trim($row[11] ?? ''),
+                        'att3_code' => trim($row[12] ?? ''),
+                        'att3_val' => trim($row[13] ?? ''),
+                        'att4_code' => trim($row[14] ?? ''),
+                        'att4_val' => trim($row[15] ?? ''),
+                        'code_guarantee' => trim($row[16] ?? ''),
+                        'sharh_guarantee' => trim($row[17] ?? ''),
+                        'code_agent_service' => trim($row[18] ?? ''),
+                        'agent_service' => trim($row[19] ?? ''),
+                        'start_guarantee' => $start_guarantee,
+                        'expite_guarantee' => $expite_guarantee
+                    ];
+                    
+                    try {
+                        if ($this->cardModel->createCard($cardData)) {
+                            $successCount++;
+                        }
+                    } catch (Exception $e) {
+                        $errorCount++;
+                        $data['errors'][] = "خطا در ردیف {$row[0]}: " . $e->getMessage();
+                    }
+                }
+                
+                $data['success'] = true;
+                $data['message'] = "وارد کردن با موفقیت انجام شد. {$successCount} کارت اضافه شد.";
+                if ($errorCount > 0) {
+                    $data['message'] .= " {$errorCount} کارت با خطا مواجه شد.";
+                }
+                
+            } catch (Exception $e) {
+                $data['errors'][] = 'خطا در پردازش فایل اکسل: ' . $e->getMessage();
+            }
         }
+        
+        $this->view('admin/cards/import', $data);
     }
 
     public function update($id = null)

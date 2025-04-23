@@ -4,13 +4,9 @@
 <div class="main-content">
     <div class="page-content dark:bg-zinc-700">
 
-
-
-
-
         <div class="grid grid-cols-1 mb-5">
             <div class="flex items-center justify-between">
-                <h4 class="mb-sm-0 text-lg font-semibold grow text-gray-800 dark:text-gray-100">تعریف کاربر جدید</h4>
+                <h4 class="mb-sm-0 text-lg font-semibold grow text-gray-800 dark:text-gray-100">تعریف  کارت گارانتی جدید</h4>
                 <nav class="flex" aria-label="Breadcrumb">
                     <ol class="inline-flex items-center space-x-1 ltr:md:space-x-3 rtl:md:space-x-0">
                         <li class="inline-flex items-center">
@@ -35,7 +31,19 @@
         <div class="grid grid-cols-1">
             <div class="card dark:bg-zinc-800 dark:border-zinc-600">
                 <div class="card-body">
+                    <?php if (!empty($data['errors'])): ?>
+                        <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+                            <?php foreach ($data['errors'] as $error): ?>
+                                <p><?php echo $error; ?></p>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
 
+                    <?php if ($data['success']): ?>
+                        <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+                            <p><?php echo $data['message']; ?></p>
+                        </div>
+                    <?php endif; ?>
 
                     <div class="card-body">
                         <form action="<?php echo URLROOT; ?>/cards/create" method="POST" enctype="multipart/form-data" class="max-w-2xl">
@@ -131,23 +139,23 @@
                                     </div>
                                     <div class="mb-4">
                                         <label for="start_guarantee" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">تاریخ شروع گارانتی</label>
-                                        <input
+                                        <input data-jdp
                                             name="start_guarantee"
                                             class="input-field w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                             type="text"
                                             placeholder="تاریخ شروع گارانتی را وارد کنید"
-                                            id="example-full-input" readonly="readonly"
+                                            id="start_guarantee" readonly="readonly"
                                             value="<?php echo htmlspecialchars($data['data']['start_guarantee'] ?? ''); ?>"
                                             required>
                                     </div>
                                     <div class="mb-4">
                                         <label for="expite_guarantee" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">تاریخ انقضای گارانتی</label>
-                                        <input
+                                        <input data-jdp
                                             name="expite_guarantee"
                                             class="input-field w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                             type="text"
                                             placeholder="تاریخ انقضای گارانتی را وارد کنید"
-                                            id="example-full-input" readonly="readonly"
+                                            id="expite_guarantee" readonly="readonly"
                                             value="<?php echo htmlspecialchars($data['data']['expite_guarantee'] ?? ''); ?>"
                                             required>
                                     </div>

@@ -349,7 +349,8 @@ use Hekmatinasser\Verta\Verta;
                                             id="activation-date"
                                             name="activation_start_date"
                                             readonly
-                                            value="<?php echo htmlspecialchars($data['reception']->activation_start_date ?? ''); ?>">
+                                            value="<?php echo htmlspecialchars($data['reception']->activation_start_date ?? ''); ?>"
+                                            data-jdp>
                                     </div>
 
                                     <div class="mb-4">

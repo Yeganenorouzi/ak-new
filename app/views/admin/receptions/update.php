@@ -1,5 +1,5 @@
 <?php require_once(APPROOT . "/views/public/header.php"); ?>
-<?php require_once(APPROOT . "/views/public/sidebar.php"); ?>
+
 
 <style>
     input[readonly], textarea[readonly], select[disabled] {
@@ -160,7 +160,7 @@
                                             <label for="address" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">آدرس</label>
                                             <textarea
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
-                                                style="height: 156px; resize: none;"
+                                                style="height: 210px; resize: none;"
                                                 name="address"
                                                 id="address"
                                                 readonly><?php echo htmlspecialchars($data['reception']->address); ?></textarea>
@@ -340,7 +340,7 @@
                                     </div>
                                     <div class="mb-4">
                                         <label for="activation-date" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">تاریخ فعالسازی</label>
-                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="activation-date" name="activation_start_date" required value="<?php echo htmlspecialchars($data['reception']->activation_start_date ?? ''); ?>" readonly>
+                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="activation-date" name="activation_start_date" required value="<?php echo htmlspecialchars($data['reception']->activation_start_date ?? ''); ?>" readonly data-jdp>
                                     </div>
                                     <div class="mb-4">
                                         <div class="mb-3">
@@ -443,7 +443,7 @@
                                     </div>
                                     <div class="mb-4">
                                         <label for="kaar_at" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">تاریخ گارانتی قطعه</label>
-                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="date" id="kaar_at" name="kaar_at" value="<?php echo htmlspecialchars($data['reception']->kaar_at ?? ''); ?>">
+                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="kaar_at" name="kaar_at" value="<?php echo htmlspecialchars($data['reception']->kaar_at ?? ''); ?>" data-jdp>
                                     </div>
                                 </div>
                             </div>
@@ -571,7 +571,10 @@
     </div>
 </div>
 
-
+<!-- Persian Date Picker -->
+<script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
 
 <script>
     function previewImage(input, previewId) {
@@ -666,6 +669,39 @@
                 });
             }
         });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Wait for jQuery to be loaded
+        const checkJQuery = setInterval(function() {
+            if (window.jQuery) {
+                clearInterval(checkJQuery);
+                initPersianDatepicker();
+            }
+        }, 100);
+        
+        function initPersianDatepicker() {
+            jQuery('#activation-date').persianDatepicker({
+                format: 'YYYY/MM/DD',
+                initialValue: false,
+                autoClose: true,
+                persianDigit: true,
+                observer: true,
+                calendar: {
+                    persian: {
+                        locale: 'fa'
+                    }
+                },
+                onSelect: function(unix) {
+                    // Convert to Persian date format
+                    const date = new persianDate(unix);
+                    const formattedDate = date.format('YYYY/MM/DD');
+                    document.getElementById('activation-date').value = formattedDate;
+                }
+            });
+        }
     });
 </script>
 </rewritten_file>

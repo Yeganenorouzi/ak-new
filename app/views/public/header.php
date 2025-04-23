@@ -19,13 +19,13 @@
   <link rel="shortcut icon" href="<?php echo URLROOT . "/assets/images/favicon.ico" ?>" />
 
   <!-- alertifyjs Css -->
-  <link href="assets/libs/alertifyjs/build/css/alertify.min.css" rel="stylesheet" type="text/css" />
+  <!-- <link href="assets/libs/alertifyjs/build/css/alertify.min.css" rel="stylesheet" type="text/css" /> -->
 
   <!-- alertifyjs default themes  Css -->
-  <link href="assets/libs/alertifyjs/build/css/themes/default.min.css" rel="stylesheet" type="text/css" />
+  <!-- <link href="assets/libs/alertifyjs/build/css/themes/default.min.css" rel="stylesheet" type="text/css" /> -->
 
-  <!-- datepicker css -->
-  <link rel="stylesheet" href="<?php echo URLROOT . "/assets/libs/flatpickr/flatpickr.min.css" ?>">
+  <!-- persian data css -->
+  <link rel="stylesheet" href="<?php echo URLROOT . "/node_modules/persian-datepicker/dist/css/persian-datepicker.min.css" ?>" />
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -39,7 +39,12 @@
   <link rel="stylesheet" href="<?php echo URLROOT . "/assets/css/icons.css" ?>" />
   <link rel="stylesheet" href="<?php echo URLROOT . "/assets/css/tailwind.css" ?>" />
 
+  <!-- jQuery -->
+  <script src="<?php echo URLROOT . "/node_modules/jquery/dist/jquery.js" ?>"></script>
 
+  <script src="path/to/jquery.min.js"></script>
+  <script src="path/to/persian-date.min.js"></script>
+  <script src="path/to/persian-datepicker.min.js"></script>
 
 </head>
 
@@ -152,3 +157,14 @@
 
     </div>
   </nav>
+
+  <?php
+  // Check user role and include appropriate sidebar
+  if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1) {
+    // Admin sidebar
+    require_once(APPROOT . "/views/public/sidebar.php");
+  } else {
+    // Agent sidebar
+    require_once(APPROOT . "/views/public/sidebarAgent.php");
+  }
+  ?>

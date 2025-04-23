@@ -78,8 +78,6 @@ class ReceptionsModel
   }
 
 
-
-
   public function createReception(array $data): bool
   {
     try {
@@ -111,7 +109,8 @@ class ReceptionsModel
   {
     $this->db->query("SELECT id FROM serials WHERE serial = :serial");
     $this->db->bind(':serial', $serial);
-    return $this->db->fetch();
+    $result = $this->db->fetch();
+    return $result === false ? null : $result;
   }
 
   private function extractCustomerData(array $data): array
@@ -329,54 +328,58 @@ class ReceptionsModel
   public function updateReception($id, $data)
   {
     try {
-      $sql = "UPDATE receptions SET 
-        product_status = :product_status,
-        kaar = :kaar,
-        kaar_serial = :kaar_serial,
-        kaar_at = :kaar_at,
-        sh_baar2 = :sh_baar2,
-        sh_baar = :sh_baar,
-        file1 = :file1,
-        file2 = :file2,
-        file3 = :file3,
-        updated_at = :updated_at
-        WHERE id = :id";
+        // لاگ کردن اطلاعات ورودی برای دیباگ
+        error_log("در حال بروزرسانی پذیرش با شناسه: " . $id);
+        error_log("اطلاعات بروزرسانی: " . print_r($data, true));
 
-      $this->db->query($sql);
-      $this->db->bind(':id', $id);
-      $this->db->bind(':product_status', $data['product_status']);
-      $this->db->bind(':kaar', $data['kaar']);
-      $this->db->bind(':kaar_serial', $data['kaar_serial']);
-      $this->db->bind(':kaar_at', $data['kaar_at']);
-      $this->db->bind(':sh_baar2', $data['sh_baar2']);
-      $this->db->bind(':sh_baar', $data['sh_baar']);
-      $this->db->bind(':file1', $data['file1'] ?? '');
-      $this->db->bind(':file2', $data['file2'] ?? '');
-      $this->db->bind(':file3', $data['file3'] ?? '');
-      $this->db->bind(':updated_at', date('Y-m-d H:i:s'));
+        $sql = "UPDATE receptions SET 
+            product_status = :product_status,
+            kaar = :kaar,
+            kaar_serial = :kaar_serial,
+            kaar_at = NULLIF(:kaar_at, ''),  /* مدیریت تاریخ خالی */
+            sh_baar2 = :sh_baar2,
+            sh_baar = :sh_baar,
+            file1 = NULLIF(:file1, ''),      /* مدیریت فایل‌های خالی */
+            file2 = NULLIF(:file2, ''),
+            file3 = NULLIF(:file3, ''),
+            updated_at = :updated_at
+            WHERE id = :id";
 
-      $result = $this->db->execute();
-      if (!$result) {
-        $errorInfo = $this->db->getLastError();
-        error_log("Database Update Error: " . $errorInfo);
-        error_log("SQL Query: " . $sql);
-        error_log("Data: " . print_r($data, true));
-        return [
-          'success' => false,
-          'error' => $errorInfo,
-          'sql' => $sql,
-          'data' => $data
-        ];
-      }
-      return ['success' => true];
+        $this->db->query($sql);
+        
+        // بایند کردن پارامترها با مقادیر پیش‌فرض خالی
+        $this->db->bind(':id', $id);
+        $this->db->bind(':product_status', $data['product_status'] ?? '');
+        $this->db->bind(':kaar', $data['kaar'] ?? '');
+        $this->db->bind(':kaar_serial', $data['kaar_serial'] ?? '');
+        $this->db->bind(':kaar_at', $data['kaar_at'] ?? '');
+        $this->db->bind(':sh_baar2', $data['sh_baar2'] ?? '');
+        $this->db->bind(':sh_baar', $data['sh_baar'] ?? '');
+        $this->db->bind(':file1', $data['file1'] ?? '');
+        $this->db->bind(':file2', $data['file2'] ?? '');
+        $this->db->bind(':file3', $data['file3'] ?? '');
+        $this->db->bind(':updated_at', date('Y-m-d H:i:s'));
+
+        $result = $this->db->execute();
+        
+        if (!$result) {
+            $errorInfo = $this->db->getLastError();
+            error_log("خطای بروزرسانی دیتابیس: " . print_r($errorInfo, true));
+            return [
+                'success' => false,
+                'error' => 'خطا در بروزرسانی اطلاعات: ' . print_r($errorInfo, true)
+            ];
+        }
+        
+        return ['success' => true];
+        
     } catch (Exception $e) {
-      error_log("Exception in updateReception: " . $e->getMessage());
-      error_log("Stack trace: " . $e->getTraceAsString());
-      return [
-        'success' => false,
-        'error' => $e->getMessage(),
-        'trace' => $e->getTraceAsString()
-      ];
+        error_log("خطا در تابع updateReception: " . $e->getMessage());
+        error_log("جزئیات خطا: " . $e->getTraceAsString());
+        return [
+            'success' => false,
+            'error' => 'خطای سیستمی: ' . $e->getMessage()
+        ];
     }
   }
 
