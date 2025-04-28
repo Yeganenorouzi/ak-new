@@ -47,6 +47,7 @@ use Hekmatinasser\Verta\Verta;
                                         <h3 class="text-lg font-semibold text-red-800 dark:text-red-400">لطفاً خطاهای زیر را برطرف کنید:</h3>
                                     </div>
                                     <ul class="list-disc list-inside space-y-1">
+                                        
                                         <?php foreach ($data['errors'] as $error): ?>
                                             <li class="text-red-600 dark:text-red-400 text-sm">
                                                 <?php echo htmlspecialchars($error); ?>
@@ -176,7 +177,7 @@ use Hekmatinasser\Verta\Verta;
                                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-zinc-700 dark:text-gray-400">
                                         <tr>
                                             <th scope="col" class="px-6 py-3">شماره پذیرش</th>
-                                            <th scope="col" class="px-6 py-3">تاریخ پذیرش</th>
+                                            <th scope="col" class="px-6 py-3">تاریخ و ساعت پذیرش</th>
                                             <th scope="col" class="px-6 py-3">شماره سریال</th>
                                             <th scope="col" class="px-6 py-3">مدل دستگاه</th>
                                             <th scope="col" class="px-6 py-3">وضعیت</th>
@@ -185,13 +186,20 @@ use Hekmatinasser\Verta\Verta;
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach ($data['receptions'] as $reception): ?>
+                                        <?php 
+                                        // Sort receptions by ID in descending order (highest ID first)
+                                        usort($data['receptions'], function($a, $b) {
+                                            return $b->id - $a->id;
+                                        });
+                                        
+                                        foreach ($data['receptions'] as $reception): 
+                                        ?>
                                             <tr class="bg-white border-b dark:bg-zinc-800 dark:border-zinc-700">
                                                 <td class="px-6 py-4"><?php echo htmlspecialchars($reception->id); ?></td>
                                                 <td class="px-6 py-4">
                                                 <?php
                                                 $shamsiDate = new Verta($reception->created_at);
-                                                echo $shamsiDate->format('Y/m/d');
+                                                echo $shamsiDate->format('Y/m/d H:i');
                                                 ?>
                                             </td>
                                                 <td class="px-6 py-4"><?php echo htmlspecialchars($reception->serial); ?></td>

@@ -1,3 +1,8 @@
+<?php
+
+use Hekmatinasser\Verta\Verta;
+use Morilog\Jalali\Jalalian;
+?>
 <?php require_once(APPROOT . "/views/public/header.php"); ?>
 
 
@@ -25,8 +30,24 @@
             <form id="update-form" action="<?php echo URLROOT; ?>/receptions/store" method="POST" enctype="multipart/form-data">
                 <!-- Header section with title and button -->
                 <div class="grid grid-cols-1 mb-5">
-                    <div class="flex items-center justify-between">
+                    <div class="flex items-center justify-between flex-wrap gap-4">
                         <h4 class="mb-sm-0 text-lg font-semibold grow text-gray-800 dark:text-gray-100">ویرایش پذیرش</h4>
+                        <div class="flex items-center gap-2">
+                            <i class="ri-calendar-line text-violet-400 text-lg"></i>
+                            <span class="text-gray-600 dark:text-gray-200 text-sm">تاریخ و ساعت پذیرش:</span>
+                            <span class="text-violet-600 dark:text-violet-400 font-bold text-sm">
+                                <?php
+                                $shamsiDate = new Verta($data['reception']->created_at);
+                                echo $shamsiDate->format('Y/m/d H:i');
+                                ?>
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-gray-600 dark:text-gray-200 text-sm">شماره پذیرش:</span>
+                            <span class="text-violet-600 dark:text-violet-400 font-bold text-sm">
+                                <?php echo $data['reception']->id; ?>
+                            </span>
+                        </div>
                         <button type="submit" id="update-button" class="flex btn text-white bg-violet-500 border-violet-500 hover:bg-violet-600 hover:border-violet-600 focus:bg-violet-600 focus:border-violet-600 focus:ring focus:ring-violet-500/30 active:bg-violet-600 active:border-violet-600 ltr:mr-2 rtl:ml-2">بروزرسانی پذیرش</button>
                     </div>
                 </div>
@@ -339,10 +360,21 @@
                                         </div>
                                     </div>
                                     <div class="mb-4">
-                                        <label for="activation-date" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">تاریخ فعالسازی</label>
-                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="activation-date" name="activation_start_date" required value="<?php echo htmlspecialchars($data['reception']->activation_start_date ?? ''); ?>" readonly data-jdp>
+                                        <label for="activation-date" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">وضعیت فعالسازی</label>
+                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="activation-date" name="activation_status" required value="<?php echo htmlspecialchars($data['reception']->activation_status ?? ''); ?>" readonly >
                                     </div>
                                     <div class="mb-4">
+                                        <label for="activation-date" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">تاریخ فعالسازی</label>
+                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="activation-date" name="activation_start_date" required value="<?php echo htmlspecialchars($data['reception']->activation_start_date ?? ''); ?>" readonly d>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="activation-date" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">تعداد روز فعالسازی</label>
+                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="activation-date" name="activation_day" required value="<?php echo htmlspecialchars($data['reception']->activation_day ?? ''); ?>" readonly >
+                                    </div>
+                                    
+                                </div>
+                                <div class="col-span-12 lg:col-span-2">
+                                <div class="mb-4">
                                         <div class="mb-3">
                                             <label class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">وضعیت گارانتی</label>
                                             <select class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100" name="guarantee_status" disabled>
@@ -353,8 +385,6 @@
                                             </select>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-span-12 lg:col-span-2">
                                     <div class="mb-4">
                                         <label for="estimated_time" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">زمان تقریبی تعمیر</label>
                                         <input class="w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="estimated_time" name="estimated_time" required value="<?php echo htmlspecialchars($data['reception']->estimated_time ?? ''); ?>" readonly>
@@ -369,6 +399,10 @@
                                     </div>
                                 </div>
                                 <div class="col-span-12 lg:col-span-3">
+                                    <div class="mb-4">
+                                        <label for="repair_status" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">وضعیت تعمیر</label>
+                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="repair_status" name="repair_status" required value="<?php echo htmlspecialchars($data['reception']->repair_status ?? ''); ?>" readonly>
+                                    </div>
                                     <div class="mb-4">
                                         <label for="situation" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">شرایط فیزیکی دستگاه</label>
                                         <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="situation" name="situation" required value="<?php echo htmlspecialchars($data['reception']->situation ?? ''); ?>" readonly>
@@ -529,7 +563,7 @@
                 </div>
 
                 <!-- Tracking Log Section -->
-                <div class="grid grid-cols-1 mt-5">
+                <!-- <div class="grid grid-cols-1 mt-5">
                     <div class="card dark:bg-zinc-800 dark:border-zinc-600">
                         <div class="card-body pb-0">
                             <h6 class="mb-1 text-15 text-gray-700 dark:text-gray-100">تاریخچه تغییرات</h6>
@@ -541,31 +575,35 @@
                                         <tr>
                                             <th scope="col" class="px-6 py-3">تاریخ</th>
                                             <th scope="col" class="px-6 py-3">کاربر</th>
-                                            <th scope="col" class="px-6 py-3">عملیات</th>
-                                            <th scope="col" class="px-6 py-3">جزئیات</th>
+                                            <th scope="col" class="px-6 py-3">وضعیت پذیرش</th>
+                                           
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <?php 
+                                        // Add reception record as first entry
+                                        $shamsiDate = new Verta($data['reception']->created_at);
+                                        ?>
+                                        <tr class="bg-white border-b dark:bg-zinc-800 dark:border-zinc-700">
+                                            <td class="px-6 py-4"><?php echo $shamsiDate->format('Y/m/d H:i'); ?></td>
+                                            <td class="px-6 py-4"><?php echo $data['reception']->user_name; ?></td>
+                                            <td class="px-6 py-4"><?php echo $data['reception']->product_status; ?></td>
+                                        </tr>
                                         <?php if (isset($data['reception']->tracking_log) && !empty($data['reception']->tracking_log)): ?>
                                             <?php foreach (json_decode($data['reception']->tracking_log, true) as $log): ?>
                                                 <tr class="bg-white border-b dark:bg-zinc-800 dark:border-zinc-700">
                                                     <td class="px-6 py-4"><?php echo $log['date']; ?></td>
                                                     <td class="px-6 py-4"><?php echo $log['user']; ?></td>
-                                                    <td class="px-6 py-4"><?php echo $log['action']; ?></td>
-                                                    <td class="px-6 py-4"><?php echo $log['details']; ?></td>
+                                                    <td class="px-6 py-4"><?php echo $log['product_status']; ?></td>
                                                 </tr>
                                             <?php endforeach; ?>
-                                        <?php else: ?>
-                                            <tr class="bg-white border-b dark:bg-zinc-800 dark:border-zinc-700">
-                                                <td colspan="4" class="px-6 py-4 text-center">هیچ تاریخچه‌ای یافت نشد</td>
-                                            </tr>
                                         <?php endif; ?>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </form>
         </div>
     </div>
@@ -647,7 +685,12 @@
                             icon: 'success',
                             confirmButtonColor: '#8b5cf6'
                         }).then(() => {
-                            window.location.href = '<?php echo URLROOT; ?>/receptions';
+                            // بررسی نقش کاربر و هدایت به صفحه مناسب
+                            <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1): ?>
+                                window.location.href = '<?php echo URLROOT; ?>/receptions/admin';
+                            <?php else: ?>
+                                window.location.href = '<?php echo URLROOT; ?>/receptions/agent';
+                            <?php endif; ?>
                         });
                     } else {
                         Swal.fire({
@@ -708,5 +751,4 @@
 
 
 <?php require_once(APPROOT . "/views/public/footer.php"); ?>
-
 

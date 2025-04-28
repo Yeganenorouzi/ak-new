@@ -17,13 +17,7 @@
                             <table class="w-full text-sm text-right text-gray-500">
                                 <thead class="text-xs text-gray-700 dark:text-gray-100 uppercase bg-gray-50/50 dark:bg-zinc-700/50">
                                 <tr>
-                                    <th scope="col" class="p-4">
-                                        <div class="flex items-center">
-                                            <input id="checkbox-all" type="checkbox" class="w-4 h-4 focus:ring-0 focus:outline-0 border-gray-100 focus:ring-offset-0 rounded dark:bg-zinc-700 dark:border-zinc-500 dark:checked:bg-violet-500">
-                                            <label for="checkbox-all" class="sr-only">چک باکس</label>
-                                        </div>
-                                    </th>
-                                   
+                                    
                                     <th scope="col" class="px-4 py-3">
                                         نام و نام خانوادگی
                                     </th>
@@ -45,12 +39,7 @@
                                 <tbody>
                                 <?php foreach ($data['customersAgent'] as $item): ?>
                                     <tr class="bg-white border-b border-gray-100 hover:bg-gray-50/50 dark:bg-zinc-700 dark:hover:bg-zinc-700/50 dark:border-zinc-600">
-                                        <td class="w-4 p-4">
-                                            <div class="flex items-center">
-                                                <input id="checkbox" type="checkbox" class="w-4 h-4 focus:ring-0 focus:outline-0 border-gray-100 focus:ring-offset-0 rounded dark:bg-zinc-700 dark:border-zinc-500 dark:checked:bg-violet-500">
-                                                <label for="checkbox" class="sr-only">چک باکس</label>
-                                            </div>
-                                        </td>
+                                        
                                         <th scope="row" class="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             <?php echo $item->name; ?>
                                         </th>

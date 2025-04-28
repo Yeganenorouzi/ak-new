@@ -141,7 +141,10 @@ use Hekmatinasser\Verta\Verta;
                                                 وضعیت دستگاه
                                             </th>
                                             <th scope="col" class="px-6 py-3">
-                                                تاریخ پذیرش
+                                                نوع پذیرش
+                                            </th>
+                                            <th scope="col" class="px-6 py-3">
+                                                تاریخ و ساعت پذیرش
                                             </th>
                                             <th scope="col" class="px-6 py-3">
                                                 عملیات
@@ -176,9 +179,12 @@ use Hekmatinasser\Verta\Verta;
                                                     <?php echo $item->product_status; ?>
                                                 </td>
                                                 <td class="px-6 py-4">
+                                                    <?php echo $item->repair_status; ?>
+                                                </td>
+                                                <td class="px-6 py-4">
                                                     <?php
                                                     $shamsiDate = new Verta($item->created_at);
-                                                    echo $shamsiDate->format('Y/m/d');
+                                                    echo $shamsiDate->format('Y/m/d _ H:i');
                                                     ?>
                                                 </td>
                                                 <td class="px-6 py-4">
@@ -196,7 +202,89 @@ use Hekmatinasser\Verta\Verta;
             </div>
 
 
-            <?php require_once(APPROOT . "/views/public/footer.php"); ?>
+            <?php if (isset($data['pagination']) && $data['pagination']['total_pages'] > 1): ?>
+            <div class="flex items-center justify-between mt-4 px-4 py-3 bg-white dark:bg-zinc-800 border-t border-gray-200 dark:border-zinc-700 sm:px-6">
+                <div class="flex-1 flex justify-between sm:hidden">
+                    <?php if ($data['pagination']['current_page'] > 1): ?>
+                    <a href="<?php echo URLROOT; ?>/receptions?page=<?php echo $data['pagination']['current_page'] - 1; ?><?php echo !empty($_GET) ? '&' . http_build_query(array_diff_key($_GET, ['page' => ''])) : ''; ?>"
+                       class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-zinc-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-600">
+                        قبلی
+                    </a>
+                    <?php endif; ?>
+                    <?php if ($data['pagination']['current_page'] < $data['pagination']['total_pages']): ?>
+                    <a href="<?php echo URLROOT; ?>/receptions?page=<?php echo $data['pagination']['current_page'] + 1; ?><?php echo !empty($_GET) ? '&' . http_build_query(array_diff_key($_GET, ['page' => ''])) : ''; ?>"
+                       class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-zinc-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-600">
+                        بعدی
+                    </a>
+                    <?php endif; ?>
+                </div>
+                <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                    <div>
+                        <!-- اگر نمی‌خواهی متن نمایش بازه را نشان بدهی، این div را خالی بگذار یا حذف کن -->
+                    </div>
+                    <div>
+                        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                            <?php if ($data['pagination']['current_page'] > 1): ?>
+                            <a href="<?php echo URLROOT; ?>/receptions?page=<?php echo $data['pagination']['current_page'] - 1; ?><?php echo !empty($_GET) ? '&' . http_build_query(array_diff_key($_GET, ['page' => ''])) : ''; ?>"
+                               class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 dark:border-zinc-600 bg-white dark:bg-zinc-700 text-sm font-medium text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-600">
+                                <span class="sr-only">قبلی</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                            <?php endif; ?>
+                            <?php
+                            $range = 2;
+                            $start = max(1, $data['pagination']['current_page'] - $range);
+                            $end = min($data['pagination']['total_pages'], $data['pagination']['current_page'] + $range);
+                            if ($start > 1) {
+                                echo '<a href="' . URLROOT . '/receptions?page=1' . (!empty($_GET) ? '&' . http_build_query(array_diff_key($_GET, ['page' => ''])) : '') . '" 
+                                        class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-zinc-600 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-600">
+                                        1
+                                      </a>';
+                                if ($start > 2) {
+                                    echo '<span class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-zinc-600 bg-white dark:bg-zinc-700 text-sm font-medium text-gray-700 dark:text-gray-200">
+                                            ...
+                                          </span>';
+                                }
+                            }
+                            for ($i = $start; $i <= $end; $i++) {
+                                if ($i == $data['pagination']['current_page']) {
+                                    echo '<span class="relative inline-flex items-center px-4 py-2 border border-violet-500 bg-violet-50 dark:bg-violet-900/20 text-sm font-medium text-violet-600 dark:text-violet-400">
+                                            ' . $i . '
+                                          </span>';
+                                } else {
+                                    echo '<a href="' . URLROOT . '/receptions?page=' . $i . (!empty($_GET) ? '&' . http_build_query(array_diff_key($_GET, ['page' => ''])) : '') . '" 
+                                            class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-zinc-600 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-600">
+                                            ' . $i . '
+                                          </a>';
+                                }
+                            }
+                            if ($end < $data['pagination']['total_pages']) {
+                                if ($end < $data['pagination']['total_pages'] - 1) {
+                                    echo '<span class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-zinc-600 bg-white dark:bg-zinc-700 text-sm font-medium text-gray-700 dark:text-gray-200">
+                                            ...
+                                          </span>';
+                                }
+                                echo '<a href="' . URLROOT . '/receptions?page=' . $data['pagination']['total_pages'] . (!empty($_GET) ? '&' . http_build_query(array_diff_key($_GET, ['page' => ''])) : '') . '" 
+                                        class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-zinc-600 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-600">
+                                        ' . $data['pagination']['total_pages'] . '
+                                      </a>';
+                            }
+                            ?>
+                            <?php if ($data['pagination']['current_page'] < $data['pagination']['total_pages']): ?>
+                            <a href="<?php echo URLROOT; ?>/receptions?page=<?php echo $data['pagination']['current_page'] + 1; ?><?php echo !empty($_GET) ? '&' . http_build_query(array_diff_key($_GET, ['page' => ''])) : ''; ?>"
+                               class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 dark:border-zinc-600 bg-white dark:bg-zinc-700 text-sm font-medium text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-600">
+                                <span class="sr-only">بعدی</span>
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                            <?php endif; ?>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>
+
+
+<?php require_once(APPROOT . "/views/public/footer.php"); ?>

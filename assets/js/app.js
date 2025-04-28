@@ -1,5 +1,3 @@
-
-
 (function () {
 
   'use strict';
@@ -52,26 +50,6 @@
 
       if (item.href == pageUrl) {
         item.classList.add("active");
-        var parent = item.parentElement;
-        if (parent && parent.id !== "side-menu") {
-          parent.classList.add("mm-active");
-          var parent2 = parent.parentElement; // ul .
-          if (parent2 && parent2.id !== "side-menu") {
-            parent2.classList.add("mm-show"); // ul tag
-            var parent3 = parent2.parentElement; // li tag
-            if (parent3 && parent3.id !== "side-menu") {
-              parent3.classList.add("mm-active"); // li
-              var parent4 = parent3.parentElement; // ul
-              if (parent4 && parent4.id !== "side-menu") {
-                parent4.classList.add("mm-show"); // ul
-                var parent5 = parent4.parentElement;
-                if (parent5 && parent5.id !== "side-menu") {
-                  parent5.classList.add("mm-active"); // li
-                }
-              }
-            }
-          }
-        }
       }
     });
   }

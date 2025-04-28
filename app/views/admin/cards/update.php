@@ -129,19 +129,17 @@
                                             type="text"
                                             placeholder="تاریخ شروع گارانتی را وارد کنید"
                                             id="example-full-input"
-                                            readonly="readonly"
                                             value="<?php echo htmlspecialchars($data['card']->start_guarantee ?? ''); ?>"
                                             required>
                                     </div>
                                     <div class="mb-4">
                                         <label for="expite_guarantee" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">تاریخ انقضای گارانتی</label>
-                                        <input
+                                        <input data-jdp
                                             name="expite_guarantee"
                                             class="input-field w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                             type="text"
                                             placeholder="تاریخ انقضای گارانتی را وارد کنید"
                                             id="example-full-input"
-                                            readonly="readonly"
                                             value="<?php echo htmlspecialchars($data['card']->expite_guarantee ?? ''); ?>"
                                             required>
                                     </div>

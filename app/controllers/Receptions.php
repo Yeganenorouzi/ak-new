@@ -66,8 +66,19 @@ class Receptions extends Controller
                 $filters['date_to'] = $_GET['date_to'];
             }
 
-            $receptions = $this->receptionsModel->getFilteredReceptions($filters);
-            $this->view('admin/receptions/list', ['receptions' => $receptions]);
+            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            $perPage = 50;
+
+            if (!empty($filters)) {
+                $result = $this->receptionsModel->getPaginatedFilteredReceptions($filters, $page, $perPage);
+            } else {
+                $result = $this->receptionsModel->getPaginatedReceptions($page, $perPage);
+            }
+
+            $this->view('admin/receptions/list', [
+                'receptions' => $result['receptions'],
+                'pagination' => $result['pagination']
+            ]);
         } else {
             $this->redirect('dashboard');
         }
@@ -83,9 +94,47 @@ class Receptions extends Controller
 
     public function agent()
     {
+        $filters = [];
+        
+        // Get filter values from GET request
+        if (!empty($_GET['reception_number'])) {
+            $filters['reception_number'] = $_GET['reception_number'];
+        }
+        if (!empty($_GET['serial'])) {
+            $filters['serial'] = $_GET['serial'];
+        }
+        if (!empty($_GET['model'])) {
+            $filters['model'] = $_GET['model'];
+        }
+        if (!empty($_GET['customer_name'])) {
+            $filters['customer_name'] = $_GET['customer_name'];
+        }
+        if (!empty($_GET['status'])) {
+            $filters['status'] = $_GET['status'];
+        }
+        if (!empty($_GET['date_from'])) {
+            $filters['date_from'] = $_GET['date_from'];
+        }
+        if (!empty($_GET['date_to'])) {
+            $filters['date_to'] = $_GET['date_to'];
+        }
+
+        // Get current page from GET parameter, default to 1
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $perPage = 50; // Number of items per page
+
+        // If filters are provided, use the filtered method, otherwise get all receptions
+        if (!empty($filters)) {
+            $result = $this->receptionsModel->getPaginatedFilteredReceptionsByAgent($filters, $page, $perPage);
+        } else {
+            $result = $this->receptionsModel->getPaginatedReceptionsByAgent($page, $perPage);
+        }
+        
         $data = [
-            "receptionsAgent" => $this->receptionsModel->getAllReceptionsByAgent()
+            "receptionsAgent" => $result['receptions'],
+            "pagination" => $result['pagination']
         ];
+        
         return $this->view("agent/receptions/list", $data);
     }
 
@@ -184,9 +233,41 @@ class Receptions extends Controller
             $user_id = $this->receptionsModel->getUserIdByCodeMelli($_SESSION["user_codemelli"]);
             $customer_id = $this->receptionsModel->getCustomerIdByCodeMelli($_POST["codemelli"]);
 
+            // بررسی وجود پذیرش قبلی با وضعیت غیر از تحویل به مشتری
+            if ($this->receptionsModel->hasNonDeliveredReception($_POST["serial"])) {
+                $errors[] = "برای این سریال پذیرش قبلی با وضعیت غیر از تحویل به مشتری وجود دارد و امکان ثبت پذیرش جدید نیست.";
+                $data = [
+                    "errors" => $errors,
+                    // سایر فیلدهای فرم برای نمایش مجدد
+                    "serial" => $_POST["serial"],
+                    "name" => $_POST["name"] ?? null,
+                    "codemelli" => $_POST["codemelli"] ?? null,
+                    "mobile" => $_POST["mobile"] ?? null,
+                    "phone" => $_POST["phone"] ?? null,
+                    "ostan" => $_POST["ostan"] ?? null,
+                    "shahr" => $_POST["shahr"] ?? null,
+                    "address" => $_POST["address"] ?? null,
+                    "codeposti" => $_POST["codeposti"] ?? null,
+                    "repair_status" => $_POST["repair_status"] ?? null,
+                    "activation_start_date" => $_POST["activation_start_date"] ?? null,
+                    "activation_end_date" => $_POST["activation_status"] ?? null,
+                    "activation_day" => $_POST["activation_day"] ?? null,
+                    "guarantee_status" => $_POST["guarantee_status"] ?? null,
+                    "problem" => $_POST["problem"] ?? null,
+                    "situation" => $_POST["situation"] ?? null,
+                    "accessories" => isset($_POST['accessories']) ? $_POST['accessories'] : [],
+                    "dex" => $_POST["dex"] ?? null,
+                    "estimated_time" => $_POST["estimated_time"] ?? null,
+                    "estimated_cost" => $_POST["estimated_cost"] ?? null,
+                    "paziresh_status" => $_POST["paziresh_status"] ?? null,
+                ];
+                return $this->view("agent/receptions/create", $data);
+            }
+
             $accessories = isset($_POST['accessories']) ? implode(',', $_POST['accessories']) : '';
 
-
+            $activation_status = $_POST['activation_status'] ?? null;
+            $activation_day = $_POST['activation_day'] ?? null;
             $data = [
                 "serial" => $_POST["serial"],
                 "serial_id" => $serial_id,
@@ -201,21 +282,24 @@ class Receptions extends Controller
                 "shahr" => $_POST["shahr"] ?? null,
                 "address" => $_POST["address"] ?? null,
                 "codeposti" => $_POST["codeposti"] ?? null,
-                "activation_start_date" => $_POST["activation_start_date"],
-                "guarantee_status" => $_POST["guarantee_status"],
-                "problem" => $_POST["problem"],
-                "situation" => $_POST["situation"],
+                "repair_status" => $_POST["repair_status"] ?? null,
+                "activation_start_date" => $_POST["activation_start_date"] ?? null,
+                "activation_end_date" => $_POST["activation_status"] ?? null,
+                "activation_day" => $_POST["activation_day"] ?? null,
+                "guarantee_status" => $_POST["guarantee_status"] ?? null,
+                "problem" => $_POST["problem"] ?? null,
+                "situation" => $_POST["situation"] ?? null,
                 "accessories" => $accessories,
-                "dex" => $_POST["dex"],
-                "estimated_time" => $_POST["estimated_time"],
-                "estimated_cost" => $_POST["estimated_cost"],
-                "paziresh_status" => $_POST["paziresh_status"],
+                "dex" => $_POST["dex"] ?? null,
+                "estimated_time" => $_POST["estimated_time"] ?? null,
+                "estimated_cost" => $_POST["estimated_cost"] ?? null,
+                "paziresh_status" => $_POST["paziresh_status"] ?? null,
                 "product_status" => "پذیرش در نمایندگی",
                 "file1" => '',
                 "file2" => '',
                 "file3" => '',
+                "activation_status" => $activation_status,
                 "created_at" => date('Y-m-d H:i:s')
-
             ];
 
             // آپلود فایل‌ها - اصلاح شده
@@ -376,13 +460,14 @@ class Receptions extends Controller
 
     public function download($filename)
     {
-        // استفاده از DIRECTORY_SEPARATOR برای سازگاری با ویندوز
-        $file = dirname(APPROOT) . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'receptions' . DIRECTORY_SEPARATOR . $filename;
+        // Get the absolute path to the uploads directory
+        $file = $_SERVER['DOCUMENT_ROOT'] . '/ak-new/assets/uploads/receptions/' . basename($filename);
 
         // بررسی امنیتی - جلوگیری از directory traversal
         $filename = basename($filename); // فقط نام فایل را استخراج می‌کند
 
         if (!file_exists($file)) {
+            error_log("File not found at: " . $file);
             die('File not found at: ' . $file);
         }
 

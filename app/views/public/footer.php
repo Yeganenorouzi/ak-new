@@ -25,23 +25,66 @@
     <script src="<?php echo URLROOT . "/assets/libs/feather-icons/feather.min.js" ?>"></script>
 
 
-    <script src="<?php echo URLROOT . "/code.jquery.com/jquery-3.6.0.min.js" ?>" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <!-- jQuery is already loaded in the header, so we don't need to load it again here -->
     <!-- apexcharts -->
     <script src="<?php echo URLROOT . "/assets/libs/apexcharts/apexcharts.min.js" ?>"></script>
-    <!-- Plugins js-->
-    <script src="<?php echo URLROOT . "/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js" ?>"></script>
-    <script src="<?php echo URLROOT . "/assets/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-world-mill-en.js" ?>"></script>
-    <!-- dashboard init -->
-    <script src="<?php echo URLROOT . "/assets/js/pages/dashboard.init.js" ?>"></script>
-
-    <script src="<?php echo URLROOT . "/assets/js/pages/nav%26tabs.js" ?>"></script>
+    
+    <!-- Script to wait for jQuery to be loaded before loading dependent scripts -->
+    <script>
+        // Function to load scripts that depend on jQuery
+        function loadJQueryDependentScripts() {
+            // Plugins js
+            var vectormapScript = document.createElement('script');
+            vectormapScript.src = '<?php echo URLROOT . "/assets/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js" ?>';
+            document.body.appendChild(vectormapScript);
+            
+            // Dashboard init
+            var dashboardScript = document.createElement('script');
+            dashboardScript.src = '<?php echo URLROOT . "/assets/js/pages/dashboard.init.js" ?>';
+            document.body.appendChild(dashboardScript);
+            
+            // Nav & tabs
+            var navTabsScript = document.createElement('script');
+            navTabsScript.src = '<?php echo URLROOT . "/assets/js/pages/nav%26tabs.js" ?>';
+            document.body.appendChild(navTabsScript);
+            
+            // Login init
+            var loginScript = document.createElement('script');
+            loginScript.src = '<?php echo URLROOT . "/assets/js/pages/login.init.js" ?>';
+            document.body.appendChild(loginScript);
+            
+            // App.js
+            var appScript = document.createElement('script');
+            appScript.src = '<?php echo URLROOT . "/assets/js/app.js" ?>';
+            document.body.appendChild(appScript);
+        }
+        
+        // Check if jQuery is already loaded
+        if (typeof jQuery !== 'undefined') {
+            loadJQueryDependentScripts();
+        } else {
+            // Listen for the jqueryLoaded event
+            document.addEventListener('jqueryLoaded', function() {
+                loadJQueryDependentScripts();
+            });
+            
+            // Fallback: Check periodically if jQuery is loaded
+            var checkInterval = setInterval(function() {
+                if (typeof jQuery !== 'undefined') {
+                    clearInterval(checkInterval);
+                    loadJQueryDependentScripts();
+                }
+            }, 100);
+            
+            // Timeout after 5 seconds
+            setTimeout(function() {
+                clearInterval(checkInterval);
+                console.error('jQuery failed to load after 5 seconds');
+            }, 5000);
+        }
+    </script>
 
     <script src="<?php echo URLROOT . "/assets/libs/swiper/swiper-bundle.min.js" ?>"></script>
-
-    <script src="<?php echo URLROOT . "/assets/js/pages/login.init.js" ?>"></script>
-
-    <script src="<?php echo URLROOT . "/assets/js/app.js" ?>"></script>
-
 
     <!-- Jalali Date Picker -->
     <link rel="stylesheet" href="https://unpkg.com/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.css">
@@ -56,7 +99,9 @@
         autoClose: true,
         position: 'auto',
         showTodayBtn: true,
-        showEmptyBtn: true
+        showEmptyBtn: true,
+       
+
     });
 </script>
 

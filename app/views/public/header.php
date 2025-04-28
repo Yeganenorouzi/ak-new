@@ -18,17 +18,13 @@
   <!-- App favicon -->
   <link rel="shortcut icon" href="<?php echo URLROOT . "/assets/images/favicon.ico" ?>" />
 
-  <!-- alertifyjs Css -->
-  <!-- <link href="assets/libs/alertifyjs/build/css/alertify.min.css" rel="stylesheet" type="text/css" /> -->
 
-  <!-- alertifyjs default themes  Css -->
-  <!-- <link href="assets/libs/alertifyjs/build/css/themes/default.min.css" rel="stylesheet" type="text/css" /> -->
 
-  <!-- persian data css -->
-  <link rel="stylesheet" href="<?php echo URLROOT . "/node_modules/persian-datepicker/dist/css/persian-datepicker.min.css" ?>" />
+
+  <!-- jQuery Loader - This will ensure jQuery is loaded before any other scripts -->
+  <script src="<?php echo URLROOT . "/assets/js/jquery-loader.js" ?>"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 
 
 
@@ -39,12 +35,11 @@
   <link rel="stylesheet" href="<?php echo URLROOT . "/assets/css/icons.css" ?>" />
   <link rel="stylesheet" href="<?php echo URLROOT . "/assets/css/tailwind.css" ?>" />
 
-  <!-- jQuery -->
-  <script src="<?php echo URLROOT . "/node_modules/jquery/dist/jquery.js" ?>"></script>
+  <!-- jQuery from CDN -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <script src="path/to/jquery.min.js"></script>
-  <script src="path/to/persian-date.min.js"></script>
-  <script src="path/to/persian-datepicker.min.js"></script>
+  <!-- Jalali Date Picker -->
+  <link rel="stylesheet" href="https://unpkg.com/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.css">
 
 </head>
 

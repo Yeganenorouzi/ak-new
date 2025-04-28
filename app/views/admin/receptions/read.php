@@ -1,10 +1,9 @@
 <?php
-
 use Hekmatinasser\Verta\Verta;
 ?>
 <?php require_once(APPROOT . "/views/public/header.php"); ?>
 
-<div class="main-content sm:mr-0 md:mr-0 lg:mr-0 xl:mr-0">
+<div class="main-content">
     <div class="page-content dark:bg-zinc-700">
         <div class="container-fluid px-[0.625rem]">
 
@@ -343,6 +342,16 @@ use Hekmatinasser\Verta\Verta;
                                         </div>
                                     </div>
                                     <div class="mb-4">
+                                        <label for="activation-date" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">وضعیت فعالسازی </label>
+                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
+                                            type="text"
+                                            id="activation-date"
+                                            name="activation_status"
+                                            readonly
+                                            value="<?php echo htmlspecialchars($data['reception']->activation_status ?? ''); ?>"
+                                            >
+                                    </div>
+                                    <div class="mb-4">
                                         <label for="activation-date" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">تاریخ فعالسازی </label>
                                         <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                             type="text"
@@ -350,10 +359,26 @@ use Hekmatinasser\Verta\Verta;
                                             name="activation_start_date"
                                             readonly
                                             value="<?php echo htmlspecialchars($data['reception']->activation_start_date ?? ''); ?>"
-                                            data-jdp>
+                                            >
+                                    </div>
+                                    <div class="mb-4">
+                                        <div class="mb-3">
+                                            <label class="block font-medium text-gray-700 dark:text-zinc-100 mb-2"> تعداد روز فعالسازی
+                                            فعالسازی </label>
+                                            <input class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
+                                                name="activation_day"
+                                                readonly
+                                                value="<?php echo htmlspecialchars($data['reception']->activation_day ?? ''); ?>">
+
+                                            </input>
+                                        </div>
                                     </div>
 
-                                    <div class="mb-4">
+                                    
+
+                                </div>
+                                <div class="col-span-12 lg:col-span-2">
+                                <div class="mb-4">
                                         <div class="mb-3">
                                             <label class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">وضعیت گارانتی</label>
                                             <input class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
@@ -364,9 +389,6 @@ use Hekmatinasser\Verta\Verta;
                                             </input>
                                         </div>
                                     </div>
-
-                                </div>
-                                <div class="col-span-12 lg:col-span-2">
 
                                     <div class="mb-4">
                                         <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">زمان تقریبی تعمیر </label>
@@ -392,7 +414,17 @@ use Hekmatinasser\Verta\Verta;
 
 
                                 </div>
+
                                 <div class="col-span-12 lg:col-span-3">
+                                <div class="mb-4">
+                                        <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">  وضعیت تعمیر</label>
+                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="example-date-input"
+                                            name="repair_status"
+                                            readonly
+
+                                            value="<?php echo htmlspecialchars($data['reception']->repair_status ?? ''); ?>">
+                                    </div>
+                                                    
                                     <div class="mb-4">
                                         <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">شرایط فیزیکی دستگاه</label>
                                         <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="example-date-input"

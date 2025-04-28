@@ -1,6 +1,22 @@
 <?php require_once(APPROOT . "/views/public/header.php"); ?>
 <?php require_once(APPROOT . "/views/public/sidebarAgent.php"); ?>
 
+
+<?php if (isset($data['errors']) && !empty($data['errors'])): ?>
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'خطا',
+            html: `<?php echo implode('<br>', array_map('htmlspecialchars', $data['errors'])); ?>`,
+            confirmButtonText: 'باشه'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "<?php echo URLROOT; ?>/receptions/agent";
+            }
+        });
+    </script>
+<?php endif; ?>
+
 <div class="main-content">
     <div class="page-content dark:bg-zinc-700">
         <div class="container-fluid px-[0.625rem]">
@@ -26,7 +42,7 @@
                                 <div class="grid grid-cols-12 gap-5">
                                     <div class="col-span-12 lg:col-span-6">
                                         <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">نام و نام خانوادگی مشتری</label>
+                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">نام و نام خانوادگی مشتری <span class="text-red-500">*</span></label>
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
                                                 type="text"
@@ -36,7 +52,7 @@
                                                 required>
                                         </div>
                                         <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">شماره تلفن همراه</label>
+                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">شماره تلفن همراه <span class="text-red-500">*</span></label>
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                                 type="tel"
@@ -47,7 +63,7 @@
                                                 required>
                                         </div>
                                         <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">شماره تلفن ثابت</label>
+                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">شماره تلفن ثابت <span class="text-red-500">*</span></label>
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                                 type="tel"
@@ -59,7 +75,7 @@
                                         </div>
                                         <div class="mb-4">
                                             <div class="mb-3">
-                                                <label class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">استان</label>
+                                                <label class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">استان <span class="text-red-500">*</span></label>
                                                 <select class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
                                                     name="ostan" id="province-select" required>
                                                     <option value="">انتخاب استان</option>
@@ -74,7 +90,7 @@
 
                                         <div class="mb-4">
                                             <div class="mb-3">
-                                                <label class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">شهر</label>
+                                                <label class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">شهر <span class="text-red-500">*</span></label>
                                                 <select class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
                                                     name="shahr" required>
                                                     <option value="">انتخاب شهر</option>
@@ -95,7 +111,7 @@
                                     </div>
                                     <div class="col-span-12 lg:col-span-6">
                                         <div class="mb-4">
-                                            <label for="codemelli" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">کدملی</label>
+                                            <label for="codemelli" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">کدملی <span class="text-red-500">*</span></label>
                                             <div class="relative">
                                                 <input
                                                     class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100 pr-[90px]"
@@ -130,7 +146,7 @@
                                             </div>
                                         </div>
                                         <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">کد پستی</label>
+                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">کد پستی <span class="text-red-500">*</span></label>
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                                 type="text"
@@ -140,7 +156,7 @@
                                         </div>
 
                                         <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">آدرس</label>
+                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">آدرس <span class="text-red-500">*</span></label>
                                             <textarea
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
                                                 style="height: 210px; resize: none;"
@@ -163,7 +179,7 @@
                                 <div class="grid grid-cols-12 gap-5">
                                     <div class="col-span-12 lg:col-span-6">
                                         <div class="mb-4">
-                                            <label for="serial" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">سریال</label>
+                                            <label for="serial" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">سریال <span class="text-red-500">*</span></label>
                                             <div class="relative">
                                                 <input
                                                     class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100 pr-[90px]"
@@ -293,7 +309,7 @@
                                 <div class="col-span-12 lg:col-span-4">
                                     <div class="mb-4">
                                         <div class="mb-3">
-                                            <label class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">نوع پذیرش</label>
+                                            <label class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">نوع پذیرش <span class="text-red-500">*</span></label>
                                             <select class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100" name="paziresh_status" required
                                                 value="<?php echo htmlspecialchars($data['paziresh_status'] ?? ''); ?>">
                                                 <option>انتخاب</option>
@@ -303,18 +319,42 @@
                                         </div>
                                     </div>
                                     <div class="mb-4">
-                                        <label for="activation-date" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">تاریخ فعالسازی </label>
-                                        <input data-jdp class=" w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100 flatpickr-input"
-                                               type="text" 
-                                               name="activation_start_date" 
-                                               id="datepicker"
-                                               required
-                                               value="<?php echo htmlspecialchars($data['activation_start_date'] ?? ''); ?>" 
-                                               >
+                                        <label class="block font-medium text-gray-700 dark:text-gray-100 mb-2">وضعیت فعال‌سازی <span class="text-red-500">*</span></label>
+                                        <select
+                                            class="w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
+                                            name="activation_status"
+                                            id="activation_status"
+                                            required
+                                        >
+                                            <option value="">انتخاب کنید</option>
+                                            <option value="فعالسازی شده" <?php echo (isset($data['activation_status']) && $data['activation_status'] == 'فعالسازی شده') ? 'selected' : ''; ?>>فعال‌سازی شده</option>
+                                            <option value="فعالسازی نشده" <?php echo (isset($data['activation_status']) && $data['activation_status'] == 'فعالسازی نشده') ? 'selected' : ''; ?>>فعال‌سازی نشده</option>
+                                        </select>
                                     </div>
-                                    <div class="mb-4">
+                                    <div class="mb-4" id="activation_date_container" style="display: <?php echo (isset($data['activation_status']) && $data['activation_status'] == 'فعالسازی شده') ? 'block' : 'none'; ?>;">
+                                        <label for="activation_start_date" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">تاریخ فعالسازی <span class="text-red-500">*</span></label>
+                                        <input 
+                                            class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
+                                            type="text"
+                                            name="activation_start_date"
+                                            id="activation_start_date"
+                                            <?php echo (isset($data['activation_status']) && $data['activation_status'] == 'فعالسازی شده') ? 'required' : 'disabled'; ?>
+                                            value="<?php echo htmlspecialchars($data['activation_start_date'] ?? ''); ?>">
+
+                                            <label for="activation_day" class="block font-medium text-gray-700 dark:text-gray-100 mb-2 mt-2">تعداد روز فعالسازی <span class="text-red-500">*</span></label>
+                                            <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" 
+                                                name="activation_day"
+                                                id="activation_day"
+                                                required
+                                                value="<?php echo htmlspecialchars($data['activation_day'] ?? ''); ?>"
+                                                readonly
+                                                <?php echo (isset($data['activation_status']) && $data['activation_status'] == 'active') ? '' : 'disabled'; ?>>
+                                    </div>
+                                </div>
+                                <div class="col-span-12 lg:col-span-4">
+                                <div class="mb-4">
                                         <div class="mb-3">
-                                            <label class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">وضعیت گارانتی</label>
+                                            <label class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">وضعیت گارانتی <span class="text-red-500">*</span></label>
                                             <select class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
                                                 name="guarantee_status" required
                                                 value="<?php echo htmlspecialchars($data['guarantee_status'] ?? ''); ?>">
@@ -325,18 +365,15 @@
                                             </select>
                                         </div>
                                     </div>
-
-                                </div>
-                                <div class="col-span-12 lg:col-span-4">
                                     <div class="mb-4">
-                                        <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">شرایط فیزیکی دستگاه</label>
+                                        <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">شرایط فیزیکی دستگاه <span class="text-red-500">*</span></label>
                                         <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" 
                                             name="situation"
                                             required
                                             value="<?php echo htmlspecialchars($data['situation'] ?? ''); ?>">
                                     </div>
                                     <div class="mb-4">
-                                        <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">ایراد دستگاه به اظهار مشتری </label>
+                                        <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">ایراد دستگاه به اظهار مشتری <span class="text-red-500">*</span></label>
                                         <input class="w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="example-month-input"
                                             name="problem"
                                             required
@@ -398,6 +435,33 @@
 
                                 </div>
                                 <div class="col-span-12 lg:col-span-4">
+                                <div class="mb-4">
+                                        <div class="mb-3">
+                                            <label class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">نوع تعمیر <span class="text-red-500">*</span></label>
+                                            <select class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
+                                                name="repair_status" required
+                                                value="<?php echo htmlspecialchars($data['repair_status'] ?? ''); ?>">
+                                                <option>انتخاب</option>
+                                                <option>تعمیر</option>
+                                                <option>تعویض </option>
+                                                
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">زمان تقریبی تعمیر <span class="text-red-500">*</span></label>
+                                        <input class="w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="example-month-input"
+                                            name="estimated_time" required
+                                            value="<?php echo htmlspecialchars($data['estimated_time'] ?? ''); ?>">
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2"> هزینه تقریبی تعمیر <span class="text-red-500">*</span></label>
+                                        <input class="w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" value="" id="example-week-input"
+                                            name="estimated_cost" required
+                                            value="<?php echo htmlspecialchars($data['estimated_cost'] ?? ''); ?>">
+                                    </div>
+
                                     <div class="mb-4">
                                         <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">توضیحات </label>
                                         <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" 
@@ -405,18 +469,6 @@
                                             name="dex"
 
                                             value="<?php echo htmlspecialchars($data['dex'] ?? ''); ?>">
-                                    </div>
-                                    <div class="mb-4">
-                                        <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">زمان تقریبی تعمیر </label>
-                                        <input class="w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="example-month-input"
-                                            name="estimated_time" required
-                                            value="<?php echo htmlspecialchars($data['estimated_time'] ?? ''); ?>">
-                                    </div>
-                                    <div class="mb-4">
-                                        <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2"> هزینه تقریبی تعمیر </label>
-                                        <input class="w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" value="" id="example-week-input"
-                                            name="estimated_cost" required
-                                            value="<?php echo htmlspecialchars($data['estimated_cost'] ?? ''); ?>">
                                     </div>
 
 
@@ -491,44 +543,10 @@
     </div>
 </div>
 
-<!-- Tracking Log Section -->
-<div class="grid grid-cols-1 mt-5">
-                    <div class="card dark:bg-zinc-800 dark:border-zinc-600">
-                        <div class="card-body pb-0">
-                            <h6 class="mb-1 text-15 text-gray-700 dark:text-gray-100">تاریخچه تغییرات</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="overflow-x-auto">
-                                <table class="w-full text-sm text-right text-gray-500 dark:text-gray-400">
-                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-zinc-700 dark:text-gray-400">
-                                        <tr>
-                                            <th scope="col" class="px-6 py-3">تاریخ</th>
-                                            <th scope="col" class="px-6 py-3">کاربر</th>
-                                            <th scope="col" class="px-6 py-3">عملیات</th>
-                                            <th scope="col" class="px-6 py-3">جزئیات</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php if (isset($data['reception']->tracking_log) && !empty($data['reception']->tracking_log)): ?>
-                                            <?php foreach (json_decode($data['reception']->tracking_log, true) as $log): ?>
-                                                <tr class="bg-white border-b dark:bg-zinc-800 dark:border-zinc-700">
-                                                    <td class="px-6 py-4"><?php echo $log['date']; ?></td>
-                                                    <td class="px-6 py-4"><?php echo $log['user']; ?></td>
-                                                    <td class="px-6 py-4"><?php echo $log['action']; ?></td>
-                                                    <td class="px-6 py-4"><?php echo $log['details']; ?></td>
-                                                </tr>
-                                            <?php endforeach; ?>
-                                        <?php else: ?>
-                                            <tr class="bg-white border-b dark:bg-zinc-800 dark:border-zinc-700">
-                                                <td colspan="4" class="px-6 py-4 text-center">هیچ تاریخچه‌ای یافت نشد</td>
-                                            </tr>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+
+
+
 </form>
 
 <?php require_once(APPROOT . "/views/public/footer.php"); ?>
@@ -589,7 +607,12 @@
                     }, 100);
 
                 } else if (data.status === 'not_found') {
-                    alert('کد ملی در سیستم نیست. لطفاً اطلاعات را وارد کنید.');
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'مشتری جدید',
+                        text: 'کد ملی در سیستم نیست. لطفاً اطلاعات مشتری جدید را وارد کنید.',
+                        confirmButtonText: 'باشه'
+                    });
                     // پاک کردن فیلدها
                     document.querySelector('[name="name"]').value = '';
                     document.querySelector('[name="mobile"]').value = '';
@@ -603,28 +626,16 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('خطا در برقراری ارتباط با سرور');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'خطا',
+                    text: 'خطا در برقراری ارتباط با سرور',
+                    confirmButtonText: 'باشه'
+                });
             });
     });
 
-    document.getElementById('customer-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const formData = new FormData(this);
-
-        fetch('controller.php?action=createCustomer', {
-                method: 'POST',
-                body: new URLSearchParams(formData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'created') {
-                    alert('مشتری با موفقیت ایجاد شد.');
-                } else {
-                    alert('خطا در ذخیره اطلاعات.');
-                }
-            });
-    });
+    
 </script>
 
 <script>
@@ -651,7 +662,8 @@
 
 
 <script>
-    document.getElementById('search-button-2').addEventListener('click', function() {
+    document.getElementById('search-button-2').addEventListener('click', function(e) {
+        e.preventDefault();
         const serial = document.getElementById('serial').value;
 
         fetch('<?php echo URLROOT; ?>/cards/searchOrCreate', {
@@ -665,7 +677,6 @@
             .then(data => {
                 if (data.status === 'found') {
                     // پر کردن سایر فیلدها
-                    document.querySelector('[name="serial"]').value = data.data.serial;
                     document.querySelector('[name="serial2"]').value = data.data.serial2;
                     document.querySelector('[name="model"]').value = data.data.model;
                     document.querySelector('[name="title"]').value = data.data.title;
@@ -680,9 +691,13 @@
 
 
                 } else if (data.status === 'not_found') {
-                    alert('سریال در سیستم نیست. لطفاً اطلاعات را وارد کنید.');
-                    // پاک کردن فیلدها
-                    document.querySelector('[name="serial"]').value = '';
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'کارت جدید',
+                        text: 'کارت در سیستم نیست. لطفاً اطلاعات کارت جدید را وارد کنید.',
+                        confirmButtonText: 'باشه'
+                    });
+                    // فقط سایر فیلدها پاک شوند
                     document.querySelector('[name="serial2"]').value = '';
                     document.querySelector('[name="model"]').value = '';
                     document.querySelector('[name="title"]').value = '';
@@ -698,28 +713,16 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('خطا در برقراری ارتباط با سرور');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'خطا',
+                    text: 'خطا در برقراری ارتباط با سرور',
+                    confirmButtonText: 'باشه'
+                });
             });
     });
 
-    document.getElementById('customer-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const formData = new FormData(this);
-
-        fetch('controller.php?action=createCard', {
-                method: 'POST',
-                body: new URLSearchParams(formData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'created') {
-                    alert('کارت با موفقیت ایجاد شد.');
-                } else {
-                    alert('خطا در ذخیره اطلاعات.');
-                }
-            });
-    });
+   
 </script>
 
 <script>
@@ -727,7 +730,12 @@
         const passport = document.getElementById('passport').value;
         
         if (!passport) {
-            alert('لطفا شماره پاسپورت را وارد کنید');
+            Swal.fire({
+                icon: 'info',
+                title: 'خطا',
+                text: 'لطفا شماره پاسپورت را وارد کنید',
+                confirmButtonText: 'باشه'
+            });
             return;
         }
 
@@ -763,7 +771,12 @@
                     citySelect.value = data.data.shahr;
                 }, 100);
             } else if (data.status === 'not_found') {
-                alert('شماره پاسپورت در سیستم نیست. لطفاً اطلاعات را وارد کنید.');
+                Swal.fire({
+                    icon: 'info',
+                    title: 'مشتری جدید',
+                    text: 'شماره پاسپورت در سیستم نیست. لطفاً اطلاعات مشتری جدید را وارد کنید.',
+                    confirmButtonText: 'باشه'
+                });
                 // پاک کردن فیلدها
                 document.querySelector('[name="name"]').value = '';
                 document.querySelector('[name="mobile"]').value = '';
@@ -777,7 +790,12 @@
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('خطا در برقراری ارتباط با سرور');
+            Swal.fire({
+                icon: 'error',
+                title: 'خطا',
+                text: 'خطا در برقراری ارتباط با سرور',
+                confirmButtonText: 'باشه'
+            });
         });
     });
 </script>
@@ -787,6 +805,7 @@
         // Add data-jdp attribute to date inputs
         const startGuarantee = document.querySelector('[name="start_guarantee"]');
         const expireGuarantee = document.querySelector('[name="expite_guarantee"]');
+        const activationDate = document.querySelector('[name="activation_start_date"]');
         
         if (startGuarantee) {
             startGuarantee.setAttribute('data-jdp', '');
@@ -797,5 +816,78 @@
             expireGuarantee.setAttribute('data-jdp', '');
             expireGuarantee.setAttribute('placeholder', 'تاریخ پایان گارانتی');
         }
+
+        if (activationDate) {
+            activationDate.setAttribute('data-jdp', '');
+            activationDate.setAttribute('placeholder', 'تاریخ فعالسازی');
+        }
     });
+</script>
+
+<script>
+document.getElementById('activation_status').addEventListener('change', function() {
+    var container = document.getElementById('activation_date_container');
+    var dateInput = document.getElementById('activation_start_date');
+    var dayInput = document.getElementById('activation_day');
+    if (this.value === 'فعالسازی شده') {
+        container.style.display = 'block';
+        dateInput.removeAttribute('disabled');
+        dateInput.setAttribute('required', 'required');
+        dayInput.removeAttribute('disabled');
+    } else {
+        container.style.display = 'none';
+        dateInput.removeAttribute('required');
+        dateInput.setAttribute('disabled', 'disabled');
+        dateInput.value = '';
+        dayInput.setAttribute('disabled', 'disabled');
+        dayInput.value = '';
+    }
+});
+</script>
+<script src="https://unpkg.com/jalali-moment@3.3.11/dist/jalali-moment.browser.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const activationStatus = document.getElementById('activation_status');
+    const activationDateInput = document.getElementById('activation_start_date');
+    const activationDayInput = document.getElementById('activation_day');
+    const activationDateContainer = document.getElementById('activation_date_container');
+
+    if (!activationStatus || !activationDateInput || !activationDayInput || !activationDateContainer) return;
+
+    function toggleActivationDateContainer() {
+        // نمایش/مخفی کردن کانتینر تاریخ بر اساس وضعیت
+        activationDateContainer.style.display = activationStatus.value === 'فعالسازی شده' ? 'block' : 'none';
+        // خالی کردن فیلد تعداد روز اگه وضعیت غیرفعال باشه
+        if (activationStatus.value !== 'فعالسازی شده') {
+            activationDayInput.value = '';
+        }
+    }
+
+    function calculateDays() {
+        if (activationStatus.value === 'فعالسازی شده' && activationDateInput.value) {
+            const startDate = moment(activationDateInput.value.replace(/-/g, '/'), 'jYYYY/jMM/jDD');
+            if (!startDate.isValid()) {
+                activationDayInput.value = '';
+                return;
+            }
+            const today = moment();
+            const diffDays = today.diff(startDate, 'days');
+            activationDayInput.value = diffDays >= 0 ? diffDays : 'تاریخ آینده';
+        } else {
+            activationDayInput.value = '';
+        }
+    }
+
+    // رویدادها
+    activationStatus.addEventListener('change', function() {
+        toggleActivationDateContainer();
+        calculateDays();
+    });
+    activationDateInput.addEventListener('change', calculateDays);
+
+    // اجرای اولیه
+    toggleActivationDateContainer();
+    calculateDays();
+});
 </script>

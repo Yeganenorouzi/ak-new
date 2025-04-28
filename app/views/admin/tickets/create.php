@@ -1,5 +1,4 @@
 <?php require_once(APPROOT . "/views/public/header.php"); ?>
-<?php require_once(APPROOT . "/views/public/sidebar.php"); ?>
 
 <div class="main-content">
     <div class="page-content dark:bg-zinc-700">
