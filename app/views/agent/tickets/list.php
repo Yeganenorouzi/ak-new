@@ -3,7 +3,7 @@
 use Hekmatinasser\Verta\Verta;
 ?>
 <?php require_once(APPROOT . "/views/public/header.php"); ?>
-<?php require_once(APPROOT . "/views/public/sidebar.php"); ?>
+<?php require_once(APPROOT . "/views/public/sidebarAgent.php"); ?>
 
 <div class="main-content">
     <div class="page-content dark:bg-zinc-700">
@@ -35,7 +35,7 @@ use Hekmatinasser\Verta\Verta;
                 <div class="card dark:bg-zinc-800 dark:border-zinc-600">
                     <!-- فرم فیلتر -->
                     <div class="card-header px-4">
-                        <form action="<?php echo URLROOT; ?>/tickets/admin" method="GET" class="flex flex-wrap items-end gap-3">
+                        <form action="<?php echo URLROOT; ?>/tickets/agent" method="GET" class="flex flex-wrap items-end gap-3">
                             <div class="w-[180px] p-2">
                                 <label for="ticket_number" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">شماره تیکت</label>
                                 <input type="text" name="ticket_number" id="ticket_number" value="<?php echo $_GET['ticket_number'] ?? ''; ?>" 

@@ -4,39 +4,96 @@ class Tickets extends Controller
 {
     private $ticketModel;
     private $usersModel;
+
     public function __construct()
     {
         $this->ticketModel = $this->model("TicketsModel");
         $this->usersModel = $this->model("UsersModel");
     }
 
+    // نمایش لیست تیکت‌ها برای ادمین
     public function admin()
     {
-        $data = [
-            "tickets" => $this->ticketModel->getAllTickets()
+        $ticketsModel = $this->model('Ticketsmodel');
+        
+        // تنظیمات پیجینیشن
+        $per_page = 30;
+        $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        
+        // فیلترها
+        $filters = [
+            'ticket_number' => $_GET['ticket_number'] ?? '',
+            'status' => $_GET['status'] ?? '',
+            'priority' => $_GET['priority'] ?? ''
         ];
-        return $this->view("admin/tickets/list", $data);
+        
+        // دریافت تعداد کل تیکت‌ها با فیلتر
+        $total_tickets = $ticketsModel->getTotalTickets($filters);
+        $total_pages = ceil($total_tickets / $per_page);
+        
+        // دریافت تیکت‌های صفحه جاری
+        $tickets = $ticketsModel->getPaginatedTickets($current_page, $per_page, $filters);
+        
+        $data = [
+            'tickets' => $tickets,
+            'current_page' => $current_page,
+            'total_pages' => $total_pages,
+            'filters' => $filters
+        ];
+        
+        $this->view('admin/tickets/list', $data);
     }
 
+    // نمایش لیست تیکت‌ها برای کارشناس
     public function agent()
     {
-        $data = [
-            "tickets" => $this->ticketModel->getAllTickets()
+        // تنظیمات پیجینیشن
+        $per_page = 30;
+        $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        
+        // فیلترها
+        $filters = [
+            'ticket_number' => $_GET['ticket_number'] ?? '',
+            'status' => $_GET['status'] ?? '',
+            'priority' => $_GET['priority'] ?? ''
         ];
+        
+        // دریافت تعداد کل تیکت‌های نماینده
+        $total_tickets = $this->ticketModel->getTotalTicketsByAgent($_SESSION['id'], $filters);
+        $total_pages = ceil($total_tickets / $per_page);
+        
+        // دریافت تیکت‌های صفحه جاری
+        $tickets = $this->ticketModel->getTicketsByAgent($_SESSION['id'], $filters, $current_page, $per_page);
+        
+        $data = [
+            "tickets" => $tickets,
+            "current_page" => $current_page,
+            "total_pages" => $total_pages,
+            "filters" => $filters
+        ];
+        
         return $this->view("agent/tickets/list", $data);
     }
 
     // نمایش فرم ایجاد تیکت
     public function create()
     {
-        $users = $this->usersModel->getAllUsers();
+        if ($_SESSION['is_admin'] == 1) {
+            // برای ادمین‌ها همه کاربران نمایش داده می‌شود
+            $allUsers = $this->usersModel->getUsers();
+            // فیلتر کردن کاربر لاگین شده از لیست
+            $users = array_filter($allUsers, function($user) {
+                return $user->id != $_SESSION['id'];
+            });
+        } else {
+            // برای نمایندگان فقط ادمین‌ها نمایش داده می‌شود
+            $users = $this->usersModel->getAllUsers();
+        }
 
         $data = [
-
             'users' => $users,
             'data' => []
         ];
-
         return $this->view("admin/tickets/create", $data);
     }
 
@@ -44,60 +101,184 @@ class Tickets extends Controller
     public function store()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $userId = $_POST['user_id'] ?? null;
-            $title = $_POST['title'] ?? null;
-            $message = $_POST['message'] ?? null;
+            // تولید شماره تیکت
+            $ticketNumber = 'TKT-' .  rand(1000, 9999);
+            
+            $ticketData = [
+                'ticket_number' => $ticketNumber,
+                'subject' => $_POST['subject'] ?? '',
+                'description' => $_POST['description'] ?? '',
+                'status' => 'open',
+                'priority' => $_POST['priority'] ?? 'medium',
+                'created_by' => $_SESSION['id'], // استفاده از ID کاربر لاگین شده
+                'assigned_to' => $_POST['assigned_to'] ?? null
+            ];
 
-            if (empty($userId) || empty($title) || empty($message)) {
+            // اعتبارسنجی داده‌ها
+            if (empty($ticketData['subject']) || empty($ticketData['description'])) {
                 $data = [
-                    'error' => 'تمامی فیلدها باید پر شوند!',
+                    'error' => 'موضوع و توضیحات تیکت الزامی است!',
+                    'data' => $ticketData,
+                    'users' => $this->usersModel->getAllUsers()
                 ];
                 return $this->view('admin/tickets/create', $data);
             }
 
-            // Insert into tickets table
-            $ticketData = [
-                'user_id' => $userId,
-                'title' => $title,
-                'status' => 0,
-            ];
-
+            // ذخیره تیکت
             $ticketId = $this->ticketModel->createTicket($ticketData);
 
             if ($ticketId) {
-                // Insert into ticket messages table
+                // ذخیره پیام اول تیکت
                 $messageData = [
                     'ticket_id' => $ticketId,
-                    'message' => $message,
-                    'created_at' => date('Y-m-d H:i:s'),
+                    'sender' => $_SESSION['id'], // استفاده از ID کاربر لاگین شده
+                    'dex' => $ticketData['description'],
+                    'attach' => null
                 ];
 
-                $messageResult = $this->ticketModel->createTicketMessage($messageData);
-
-                if ($messageResult) {
-                    header('Location: /admin/tickets');
-                    exit();
-                } else {
-                    $data = [
-                        'error' => 'خطایی در ذخیره پیام تیکت رخ داده است.',
-                    ];
-                    return $this->view('admin/tickets/create', $data);
+                // آپلود فایل پیوست
+                if (isset($_FILES['attach']) && $_FILES['attach']['error'] === UPLOAD_ERR_OK) {
+                    $uploadDir = 'uploads/tickets/';
+                    if (!file_exists($uploadDir)) {
+                        mkdir($uploadDir, 0777, true);
+                    }
+                    $fileName = time() . '_' . $_FILES['attach']['name'];
+                    $uploadFile = $uploadDir . $fileName;
+                    
+                    if (move_uploaded_file($_FILES['attach']['tmp_name'], $uploadFile)) {
+                        $messageData['attach'] = $uploadFile;
+                    }
                 }
-            } else {
-                $data = [
-                    'error' => 'خطایی در ذخیره تیکت رخ داده است.',
-                ];
-                return $this->view('admin/tickets/create', $data);
+
+                if ($this->ticketModel->createTicketMessage($messageData)) {
+                    header('Location: ' . URLROOT . '/tickets/admin');
+                    exit();
+                }
             }
+
+            $data = [
+                'error' => 'خطایی در ایجاد تیکت رخ داده است.',
+                'data' => $ticketData,
+                'users' => $this->usersModel->getAllUsers()
+            ];
+            return $this->view('admin/tickets/create', $data);
         }
 
         $this->create();
     }
 
-    // نمایش ویو
-    private function render($path, $data = [])
+    // نمایش جزئیات تیکت
+    public function show($id)
     {
-        extract($data);
-        include __DIR__ . "/../views/$path.php";
+        $ticket = $this->ticketModel->getTicketById($id);
+        $messages = $this->ticketModel->getTicketMessages($id);
+        
+        $data = [
+            'ticket' => $ticket,
+            'messages' => $messages
+        ];
+        
+        return $this->view("admin/tickets/show", $data);
+    }
+
+    // پاسخ به تیکت
+    public function reply($id)
+    {
+        $ticket = $this->ticketModel->getTicketById($id);
+        
+        // بررسی مجوز پاسخ دادن
+        if ($_SESSION['id'] != $ticket->created_by && $_SESSION['id'] != $ticket->assigned_to) {
+            $data = [
+                'error' => 'شما مجاز به پاسخ دادن به این تیکت نیستید.',
+                'ticket' => $ticket,
+                'messages' => $this->ticketModel->getTicketMessages($id)
+            ];
+            return $this->view("admin/tickets/show", $data);
+        }
+
+        // بررسی وضعیت تیکت
+        if ($ticket->status === 'closed') {
+            $data = [
+                'error' => 'این تیکت بسته شده است و امکان پاسخ دادن وجود ندارد.',
+                'ticket' => $ticket,
+                'messages' => $this->ticketModel->getTicketMessages($id)
+            ];
+            return $this->view("admin/tickets/show", $data);
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $messageData = [
+                'ticket_id' => $id,
+                'sender' => $_SESSION['id'],
+                'dex' => $_POST['message'] ?? null,
+                'attach' => null
+            ];
+
+            // آپلود فایل پیوست
+            if (isset($_FILES['attach']) && $_FILES['attach']['error'] === UPLOAD_ERR_OK) {
+                $uploadDir = 'uploads/tickets/';
+                if (!file_exists($uploadDir)) {
+                    mkdir($uploadDir, 0777, true);
+                }
+                $fileName = time() . '_' . $_FILES['attach']['name'];
+                $uploadFile = $uploadDir . $fileName;
+                
+                if (move_uploaded_file($_FILES['attach']['tmp_name'], $uploadFile)) {
+                    $messageData['attach'] = $uploadFile;
+                }
+            }
+
+            if ($this->ticketModel->createTicketMessage($messageData)) {
+                header("Location: " . URLROOT . "/tickets/show/$id");
+                exit();
+            }
+        }
+
+        $this->show($id);
+    }
+
+    // بروزرسانی وضعیت تیکت
+    public function updateStatus($id)
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $status = $_POST['status'] ?? null;
+            
+            if ($this->ticketModel->updateTicketStatus($id, $status)) {
+                header("Location: " . URLROOT . "/tickets/show/$id");
+                exit();
+            }
+        }
+
+        $this->show($id);
+    }
+
+    // بروزرسانی اولویت تیکت
+    public function updatePriority($id)
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $priority = $_POST['priority'] ?? null;
+            
+            if ($this->ticketModel->updateTicketPriority($id, $priority)) {
+                header("Location: " . URLROOT . "/tickets/show/$id");
+                exit();
+            }
+        }
+
+        $this->show($id);
+    }
+
+    // اختصاص تیکت به کاربر
+    public function assign($id)
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $userId = $_POST['user_id'] ?? null;
+            
+            if ($this->ticketModel->assignTicket($id, $userId)) {
+                header("Location: " . URLROOT . "/tickets/show/$id");
+                exit();
+            }
+        }
+
+        $this->show($id);
     }
 }

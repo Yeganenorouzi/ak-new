@@ -20,7 +20,7 @@ class Export extends Controller
             exit();
         }
 
-        $this->receptionsModel = $this->model("ReceptionsModel");
+        $this->receptionsModel = $this->model("ReceptionsModel"); 
         $this->cardsModel = $this->model("CardsModel");
     }
 

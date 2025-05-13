@@ -9,6 +9,12 @@ class UsersModel
     $this->db = new Database;
   }
 
+  public function getUsers(){
+    $this->db->query("SELECT * FROM users");
+    return $this->db->fetchAll();
+  }
+
+
 
   public function getAllUsers()
   {
