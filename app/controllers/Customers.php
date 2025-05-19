@@ -10,8 +10,23 @@ class Customers extends Controller
 
     public function index()
     {
+        $search_name = $_GET['search_name'] ?? '';
+        $search_codemelli = $_GET['search_codemelli'] ?? '';
+        $search_mobile = $_GET['search_mobile'] ?? '';
+        $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+        $per_page = 20;
+
+        $total_results = $this->customersModel->countSearchResults($search_name, $search_codemelli, $search_mobile);
+        $total_pages = ceil($total_results / $per_page);
+
         $data = [
-            "customers" => $this->customersModel->getAllCustomers()
+            "customers" => $this->customersModel->searchCustomers($search_name, $search_codemelli, $search_mobile, $page, $per_page),
+            "pagination" => [
+                "current_page" => $page,
+                "total_pages" => $total_pages,
+                "total_results" => $total_results,
+                "per_page" => $per_page
+            ]
         ];
         return $this->view("admin/customers/read", $data);
     }
@@ -22,7 +37,7 @@ class Customers extends Controller
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // تعیین نوع جستجو
             $search_type = $_POST['search_type'] ?? 'codemelli';
-            
+
             if ($search_type === 'passport') {
                 $passport = $_POST['passport'] ?? '';
                 $customer = $this->customersModel->getCustomerByPassport($passport);
@@ -68,8 +83,23 @@ class Customers extends Controller
 
     public function agent()
     {
+        $search_name = $_GET['search_name'] ?? '';
+        $search_codemelli = $_GET['search_codemelli'] ?? '';
+        $search_mobile = $_GET['search_mobile'] ?? '';
+        $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+        $per_page = 10;
+
+        $total_results = $this->customersModel->countSearchResultsByAgent($search_name, $search_codemelli, $search_mobile);
+        $total_pages = ceil($total_results / $per_page);
+
         $data = [
-            "customersAgent" => $this->customersModel->getAllCustomersByAgent()
+            "customersAgent" => $this->customersModel->searchCustomersByAgent($search_name, $search_codemelli, $search_mobile, $page, $per_page),
+            "pagination" => [
+                "current_page" => $page,
+                "total_pages" => $total_pages,
+                "total_results" => $total_results,
+                "per_page" => $per_page
+            ]
         ];
         return $this->view("agent/customers/read", $data);
     }
@@ -101,5 +131,21 @@ class Customers extends Controller
             $data['errors'][] = $e->getMessage();
             $this->view('agent/customers/update', $data);
         }
+    }
+
+    public function delete($id)
+    {
+        try {
+            if ($this->customersModel->deleteCustomer($id)) {
+                $_SESSION['success'] = "مشتری با موفقیت حذف شد";
+            } else {
+                $_SESSION['error'] = "خطا در حذف مشتری";
+            }
+        } catch (Exception $e) {
+            $_SESSION['error'] = $e->getMessage();
+        }
+
+        header("Location: " . URLROOT . "/customers");
+        exit();
     }
 }

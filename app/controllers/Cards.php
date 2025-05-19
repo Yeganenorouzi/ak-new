@@ -16,36 +16,36 @@ class Cards extends Controller
 
     public function index($page = 1)
     {
-        $page = (int)$page;
+        $page = (int) $page;
 
         $cardsPerPage = 50;
-        
+
         // بررسی وجود فیلترها در درخواست
         $filters = [];
-        
+
         // فیلترهای متنی
         if (isset($_GET['serial']) && !empty($_GET['serial'])) {
             $filters['serial'] = $_GET['serial'];
         }
-        
+
         if (isset($_GET['serial2']) && !empty($_GET['serial2'])) {
             $filters['serial2'] = $_GET['serial2'];
         }
-        
+
         if (isset($_GET['model']) && !empty($_GET['model'])) {
             $filters['model'] = $_GET['model'];
         }
-        
+
         if (isset($_GET['company']) && !empty($_GET['company'])) {
             $filters['company'] = $_GET['company'];
         }
-        
+
         if (isset($_GET['sh_sanad']) && !empty($_GET['sh_sanad'])) {
             $filters['sh_sanad'] = $_GET['sh_sanad'];
         }
-        
-        
-        
+
+
+
         // اگر فیلتری وجود دارد، از متد فیلتر شده استفاده کن
         if (!empty($filters)) {
             $totalCards = $this->cardModel->getTotalFilteredCards($filters);
@@ -57,7 +57,7 @@ class Cards extends Controller
             $offset = ($page - 1) * $cardsPerPage;
             $cards = $this->cardModel->getPaginatedCards($cardsPerPage, $offset);
         }
-        
+
         $totalPages = ceil($totalCards / $cardsPerPage);
 
         // اطمینان از اینکه شماره صفحه معتبر است
@@ -83,65 +83,65 @@ class Cards extends Controller
         // این متد برای درخواست‌های AJAX استفاده می‌شود
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $filters = [];
-            
+
             // فیلترهای متنی
             if (isset($_POST['serial']) && !empty($_POST['serial'])) {
                 $filters['serial'] = $_POST['serial'];
             }
-            
+
             if (isset($_POST['serial2']) && !empty($_POST['serial2'])) {
                 $filters['serial2'] = $_POST['serial2'];
             }
-            
+
             if (isset($_POST['model']) && !empty($_POST['model'])) {
                 $filters['model'] = $_POST['model'];
             }
-            
+
             if (isset($_POST['company']) && !empty($_POST['company'])) {
                 $filters['company'] = $_POST['company'];
             }
-            
+
             if (isset($_POST['sh_sanad']) && !empty($_POST['sh_sanad'])) {
                 $filters['sh_sanad'] = $_POST['sh_sanad'];
             }
-            
+
             // فیلترهای تاریخ
             if (isset($_POST['start_guarantee_from']) && !empty($_POST['start_guarantee_from'])) {
                 $filters['start_guarantee_from'] = $_POST['start_guarantee_from'];
             }
-            
+
             if (isset($_POST['start_guarantee_to']) && !empty($_POST['start_guarantee_to'])) {
                 $filters['start_guarantee_to'] = $_POST['start_guarantee_to'];
             }
-            
+
             if (isset($_POST['expite_guarantee_from']) && !empty($_POST['expite_guarantee_from'])) {
                 $filters['expite_guarantee_from'] = $_POST['expite_guarantee_from'];
             }
-            
+
             if (isset($_POST['expite_guarantee_to']) && !empty($_POST['expite_guarantee_to'])) {
                 $filters['expite_guarantee_to'] = $_POST['expite_guarantee_to'];
             }
-            
+
             // فیلتر وضعیت گارانتی
             if (isset($_POST['guarantee_status']) && !empty($_POST['guarantee_status'])) {
                 $filters['guarantee_status'] = $_POST['guarantee_status'];
             }
-            
+
             // ساخت URL با پارامترهای فیلتر
             $url = URLROOT . '/cards/index/1?';
             $params = [];
-            
+
             foreach ($filters as $key => $value) {
                 $params[] = $key . '=' . urlencode($value);
             }
-            
+
             $url .= implode('&', $params);
-            
+
             // بازگشت به صفحه لیست با فیلترهای اعمال شده
             header("Location: " . $url);
             exit();
         }
-        
+
         // اگر درخواست POST نباشد، به صفحه اصلی هدایت کن
         header("Location: " . URLROOT . "/cards/index");
         exit();
@@ -233,49 +233,51 @@ class Cards extends Controller
         $this->view('admin/cards/create', $data);
     }
 
-    public function import() {
+    public function import()
+    {
         $data = [
             'success' => false,
             'message' => '',
             'errors' => []
         ];
-        
+
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (!isset($_FILES['excel_file']) || $_FILES['excel_file']['error'] !== UPLOAD_ERR_OK) {
                 $data['errors'][] = 'لطفاً یک فایل اکسل انتخاب کنید.';
                 $this->view('admin/cards/import', $data);
                 return;
             }
-            
+
             $file = $_FILES['excel_file'];
             $allowedTypes = ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
-            
+
             if (!in_array($file['type'], $allowedTypes)) {
                 $data['errors'][] = 'لطفاً یک فایل اکسل معتبر انتخاب کنید.';
                 $this->view('admin/cards/import', $data);
                 return;
             }
-            
+
             // تغییر مسیر اتولود
             // require_once APPROOT . '/vendor/autoload.php';
-            
+
             try {
                 $spreadsheet = IOFactory::load($file['tmp_name']);
                 $worksheet = $spreadsheet->getActiveSheet();
                 $rows = $worksheet->toArray();
-                
+
                 array_shift($rows); // Remove header row
-                
+
                 $successCount = 0;
                 $errorCount = 0;
-                
+
                 foreach ($rows as $row) {
-                    if (empty($row[0])) continue; // Skip empty rows
-                    
+                    if (empty($row[0]))
+                        continue; // Skip empty rows
+
                     // تبدیل تاریخ‌ها به فرمت مناسب
                     $start_guarantee = '';
                     $expite_guarantee = '';
-                    
+
                     // تبدیل تاریخ شروع
                     if (!empty($row[20])) {
                         try {
@@ -284,9 +286,9 @@ class Cards extends Controller
                                 // تبدیل تاریخ شمسی به میلادی
                                 $date_parts = explode('/', $row[20]);
                                 if (count($date_parts) == 3) {
-                                    $start_guarantee = $date_parts[0] . '/' . 
-                                                     str_pad($date_parts[1], 2, '0', STR_PAD_LEFT) . '/' . 
-                                                     str_pad($date_parts[2], 2, '0', STR_PAD_LEFT);
+                                    $start_guarantee = $date_parts[0] . '/' .
+                                        str_pad($date_parts[1], 2, '0', STR_PAD_LEFT) . '/' .
+                                        str_pad($date_parts[2], 2, '0', STR_PAD_LEFT);
                                 }
                             } else {
                                 // اگر تاریخ به فرمت اکسل باشد
@@ -297,16 +299,16 @@ class Cards extends Controller
                             $start_guarantee = '';
                         }
                     }
-                    
+
                     // تبدیل تاریخ پایان
                     if (!empty($row[21])) {
                         try {
                             if (strpos($row[21], '/') !== false) {
                                 $date_parts = explode('/', $row[21]);
                                 if (count($date_parts) == 3) {
-                                    $expite_guarantee = $date_parts[0] . '/' . 
-                                                      str_pad($date_parts[1], 2, '0', STR_PAD_LEFT) . '/' . 
-                                                      str_pad($date_parts[2], 2, '0', STR_PAD_LEFT);
+                                    $expite_guarantee = $date_parts[0] . '/' .
+                                        str_pad($date_parts[1], 2, '0', STR_PAD_LEFT) . '/' .
+                                        str_pad($date_parts[2], 2, '0', STR_PAD_LEFT);
                                 }
                             } else {
                                 $UNIX_DATE = ($row[21] - 25569) * 86400;
@@ -316,7 +318,7 @@ class Cards extends Controller
                             $expite_guarantee = '';
                         }
                     }
-                    
+
                     $cardData = [
                         'serial' => trim($row[0] ?? ''),
                         'serial2' => trim($row[1] ?? ''),
@@ -341,7 +343,7 @@ class Cards extends Controller
                         'start_guarantee' => $start_guarantee,
                         'expite_guarantee' => $expite_guarantee
                     ];
-                    
+
                     try {
                         if ($this->cardModel->createCard($cardData)) {
                             $successCount++;
@@ -351,18 +353,18 @@ class Cards extends Controller
                         $data['errors'][] = "خطا در ردیف {$row[0]}: " . $e->getMessage();
                     }
                 }
-                
+
                 $data['success'] = true;
                 $data['message'] = "وارد کردن با موفقیت انجام شد. {$successCount} کارت اضافه شد.";
                 if ($errorCount > 0) {
                     $data['message'] .= " {$errorCount} کارت با خطا مواجه شد.";
                 }
-                
+
             } catch (Exception $e) {
                 $data['errors'][] = 'خطا در پردازش فایل اکسل: ' . $e->getMessage();
             }
         }
-        
+
         $this->view('admin/cards/import', $data);
     }
 
@@ -374,7 +376,7 @@ class Cards extends Controller
         }
 
         $card = $this->cardModel->getCardById($id);
-        
+
         if (!$card) {
             header("Location: " . URLROOT . "/cards/index");
             exit();
@@ -437,6 +439,6 @@ class Cards extends Controller
         header("Location: " . URLROOT . "/cards/index");
         exit();
     }
-    
+
 
 }

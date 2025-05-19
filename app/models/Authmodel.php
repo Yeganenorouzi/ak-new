@@ -1,5 +1,5 @@
 <?php
-class Authmodel
+class AuthModel
 {
   private $db;
   public function __construct()

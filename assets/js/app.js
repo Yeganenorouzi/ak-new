@@ -50,6 +50,16 @@
 
       if (item.href == pageUrl) {
         item.classList.add("active");
+        // Add mm-active class to parent li elements and mm-show to their ul elements
+        var parentLi = item.closest('li');
+        while (parentLi) {
+          parentLi.classList.add("mm-active");
+          var parentUl = parentLi.querySelector('ul');
+          if (parentUl) {
+            parentUl.classList.add("mm-show");
+          }
+          parentLi = parentLi.parentElement.closest('li');
+        }
       }
     });
   }

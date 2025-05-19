@@ -19,14 +19,14 @@ class Receptions extends Controller
         if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin') {
             return true;
         }
-        
+
         // Alternative check - if your application uses a different session variable
         if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
             return true;
         }
-        
+
         // If you're using a different approach to identify admins, add it here
-        
+
         // For development/testing, you can temporarily return true
         // WARNING: Remove this in production
         return true;
@@ -36,7 +36,7 @@ class Receptions extends Controller
     {
         if ($this->isAdmin()) {
             $filters = [];
-            
+
             // Get filter values from GET request
             if (!empty($_GET['reception_number'])) {
                 $filters['reception_number'] = $_GET['reception_number'];
@@ -66,7 +66,7 @@ class Receptions extends Controller
                 $filters['date_to'] = $_GET['date_to'];
             }
 
-            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
             $perPage = 50;
 
             if (!empty($filters)) {
@@ -95,7 +95,7 @@ class Receptions extends Controller
     public function agent()
     {
         $filters = [];
-        
+
         // Get filter values from GET request
         if (!empty($_GET['reception_number'])) {
             $filters['reception_number'] = $_GET['reception_number'];
@@ -120,7 +120,7 @@ class Receptions extends Controller
         }
 
         // Get current page from GET parameter, default to 1
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
         $perPage = 50; // Number of items per page
 
         // If filters are provided, use the filtered method, otherwise get all receptions
@@ -129,12 +129,12 @@ class Receptions extends Controller
         } else {
             $result = $this->receptionsModel->getPaginatedReceptionsByAgent($page, $perPage);
         }
-        
+
         $data = [
             "receptionsAgent" => $result['receptions'],
             "pagination" => $result['pagination']
         ];
-        
+
         return $this->view("agent/receptions/list", $data);
     }
 
@@ -158,7 +158,7 @@ class Receptions extends Controller
             } else {
                 $fileName = time() . '_' . $index . '_' . $file['name'];
                 $uploadPath = 'uploads/receptions/' . $fileName;
-                
+
                 // Log the absolute path for debugging
                 error_log("Upload path: " . realpath(dirname($uploadPath)) . "/" . basename($uploadPath));
                 error_log("Current directory: " . getcwd());
@@ -195,7 +195,7 @@ class Receptions extends Controller
             'file2' => '',
             'file3' => ''
         ];
-        
+
         // Process each file upload
         if (isset($_FILES['image1']) && $_FILES['image1']['error'] !== UPLOAD_ERR_NO_FILE) {
             $uploadResult = $this->uploadFile($_FILES['image1'], 1);
@@ -204,7 +204,7 @@ class Receptions extends Controller
             }
             $result['file1'] = $uploadResult;
         }
-        
+
         if (isset($_FILES['image2']) && $_FILES['image2']['error'] !== UPLOAD_ERR_NO_FILE) {
             $uploadResult = $this->uploadFile($_FILES['image2'], 2);
             if (is_string($uploadResult) && strpos($uploadResult, 'خطا') !== false) {
@@ -212,7 +212,7 @@ class Receptions extends Controller
             }
             $result['file2'] = $uploadResult;
         }
-        
+
         if (isset($_FILES['image3']) && $_FILES['image3']['error'] !== UPLOAD_ERR_NO_FILE) {
             $uploadResult = $this->uploadFile($_FILES['image3'], 3);
             if (is_string($uploadResult) && strpos($uploadResult, 'خطا') !== false) {
@@ -220,7 +220,7 @@ class Receptions extends Controller
             }
             $result['file3'] = $uploadResult;
         }
-        
+
         return $result;
     }
 
@@ -373,16 +373,16 @@ class Receptions extends Controller
     {
         // Start output buffering to catch any unwanted output
         ob_start();
-        
+
         // Set content type to JSON to ensure proper response
         header('Content-Type: application/json');
-        
+
         try {
             // Check if the request is POST
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
                 throw new Exception("Invalid request method. Only POST is allowed.");
             }
-            
+
             $id = $_POST['id'] ?? null;
             if (!$id) {
                 throw new Exception("شناسه پذیرش نامعتبر است");
@@ -415,14 +415,14 @@ class Receptions extends Controller
 
             // به‌روزرسانی پذیرش
             $result = $this->receptionsModel->updateReception($id, $data);
-            
+
             if (!$result['success']) {
                 throw new Exception($result['error'] ?? "خطا در به‌روزرسانی پذیرش");
             }
 
             // Clear any output buffers
             ob_clean();
-            
+
             // پاسخ موفقیت
             echo json_encode([
                 'status' => 'success',
@@ -437,10 +437,10 @@ class Receptions extends Controller
         } catch (Exception $e) {
             // Clear any output buffers
             ob_clean();
-            
+
             error_log("Error in Receptions::update: " . $e->getMessage());
             error_log("Stack trace: " . $e->getTraceAsString());
-            
+
             echo json_encode([
                 'status' => 'error',
                 'message' => $e->getMessage(),
@@ -450,7 +450,7 @@ class Receptions extends Controller
                 ]
             ]);
         }
-        
+
         // End output buffering and flush
         ob_end_flush();
     }
@@ -460,15 +460,34 @@ class Receptions extends Controller
 
     public function download($filename)
     {
-        // Get the absolute path to the uploads directory
-        $file = $_SERVER['DOCUMENT_ROOT'] . '/ak-new/assets/uploads/receptions/' . basename($filename);
-
         // بررسی امنیتی - جلوگیری از directory traversal
         $filename = basename($filename); // فقط نام فایل را استخراج می‌کند
 
-        if (!file_exists($file)) {
-            error_log("File not found at: " . $file);
-            die('File not found at: ' . $file);
+        // تعریف مسیرهای ممکن برای فایل
+        $possiblePaths = [
+            // مسیر لوکال
+            dirname(dirname(dirname(__DIR__))) . '/assets/uploads/receptions/' . $filename,
+            // مسیر نسبی
+            'assets/uploads/receptions/' . $filename,
+            // مسیر هاست
+            '/home/pfsh/public_html/ak-new/assets/uploads/receptions/' . $filename,
+            // مسیر هاست جایگزین
+            $_SERVER['DOCUMENT_ROOT'] . '/ak-new/assets/uploads/receptions/' . $filename
+        ];
+
+        $file = null;
+        foreach ($possiblePaths as $path) {
+            error_log("Checking path: " . $path);
+            if (file_exists($path) && is_readable($path)) {
+                $file = $path;
+                error_log("Found file at: " . $path);
+                break;
+            }
+        }
+
+        if (!$file) {
+            error_log("File not found in any of the possible paths");
+            die('File not found');
         }
 
         // تنظیم نوع محتوا بر اساس پسوند فایل
@@ -508,8 +527,8 @@ class Receptions extends Controller
         ];
 
         return $this->view("admin/receptions/read", $data);
-        
-        
+
+
     }
 
     public function print($id)

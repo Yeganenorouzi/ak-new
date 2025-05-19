@@ -3,8 +3,13 @@
 use Hekmatinasser\Verta\Verta;
 ?>
 <?php require_once(APPROOT . "/views/public/header.php"); ?>
-<?php require_once(APPROOT . "/views/public/sidebar.php"); ?>
-
+<?php
+if ($_SESSION['is_admin'] == 1) {
+    require_once(APPROOT . "/views/public/sidebar.php");
+} else {
+    require_once(APPROOT . "/views/public/sidebarAgent.php");
+}
+?>
 <div class="main-content">
     <div class="page-content dark:bg-zinc-700">
         <div class="container-fluid px-[0.625rem]">

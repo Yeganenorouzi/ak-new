@@ -5,7 +5,7 @@ class Auth extends Controller
   private $authModel;
   public function __construct()
   {
-    $this->authModel = $this->model("authmodel");
+    $this->authModel = $this->model("AuthModel");
     if (isset($_SESSION['admin'])) {
       header("location:" . URLROOT . "/dashboard/admin");
     }

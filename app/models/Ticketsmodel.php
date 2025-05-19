@@ -1,6 +1,6 @@
 <?php
 
-class Ticketsmodel
+class TicketsModel
 {
     private $db;
 
@@ -56,10 +56,10 @@ class Ticketsmodel
         $this->db->query("
             INSERT INTO tickets (
                 ticket_number, subject, description, status, priority, 
-                created_by, assigned_to, created_at
+                created_by, assigned_to, created_at ,attach
             ) VALUES (
                 :ticket_number, :subject, :description, :status, :priority,
-                :created_by, :assigned_to, NOW()
+                :created_by, :assigned_to, NOW(), :attach
             )
         ");
 
@@ -70,7 +70,7 @@ class Ticketsmodel
         $this->db->bind(":priority", $data['priority']);
         $this->db->bind(":created_by", $data['created_by']);
         $this->db->bind(":assigned_to", $data['assigned_to']);
-
+        $this->db->bind(":attach", $data['attach'] ?? null);
         return $this->db->execute();
     }
 
@@ -148,27 +148,27 @@ class Ticketsmodel
     {
         $sql = "SELECT COUNT(*) as total FROM tickets WHERE 1=1";
         $params = [];
-        
+
         if (!empty($filters['ticket_number'])) {
             $sql .= " AND ticket_number LIKE :ticket_number";
             $params[':ticket_number'] = "%{$filters['ticket_number']}%";
         }
-        
+
         if (!empty($filters['status'])) {
             $sql .= " AND status = :status";
             $params[':status'] = $filters['status'];
         }
-        
+
         if (!empty($filters['priority'])) {
             $sql .= " AND priority = :priority";
             $params[':priority'] = $filters['priority'];
         }
-        
+
         $this->db->query($sql);
         foreach ($params as $key => $value) {
             $this->db->bind($key, $value);
         }
-        
+
         $result = $this->db->fetch();
         return $result->total;
     }
@@ -176,38 +176,111 @@ class Ticketsmodel
     public function getPaginatedTickets($page, $per_page, $filters = [])
     {
         $offset = ($page - 1) * $per_page;
-        
+
         $sql = "SELECT t.*, u1.name as created_by_name, u2.name as assigned_to_name 
                 FROM tickets t 
                 LEFT JOIN users u1 ON t.created_by = u1.id 
                 LEFT JOIN users u2 ON t.assigned_to = u2.id 
                 WHERE 1=1";
         $params = [];
-        
+
         if (!empty($filters['ticket_number'])) {
             $sql .= " AND t.ticket_number LIKE :ticket_number";
             $params[':ticket_number'] = "%{$filters['ticket_number']}%";
         }
-        
+
         if (!empty($filters['status'])) {
             $sql .= " AND t.status = :status";
             $params[':status'] = $filters['status'];
         }
-        
+
         if (!empty($filters['priority'])) {
             $sql .= " AND t.priority = :priority";
             $params[':priority'] = $filters['priority'];
         }
-        
+
         $sql .= " ORDER BY t.created_at DESC LIMIT :limit OFFSET :offset";
         $params[':limit'] = $per_page;
         $params[':offset'] = $offset;
-        
+
         $this->db->query($sql);
         foreach ($params as $key => $value) {
             $this->db->bind($key, $value);
         }
-        
+
+        return $this->db->fetchAll();
+    }
+
+    public function getTotalTicketsByAgent($agentId, $filters = [])
+    {
+        $sql = "SELECT COUNT(*) as total FROM tickets WHERE (created_by = :agent_id1 OR assigned_to = :agent_id2)";
+        $params = [
+            ':agent_id1' => $agentId,
+            ':agent_id2' => $agentId
+        ];
+
+        if (!empty($filters['ticket_number'])) {
+            $sql .= " AND ticket_number LIKE :ticket_number";
+            $params[':ticket_number'] = "%{$filters['ticket_number']}%";
+        }
+
+        if (!empty($filters['status'])) {
+            $sql .= " AND status = :status";
+            $params[':status'] = $filters['status'];
+        }
+
+        if (!empty($filters['priority'])) {
+            $sql .= " AND priority = :priority";
+            $params[':priority'] = $filters['priority'];
+        }
+
+        $this->db->query($sql);
+        foreach ($params as $key => $value) {
+            $this->db->bind($key, $value);
+        }
+
+        $result = $this->db->fetch();
+        return $result->total;
+    }
+
+    public function getTicketsByAgent($agentId, $filters = [], $page = 1, $per_page = 30)
+    {
+        $offset = ($page - 1) * $per_page;
+
+        $sql = "SELECT t.*, u1.name as created_by_name, u2.name as assigned_to_name 
+                FROM tickets t 
+                LEFT JOIN users u1 ON t.created_by = u1.id 
+                LEFT JOIN users u2 ON t.assigned_to = u2.id 
+                WHERE (t.created_by = :agent_id1 OR t.assigned_to = :agent_id2)";
+        $params = [
+            ':agent_id1' => $agentId,
+            ':agent_id2' => $agentId
+        ];
+
+        if (!empty($filters['ticket_number'])) {
+            $sql .= " AND t.ticket_number LIKE :ticket_number";
+            $params[':ticket_number'] = "%{$filters['ticket_number']}%";
+        }
+
+        if (!empty($filters['status'])) {
+            $sql .= " AND t.status = :status";
+            $params[':status'] = $filters['status'];
+        }
+
+        if (!empty($filters['priority'])) {
+            $sql .= " AND t.priority = :priority";
+            $params[':priority'] = $filters['priority'];
+        }
+
+        $sql .= " ORDER BY t.created_at DESC LIMIT :offset, :per_page";
+        $params[':offset'] = $offset;
+        $params[':per_page'] = $per_page;
+
+        $this->db->query($sql);
+        foreach ($params as $key => $value) {
+            $this->db->bind($key, $value);
+        }
+
         return $this->db->fetchAll();
     }
 }

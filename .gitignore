@@ -8,5 +8,6 @@
 /dataSources.local.xml
 
 .htaccess
-/node_modules/
-
+node_modules/
+.htaccess.local
+vendor/
