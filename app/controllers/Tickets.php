@@ -103,73 +103,96 @@ class Tickets extends Controller
     public function store()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // تولید شماره تیکت
-            $ticketNumber = 'TKT-' . rand(1000, 9999);
+            try {
+                // تولید شماره تیکت
+                $ticketNumber = 'TKT-' . rand(1000, 9999);
 
-            $ticketData = [
-                'ticket_number' => $ticketNumber,
-                'subject' => $_POST['subject'] ?? '',
-                'description' => $_POST['description'] ?? '',
-                'status' => 'open',
-                'priority' => $_POST['priority'] ?? 'medium',
-                'created_by' => $_SESSION['id'], // استفاده از ID کاربر لاگین شده
-                'assigned_to' => $_POST['assigned_to'] ?? null,
-                'attach' => null
-            ];
+                $ticketData = [
+                    'ticket_number' => $ticketNumber,
+                    'subject' => $_POST['subject'] ?? '',
+                    'description' => $_POST['description'] ?? '',
+                    'status' => 'open',
+                    'priority' => $_POST['priority'] ?? 'medium',
+                    'created_by' => $_SESSION['id'],
+                    'assigned_to' => $_POST['assigned_to'] ?? null,
+                    'department' => $_POST['department'] ?? null,
+                    'attach' => null
+                ];
 
-            // اعتبارسنجی داده‌ها
-            if (empty($ticketData['subject']) || empty($ticketData['description'])) {
+                // اعتبارسنجی داده‌ها
+                if (empty($ticketData['subject']) || empty($ticketData['description'])) {
+                    $data = [
+                        'error' => 'موضوع و توضیحات تیکت الزامی است!',
+                        'data' => $ticketData,
+                        'users' => $this->usersModel->getAllUsers()
+                    ];
+                    return $this->view('admin/tickets/create', $data);
+                }
+
+                // آپلود فایل پیوست برای تیکت
+                if (isset($_FILES['attach']) && $_FILES['attach']['error'] === UPLOAD_ERR_OK) {
+                    $uploadDir = 'uploads/tickets/';
+
+                    // ایجاد دایرکتوری با دسترسی مناسب
+                    if (!file_exists($uploadDir)) {
+                        if (!mkdir($uploadDir, 0755, true)) {
+                            throw new Exception('خطا در ایجاد دایرکتوری آپلود');
+                        }
+                    }
+
+                    // بررسی دسترسی نوشتن در دایرکتوری
+                    if (!is_writable($uploadDir)) {
+                        throw new Exception('دایرکتوری آپلود قابل نوشتن نیست');
+                    }
+
+                    $fileName = time() . '_' . basename($_FILES['attach']['name']);
+                    $uploadFile = $uploadDir . $fileName;
+
+                    if (!move_uploaded_file($_FILES['attach']['tmp_name'], $uploadFile)) {
+                        throw new Exception('خطا در آپلود فایل');
+                    }
+
+                    $ticketData['attach'] = $uploadFile;
+                }
+
+                // ذخیره تیکت
+                $ticketId = $this->ticketModel->createTicket($ticketData);
+
+                if (!$ticketId) {
+                    throw new Exception('خطا در ذخیره تیکت');
+                }
+
+                // ذخیره پیام اول تیکت
+                $messageData = [
+                    'ticket_id' => $ticketId,
+                    'sender' => $_SESSION['id'],
+                    'dex' => $ticketData['description'],
+                    'attach' => $ticketData['attach']
+                ];
+
+                if (!$this->ticketModel->createTicketMessage($messageData)) {
+                    throw new Exception('خطا در ذخیره پیام تیکت');
+                }
+
+                // Redirect based on user role
+                if ($_SESSION['is_admin'] == 1) {
+                    header('Location: ' . URLROOT . '/tickets/admin');
+                } else {
+                    header('Location: ' . URLROOT . '/tickets/agent');
+                }
+                exit();
+
+            } catch (Exception $e) {
+                // لاگ کردن خطا
+                error_log('Ticket creation error: ' . $e->getMessage());
+
                 $data = [
-                    'error' => 'موضوع و توضیحات تیکت الزامی است!',
-                    'data' => $ticketData,
+                    'error' => 'خطایی در ایجاد تیکت رخ داده است: ' . $e->getMessage(),
+                    'data' => $ticketData ?? [],
                     'users' => $this->usersModel->getAllUsers()
                 ];
                 return $this->view('admin/tickets/create', $data);
             }
-
-            // آپلود فایل پیوست برای تیکت
-            if (isset($_FILES['attach']) && $_FILES['attach']['error'] === UPLOAD_ERR_OK) {
-                $uploadDir = 'uploads/tickets/';
-                if (!file_exists($uploadDir)) {
-                    mkdir($uploadDir, 0777, true);
-                }
-                $fileName = time() . '_' . $_FILES['attach']['name'];
-                $uploadFile = $uploadDir . $fileName;
-
-                if (move_uploaded_file($_FILES['attach']['tmp_name'], $uploadFile)) {
-                    $ticketData['attach'] = $uploadFile;
-                }
-            }
-
-            // ذخیره تیکت
-            $ticketId = $this->ticketModel->createTicket($ticketData);
-
-            if ($ticketId) {
-                // ذخیره پیام اول تیکت
-                $messageData = [
-                    'ticket_id' => $ticketId,
-                    'sender' => $_SESSION['id'], // استفاده از ID کاربر لاگین شده
-                    'dex' => $ticketData['description'],
-                    'attach' => $ticketData['attach'] // استفاده از همان فایل پیوست تیکت
-                ];
-
-                if ($this->ticketModel->createTicketMessage($messageData)) {
-                    // Redirect based on user role
-                    if ($_SESSION['is_admin'] == 1) {
-                        header('Location: ' . URLROOT . '/tickets/admin');
-                    } else {
-                        header('Location: ' . URLROOT . '/tickets/agent');
-                    }
-                    exit();
-                }
-            }
-
-            $data = [
-                'error' => 'خطایی در ایجاد تیکت رخ داده است.',
-                'data' => $ticketData,
-                'users' => $this->usersModel->getAllUsers()
-            ];
-            return $this->view('admin/tickets/create', $data);
         }
 
         $this->create();
