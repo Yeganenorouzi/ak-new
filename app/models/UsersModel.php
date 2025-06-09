@@ -9,7 +9,29 @@ class UsersModel
     $this->db = new Database;
   }
 
-  public function getUsers(){
+  public function getTotalUsers()
+  {
+    $this->db->query("SELECT COUNT(*) as total FROM users");
+    $result = $this->db->fetch();
+    return $result->total;
+  }
+
+  public function getTotalAdmins()
+  {
+    $this->db->query("SELECT COUNT(*) as total FROM users WHERE admin = 1");
+    $result = $this->db->fetch();
+    return $result->total;
+  }
+
+  public function getTotalAgents()
+  {
+    $this->db->query("SELECT COUNT(*) as total FROM users WHERE admin = 0");
+    $result = $this->db->fetch();
+    return $result->total;
+  }
+
+  public function getUsers()
+  {
     $this->db->query("SELECT * FROM users");
     return $this->db->fetchAll();
   }
@@ -32,85 +54,85 @@ class UsersModel
   {
     $sql = "SELECT * FROM users WHERE admin = 1";
     $params = [];
-    
+
     // فیلتر بر اساس نام
     if (!empty($filters['name'])) {
       $sql .= " AND name LIKE :name";
       $params[':name'] = '%' . $filters['name'] . '%';
     }
-    
+
     // فیلتر بر اساس کد ملی
     if (!empty($filters['codemelli'])) {
       $sql .= " AND codemelli LIKE :codemelli";
       $params[':codemelli'] = '%' . $filters['codemelli'] . '%';
     }
-    
+
     // فیلتر بر اساس موبایل
     if (!empty($filters['mobile'])) {
       $sql .= " AND mobile LIKE :mobile";
       $params[':mobile'] = '%' . $filters['mobile'] . '%';
     }
-    
+
     // فیلتر بر اساس ایمیل
     if (!empty($filters['email'])) {
       $sql .= " AND email LIKE :email";
       $params[':email'] = '%' . $filters['email'] . '%';
     }
-    
+
     // اضافه کردن مرتب‌سازی
     $sql .= " ORDER BY id DESC";
-    
+
     // اجرای کوئری با پارامترها
     $this->db->query($sql);
-    
+
     // بایند کردن پارامترها
     foreach ($params as $key => $value) {
       $this->db->bind($key, $value);
     }
-    
+
     return $this->db->fetchAll();
   }
-  
+
   public function getFilteredAgents($filters)
   {
     $sql = "SELECT * FROM users WHERE admin = 0";
     $params = [];
-    
+
     // فیلتر بر اساس نام
     if (!empty($filters['name'])) {
       $sql .= " AND name LIKE :name";
       $params[':name'] = '%' . $filters['name'] . '%';
     }
-    
+
     // فیلتر بر اساس کد ملی
     if (!empty($filters['codemelli'])) {
       $sql .= " AND codemelli LIKE :codemelli";
       $params[':codemelli'] = '%' . $filters['codemelli'] . '%';
     }
-    
+
     // فیلتر بر اساس موبایل
     if (!empty($filters['mobile'])) {
       $sql .= " AND mobile LIKE :mobile";
       $params[':mobile'] = '%' . $filters['mobile'] . '%';
     }
-    
+
     // فیلتر بر اساس ایمیل
     if (!empty($filters['email'])) {
       $sql .= " AND email LIKE :email";
       $params[':email'] = '%' . $filters['email'] . '%';
     }
-    
+
     // اضافه کردن مرتب‌سازی
     $sql .= " ORDER BY id DESC";
-    
+
     // اجرای کوئری با پارامترها
     $this->db->query($sql);
-    
+
     // بایند کردن پارامترها
     foreach ($params as $key => $value) {
       $this->db->bind($key, $value);
     }
-    
+
     return $this->db->fetchAll();
   }
 
@@ -375,7 +397,8 @@ class UsersModel
     return $this->db->execute();
   }
 
-  public function updatePassword($userId, $newPassword) {
+  public function updatePassword($userId, $newPassword)
+  {
     $this->db->query('UPDATE users SET password = :password WHERE id = :id');
     $this->db->bind(':password', $newPassword);
     $this->db->bind(':id', $userId);

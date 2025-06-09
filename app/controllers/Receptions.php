@@ -3,9 +3,12 @@
 class Receptions extends Controller
 {
     private $receptionsModel;
+    private $statusModel;
+
     public function __construct()
     {
         $this->receptionsModel = $this->model("ReceptionsModel");
+        $this->statusModel = $this->model("ReceptionStatusModel");
     }
 
     /**
@@ -67,7 +70,7 @@ class Receptions extends Controller
             }
 
             $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-            $perPage = 50;
+            $perPage = 10;
 
             if (!empty($filters)) {
                 $result = $this->receptionsModel->getPaginatedFilteredReceptions($filters, $page, $perPage);
@@ -86,8 +89,49 @@ class Receptions extends Controller
 
     public function admin()
     {
+        $filters = [];
+
+        // Get filter values from GET request
+        if (!empty($_GET['reception_number'])) {
+            $filters['reception_number'] = $_GET['reception_number'];
+        }
+        if (!empty($_GET['serial'])) {
+            $filters['serial'] = $_GET['serial'];
+        }
+        if (!empty($_GET['model'])) {
+            $filters['model'] = $_GET['model'];
+        }
+        if (!empty($_GET['customer_name'])) {
+            $filters['customer_name'] = $_GET['customer_name'];
+        }
+        if (!empty($_GET['codemelli'])) {
+            $filters['codemelli'] = $_GET['codemelli'];
+        }
+        if (!empty($_GET['mobile'])) {
+            $filters['mobile'] = $_GET['mobile'];
+        }
+        if (!empty($_GET['status'])) {
+            $filters['status'] = $_GET['status'];
+        }
+        if (!empty($_GET['date_from'])) {
+            $filters['date_from'] = $_GET['date_from'];
+        }
+        if (!empty($_GET['date_to'])) {
+            $filters['date_to'] = $_GET['date_to'];
+        }
+
+        $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+        $perPage = 10;
+
+        if (!empty($filters)) {
+            $result = $this->receptionsModel->getPaginatedFilteredReceptions($filters, $page, $perPage);
+        } else {
+            $result = $this->receptionsModel->getPaginatedReceptions($page, $perPage);
+        }
+
         $data = [
-            "receptions" => $this->receptionsModel->getAllReceptions()
+            'receptions' => $result['receptions'],
+            'pagination' => $result['pagination']
         ];
         return $this->view("admin/receptions/list", $data);
     }
@@ -121,7 +165,7 @@ class Receptions extends Controller
 
         // Get current page from GET parameter, default to 1
         $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-        $perPage = 50; // Number of items per page
+        $perPage = 10; // Number of items per page
 
         // If filters are provided, use the filtered method, otherwise get all receptions
         if (!empty($filters)) {
@@ -335,8 +379,12 @@ class Receptions extends Controller
             exit();
         }
 
+        // دریافت وضعیت‌ها از دیتابیس
+        $product_statuses = $this->statusModel->getAll();
+
         $data = [
-            "reception" => $reception
+            "reception" => $reception,
+            "product_statuses" => $product_statuses
         ];
         return $this->view("admin/receptions/update", $data);
     }
