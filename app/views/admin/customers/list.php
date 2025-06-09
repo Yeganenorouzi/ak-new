@@ -8,43 +8,44 @@
                 <div class="col-span-12 xl:col-span-6">
                     <div class="card dark:bg-zinc-800 dark:border-zinc-600">
                         <div class="card-header p-4">
-                            <h3 class="card-title mb-sm-0 text-lg font-semibold grow text-gray-800 dark:text-gray-100 ">
-                                لیست کاربران</h3>
+                            <h3 class="card-title mb-sm-0 text-lg font-semibold grow text-gray-800 dark:text-gray-100">
+                                لیست مشتریان</h3>
                         </div>
                         <div class="card-body">
                             <div class="card-body p-0 mb-4">
                                 <div
                                     class="bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg shadow-sm p-3 flex flex-col items-center">
-                                    <form action="<?php echo URLROOT; ?>/users" method="GET"
+                                    <form action="<?php echo URLROOT; ?>/customers" method="GET"
                                         class="filter-form w-full max-w-4xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
                                         <div class="form-group flex flex-col">
-                                            <label for="name"
+                                            <label for="search_name"
                                                 class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">نام
                                                 و نام خانوادگی</label>
-                                            <input type="text" id="name" name="name"
-                                                value="<?php echo isset($_GET['name']) ? $_GET['name'] : ''; ?>"
+                                            <input type="text" id="search_name" name="search_name"
+                                                value="<?php echo isset($_GET['search_name']) ? $_GET['search_name'] : ''; ?>"
                                                 class="w-full h-8 text-xs rounded-md border-gray-300 shadow-sm focus:border-violet-500 focus:ring-violet-500 dark:bg-zinc-700 dark:border-zinc-600 dark:text-white px-2">
                                         </div>
                                         <div class="form-group flex flex-col">
-                                            <label for="codemelli"
+                                            <label for="search_codemelli"
                                                 class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">کد
                                                 ملی</label>
-                                            <input type="text" id="codemelli" name="codemelli"
-                                                value="<?php echo isset($_GET['codemelli']) ? $_GET['codemelli'] : ''; ?>"
+                                            <input type="text" id="search_codemelli" name="search_codemelli"
+                                                value="<?php echo isset($_GET['search_codemelli']) ? $_GET['search_codemelli'] : ''; ?>"
                                                 class="w-full h-8 text-xs rounded-md border-gray-300 shadow-sm focus:border-violet-500 focus:ring-violet-500 dark:bg-zinc-700 dark:border-zinc-600 dark:text-white px-2">
                                         </div>
                                         <div class="form-group flex flex-col">
-                                            <label for="mobile"
+                                            <label for="search_mobile"
                                                 class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">موبایل</label>
-                                            <input type="text" id="mobile" name="mobile"
-                                                value="<?php echo isset($_GET['mobile']) ? $_GET['mobile'] : ''; ?>"
+                                            <input type="text" id="search_mobile" name="search_mobile"
+                                                value="<?php echo isset($_GET['search_mobile']) ? $_GET['search_mobile'] : ''; ?>"
                                                 class="w-full h-8 text-xs rounded-md border-gray-300 shadow-sm focus:border-violet-500 focus:ring-violet-500 dark:bg-zinc-700 dark:border-zinc-600 dark:text-white px-2">
                                         </div>
                                         <div class="form-group flex flex-col">
-                                            <label for="email"
-                                                class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">ایمیل</label>
-                                            <input type="text" id="email" name="email"
-                                                value="<?php echo isset($_GET['email']) ? $_GET['email'] : ''; ?>"
+                                            <label for="search_passport"
+                                                class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">شماره
+                                                پاسپورت</label>
+                                            <input type="text" id="search_passport" name="search_passport"
+                                                value="<?php echo isset($_GET['search_passport']) ? $_GET['search_passport'] : ''; ?>"
                                                 class="w-full h-8 text-xs rounded-md border-gray-300 shadow-sm focus:border-violet-500 focus:ring-violet-500 dark:bg-zinc-700 dark:border-zinc-600 dark:text-white px-2">
                                         </div>
                                         <div
@@ -54,12 +55,12 @@
                                                 <i class="fas fa-filter ml-2"></i>
                                                 اعمال فیلتر
                                             </button>
-                                            <a href="<?php echo URLROOT; ?>/users"
+                                            <a href="<?php echo URLROOT; ?>/customers"
                                                 class="inline-flex items-center px-3 py-1 bg-gray-500 text-white rounded-md hover:bg-gray-600 text-xs">
                                                 <i class="fas fa-times ml-2"></i>
                                                 پاک کردن فیلترها
                                             </a>
-                                            <a href="<?php echo URLROOT; ?>/export/exportUsers"
+                                            <a href="<?php echo URLROOT; ?>/export/exportCustomers"
                                                 class="inline-flex items-center px-3 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 text-xs">
                                                 <i class="fas fa-file-excel ml-2"></i>
                                                 دانلود خروجی اکسل
@@ -75,10 +76,6 @@
                                         <thead
                                             class="text-xs text-gray-700 dark:text-gray-100 uppercase bg-gray-50/50 dark:bg-zinc-700/50">
                                             <tr>
-                                                
-                                                <th scope="col" class="px-4 py-3">
-                                                    تصویر
-                                                </th>
                                                 <th scope="col" class="px-4 py-3">
                                                     نام و نام خانوادگی
                                                 </th>
@@ -89,7 +86,10 @@
                                                     موبایل
                                                 </th>
                                                 <th scope="col" class="px-6 py-3">
-                                                    ایمیل
+                                                    شماره پاسپورت
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
+                                                    آدرس
                                                 </th>
                                                 <th scope="col" class="px-6 py-3">
                                                     عملیات
@@ -97,14 +97,9 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($data['users'] as $item): ?>
+                                            <?php foreach ($data['customers'] as $item): ?>
                                                 <tr
                                                     class="bg-white border-b border-gray-100 hover:bg-gray-50/50 dark:bg-zinc-700 dark:hover:bg-zinc-700/50 dark:border-zinc-600">
-                                                  
-                                                    <td class="px-4 py-4">
-                                                        <img src="<?php echo URLROOT; ?>/assets/uploads/users/<?php echo $item->avatar; ?>"
-                                                            alt="تصویر کاربر" class="w-10 h-10 rounded-full object-cover">
-                                                    </td>
                                                     <th scope="row"
                                                         class="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                         <?php echo $item->name; ?>
@@ -116,13 +111,17 @@
                                                         <?php echo $item->mobile; ?>
                                                     </td>
                                                     <td class="px-6 py-4">
-                                                        <?php echo $item->email; ?>
+                                                        <?php echo $item->passport; ?>
+                                                    </td>
+                                                    <td class="px-6 py-4">
+                                                        <?php echo $item->address; ?>
                                                     </td>
                                                     <td class="px-6 py-4">
                                                         <div class="flex flex-row gap-2">
-                                                            <a href="<?php echo URLROOT; ?>/users/edit/<?php echo $item->id; ?>"
+                                                            <a href="<?php echo URLROOT; ?>/customers/edit/<?php echo $item->id; ?>"
                                                                 class="font-medium text-blue-600 dark:text-blue-500 hover:underline">ویرایش</a>
-                                                            <a href="<?php echo URLROOT; ?>/users/delete/<?php echo $item->id; ?>"
+                                                            <a href="javascript:void(0)"
+                                                                onclick="confirmDelete('<?php echo URLROOT; ?>/customers/delete/<?php echo $item->id; ?>', '<?php echo addslashes($item->name); ?>', '<?php echo $item->codemelli; ?>')"
                                                                 class="font-medium text-red-600 dark:text-red-500 hover:underline">حذف</a>
                                                         </div>
                                                     </td>
@@ -141,13 +140,13 @@
                     class="flex items-center justify-between mt-4 px-4 py-3 bg-white dark:bg-zinc-800 border-t border-gray-200 dark:border-zinc-700 sm:px-6">
                     <div class="flex-1 flex justify-between sm:hidden">
                         <?php if ($data['pagination']['current_page'] > 1): ?>
-                            <a href="<?php echo URLROOT; ?>/users?page=<?php echo $data['pagination']['current_page'] - 1; ?><?php echo !empty($_GET) ? '&' . http_build_query(array_diff_key($_GET, ['page' => ''])) : ''; ?>"
+                            <a href="<?php echo URLROOT; ?>/customers?page=<?php echo $data['pagination']['current_page'] - 1; ?><?php echo !empty($_GET) ? '&' . http_build_query(array_diff_key($_GET, ['page' => ''])) : ''; ?>"
                                 class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-zinc-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-600">
                                 قبلی
                             </a>
                         <?php endif; ?>
                         <?php if ($data['pagination']['current_page'] < $data['pagination']['total_pages']): ?>
-                            <a href="<?php echo URLROOT; ?>/users?page=<?php echo $data['pagination']['current_page'] + 1; ?><?php echo !empty($_GET) ? '&' . http_build_query(array_diff_key($_GET, ['page' => ''])) : ''; ?>"
+                            <a href="<?php echo URLROOT; ?>/customers?page=<?php echo $data['pagination']['current_page'] + 1; ?><?php echo !empty($_GET) ? '&' . http_build_query(array_diff_key($_GET, ['page' => ''])) : ''; ?>"
                                 class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-zinc-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-600">
                                 بعدی
                             </a>
@@ -160,7 +159,7 @@
                         <div>
                             <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
                                 <?php if ($data['pagination']['current_page'] > 1): ?>
-                                    <a href="<?php echo URLROOT; ?>/users?page=<?php echo $data['pagination']['current_page'] - 1; ?><?php echo !empty($_GET) ? '&' . http_build_query(array_diff_key($_GET, ['page' => ''])) : ''; ?>"
+                                    <a href="<?php echo URLROOT; ?>/customers?page=<?php echo $data['pagination']['current_page'] - 1; ?><?php echo !empty($_GET) ? '&' . http_build_query(array_diff_key($_GET, ['page' => ''])) : ''; ?>"
                                         class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 dark:border-zinc-600 bg-white dark:bg-zinc-700 text-sm font-medium text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-600">
                                         <span class="sr-only">قبلی</span>
                                         <i class="fas fa-chevron-right"></i>
@@ -171,7 +170,7 @@
                                 $start = max(1, $data['pagination']['current_page'] - $range);
                                 $end = min($data['pagination']['total_pages'], $data['pagination']['current_page'] + $range);
                                 if ($start > 1) {
-                                    echo '<a href="' . URLROOT . '/users?page=1' . (!empty($_GET) ? '&' . http_build_query(array_diff_key($_GET, ['page' => ''])) : '') . '" 
+                                    echo '<a href="' . URLROOT . '/customers?page=1' . (!empty($_GET) ? '&' . http_build_query(array_diff_key($_GET, ['page' => ''])) : '') . '" 
                                         class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-zinc-600 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-600">
                                         1
                                       </a>';
@@ -187,7 +186,7 @@
                                             ' . $i . '
                                           </span>';
                                     } else {
-                                        echo '<a href="' . URLROOT . '/users?page=' . $i . (!empty($_GET) ? '&' . http_build_query(array_diff_key($_GET, ['page' => ''])) : '') . '" 
+                                        echo '<a href="' . URLROOT . '/customers?page=' . $i . (!empty($_GET) ? '&' . http_build_query(array_diff_key($_GET, ['page' => ''])) : '') . '" 
                                             class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-zinc-600 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-600">
                                             ' . $i . '
                                           </a>';
@@ -199,14 +198,14 @@
                                             ...
                                           </span>';
                                     }
-                                    echo '<a href="' . URLROOT . '/users?page=' . $data['pagination']['total_pages'] . (!empty($_GET) ? '&' . http_build_query(array_diff_key($_GET, ['page' => ''])) : '') . '" 
+                                    echo '<a href="' . URLROOT . '/customers?page=' . $data['pagination']['total_pages'] . (!empty($_GET) ? '&' . http_build_query(array_diff_key($_GET, ['page' => ''])) : '') . '" 
                                         class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-zinc-600 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-600">
                                         ' . $data['pagination']['total_pages'] . '
                                       </a>';
                                 }
                                 ?>
                                 <?php if ($data['pagination']['current_page'] < $data['pagination']['total_pages']): ?>
-                                    <a href="<?php echo URLROOT; ?>/users?page=<?php echo $data['pagination']['current_page'] + 1; ?><?php echo !empty($_GET) ? '&' . http_build_query(array_diff_key($_GET, ['page' => ''])) : ''; ?>"
+                                    <a href="<?php echo URLROOT; ?>/customers?page=<?php echo $data['pagination']['current_page'] + 1; ?><?php echo !empty($_GET) ? '&' . http_build_query(array_diff_key($_GET, ['page' => ''])) : ''; ?>"
                                         class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 dark:border-zinc-600 bg-white dark:bg-zinc-700 text-sm font-medium text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-600">
                                         <span class="sr-only">بعدی</span>
                                         <i class="fas fa-chevron-left"></i>
@@ -221,3 +220,30 @@
     </div>
     <?php require_once(APPROOT . "/views/public/footer.php"); ?>
 </div>
+
+<script>
+    function confirmDelete(deleteUrl, name, codemelli) {
+        Swal.fire({
+            title: 'آیا مطمئن هستید؟',
+            text: 'آیا می‌خواهید مشتری با مشخصات زیر را حذف کنید؟\nنام: ' + name + '\nکد ملی: ' + codemelli,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'بله، حذف شود',
+            cancelButtonText: 'انصراف',
+            showCloseButton: true,
+            width: '500px',
+            customClass: {
+                title: 'text-sm',
+                content: 'text-xs',
+                confirmButton: 'text-xs',
+                cancelButton: 'text-xs'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = deleteUrl;
+            }
+        });
+    }
+</script>

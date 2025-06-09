@@ -80,7 +80,7 @@ class CustomersModel
         return $this->db->fetch();
     }
 
-    public function searchCustomers($search_name = '', $search_codemelli = '', $search_mobile = '', $page = 1, $per_page = 20)
+    public function searchCustomers($search_name = '', $search_codemelli = '', $search_mobile = '', $search_passport = '', $page = 1, $per_page = 20)
     {
         $offset = ($page - 1) * $per_page;
         $sql = "SELECT * FROM customers WHERE 1=1";
@@ -101,6 +101,11 @@ class CustomersModel
             $params[':mobile'] = '%' . $search_mobile . '%';
         }
 
+        if (!empty($search_passport)) {
+            $sql .= " AND passport LIKE :passport";
+            $params[':passport'] = '%' . $search_passport . '%';
+        }
+
         $sql .= " ORDER BY id DESC LIMIT :limit OFFSET :offset";
         $params[':limit'] = $per_page;
         $params[':offset'] = $offset;
@@ -114,7 +119,7 @@ class CustomersModel
         return $this->db->fetchAll();
     }
 
-    public function countSearchResults($search_name = '', $search_codemelli = '', $search_mobile = '')
+    public function countSearchResults($search_name = '', $search_codemelli = '', $search_mobile = '', $search_passport = '')
     {
         $sql = "SELECT COUNT(*) as total FROM customers WHERE 1=1";
         $params = [];
@@ -132,6 +137,11 @@ class CustomersModel
         if (!empty($search_mobile)) {
             $sql .= " AND mobile LIKE :mobile";
             $params[':mobile'] = '%' . $search_mobile . '%';
+        }
+
+        if (!empty($search_passport)) {
+            $sql .= " AND passport LIKE :passport";
+            $params[':passport'] = '%' . $search_passport . '%';
         }
 
         $this->db->query($sql);

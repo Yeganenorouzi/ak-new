@@ -8,6 +8,8 @@ class Export extends Controller
 {
     private $receptionsModel;
     private $cardsModel;
+    private $customersModel;
+    private $usersModel;
 
     public function __construct()
     {
@@ -20,8 +22,10 @@ class Export extends Controller
             exit();
         }
 
-        $this->receptionsModel = $this->model("ReceptionsModel"); 
+        $this->receptionsModel = $this->model("ReceptionsModel");
         $this->cardsModel = $this->model("CardsModel");
+        $this->customersModel = $this->model("CustomersModel");
+        $this->usersModel = $this->model("UsersModel");
     }
 
     public function exportReceptions()
@@ -57,8 +61,8 @@ class Export extends Controller
             $sheet->setCellValue('E' . $row, $item->address ?? 'N/A');
             // تبدیل تاریخ میلادی به شمسی
             $persianDate = empty($item->created_at) ? 'N/A' : \Morilog\Jalali\Jalalian::fromDateTime($item->created_at)->format('Y/m/d');
-            $sheet->setCellValue('F' . $row, $persianDate); 
-            
+            $sheet->setCellValue('F' . $row, $persianDate);
+
             $sheet->setCellValue('G' . $row, $item->product_status ?? 'N/A');
             $sheet->setCellValue('H' . $row, $item->dex ?? 'N/A');
             $sheet->setCellValue('I' . $row, $item->guarantee_status ?? 'N/A');
@@ -155,6 +159,103 @@ class Export extends Controller
         // ارسال هدرهای دانلود
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="cards.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+
+        // پاک کردن هر خروجی اضافی قبل از ارسال فایل
+        ob_end_clean();
+
+        // ارسال فایل به خروجی
+        $writer->save('php://output');
+        exit();
+    }
+
+    public function exportCustomers()
+    {
+        // پاک کردن هرگونه خروجی قبلی برای جلوگیری از خرابی فایل
+        ob_start();
+
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // تنظیم هدرها
+        $sheet->setCellValue('A1', 'نام و نام خانوادگی');
+        $sheet->setCellValue('B1', 'کد ملی');
+        $sheet->setCellValue('C1', 'موبایل');
+        $sheet->setCellValue('D1', 'تلفن ثابت');
+        $sheet->setCellValue('E1', 'شماره پاسپورت');
+        $sheet->setCellValue('F1', 'استان');
+        $sheet->setCellValue('G1', 'شهر');
+        $sheet->setCellValue('H1', 'آدرس');
+        $sheet->setCellValue('I1', 'کد پستی');
+
+        $row = 2;
+        $customers = $this->customersModel->getAllCustomers();
+        foreach ($customers as $item) {
+            $sheet->setCellValue('A' . $row, $item->name ?? 'N/A');
+            $sheet->setCellValue('B' . $row, $item->codemelli ?? 'N/A');
+            $sheet->setCellValue('C' . $row, $item->mobile ?? 'N/A');
+            $sheet->setCellValue('D' . $row, $item->phone ?? 'N/A');
+            $sheet->setCellValue('E' . $row, $item->passport ?? 'N/A');
+            $sheet->setCellValue('F' . $row, $item->ostan ?? 'N/A');
+            $sheet->setCellValue('G' . $row, $item->shahr ?? 'N/A');
+            $sheet->setCellValue('H' . $row, $item->address ?? 'N/A');
+            $sheet->setCellValue('I' . $row, $item->codeposti ?? 'N/A');
+            $row++;
+        }
+
+        // ارسال هدرهای دانلود
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="customers.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+
+        // پاک کردن هر خروجی اضافی قبل از ارسال فایل
+        ob_end_clean();
+
+        // ارسال فایل به خروجی
+        $writer->save('php://output');
+        exit();
+    }
+
+    public function exportUsers()
+    {
+        // پاک کردن هرگونه خروجی قبلی برای جلوگیری از خرابی فایل
+        ob_start();
+
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // تنظیم هدرها
+        $sheet->setCellValue('A1', 'نام و نام خانوادگی');
+        $sheet->setCellValue('B1', 'کد ملی');
+        $sheet->setCellValue('C1', 'موبایل');
+        $sheet->setCellValue('D1', 'ایمیل');
+        $sheet->setCellValue('E1', 'آدرس');
+        $sheet->setCellValue('F1', 'کد پستی');
+        $sheet->setCellValue('G1', 'تاریخ ثبت نام');
+
+        $row = 2;
+        $users = $this->usersModel->getAllUsers();
+        foreach ($users as $item) {
+            $sheet->setCellValue('A' . $row, $item->name ?? 'N/A');
+            $sheet->setCellValue('B' . $row, $item->codemelli ?? 'N/A');
+            $sheet->setCellValue('C' . $row, $item->mobile ?? 'N/A');
+            $sheet->setCellValue('D' . $row, $item->email ?? 'N/A');
+            $sheet->setCellValue('E' . $row, $item->address ?? 'N/A');
+            $sheet->setCellValue('F' . $row, $item->codeposti ?? 'N/A');
+
+            // تبدیل تاریخ میلادی به شمسی
+            $persianDate = empty($item->created_at) ? 'N/A' : \Morilog\Jalali\Jalalian::fromDateTime($item->created_at)->format('Y/m/d');
+            $sheet->setCellValue('G' . $row, $persianDate);
+            $row++;
+        }
+
+        // ارسال هدرهای دانلود
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="users.xlsx"');
         header('Cache-Control: max-age=0');
 
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);

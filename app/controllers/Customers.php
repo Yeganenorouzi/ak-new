@@ -13,14 +13,15 @@ class Customers extends Controller
         $search_name = $_GET['search_name'] ?? '';
         $search_codemelli = $_GET['search_codemelli'] ?? '';
         $search_mobile = $_GET['search_mobile'] ?? '';
+        $search_passport = $_GET['search_passport'] ?? '';
         $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
-        $per_page = 20;
+        $per_page = 10;
 
-        $total_results = $this->customersModel->countSearchResults($search_name, $search_codemelli, $search_mobile);
+        $total_results = $this->customersModel->countSearchResults($search_name, $search_codemelli, $search_mobile, $search_passport);
         $total_pages = ceil($total_results / $per_page);
 
         $data = [
-            "customers" => $this->customersModel->searchCustomers($search_name, $search_codemelli, $search_mobile, $page, $per_page),
+            "customers" => $this->customersModel->searchCustomers($search_name, $search_codemelli, $search_mobile, $search_passport, $page, $per_page),
             "pagination" => [
                 "current_page" => $page,
                 "total_pages" => $total_pages,
@@ -28,7 +29,7 @@ class Customers extends Controller
                 "per_page" => $per_page
             ]
         ];
-        return $this->view("admin/customers/read", $data);
+        return $this->view("admin/customers/list", $data);
     }
 
 
@@ -101,7 +102,7 @@ class Customers extends Controller
                 "per_page" => $per_page
             ]
         ];
-        return $this->view("agent/customers/read", $data);
+        return $this->view("agent/customers/list", $data);
     }
 
     public function edit($id)

@@ -58,6 +58,22 @@
     background-color: rgba(139, 92, 246, 0.05);
     color: #8b5cf6;
   }
+
+  /* Ensure MetisMenu works properly */
+  .metismenu .mm-collapse {
+    display: none;
+  }
+
+  .metismenu .mm-collapse.mm-show {
+    display: block !important;
+  }
+
+  .metismenu .mm-collapsing {
+    position: relative;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.35s ease;
+  }
 </style>
 
 <div
@@ -122,7 +138,7 @@
           </a>
           <ul>
             <li>
-              <a <a href="<?php echo URLROOT . "/users/indexAgents" ?> "
+              <a href="<?php echo URLROOT . "/users/indexAgents" ?> "
                 class="pr-14 pl-4 py-2 block text-[13.5px] font-medium text-gray-700 transition-all duration-150 ease-linear hover:text-violet-500 dark:text-gray-300 dark:active:text-white dark:hover:text-white">
                 لیست
                 نمایندگان </a>
@@ -215,4 +231,7 @@
     <!-- Sidebar -->
   </div>
 </div>
+
+
+
 <!-- Left Sidebar End -->
