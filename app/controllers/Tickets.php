@@ -17,7 +17,7 @@ class Tickets extends Controller
         $ticketsModel = $this->model('TicketsModel');
 
         // تنظیمات پیجینیشن
-        $per_page = 30;
+        $per_page = 10;
         $current_page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 
         // فیلترها
@@ -50,7 +50,7 @@ class Tickets extends Controller
         $ticketsModel = $this->model('TicketsModel');
 
         // تنظیمات پیجینیشن
-        $per_page = 30;
+        $per_page = 10;
         $current_page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 
         // فیلترها

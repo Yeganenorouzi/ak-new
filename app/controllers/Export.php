@@ -267,4 +267,52 @@ class Export extends Controller
         $writer->save('php://output');
         exit();
     }
+
+    public function exportAgents()
+    {
+        // پاک کردن هرگونه خروجی قبلی برای جلوگیری از خرابی فایل
+        ob_start();
+
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // تنظیم هدرها
+        $sheet->setCellValue('A1', 'نام و نام خانوادگی');
+        $sheet->setCellValue('B1', 'کد ملی');
+        $sheet->setCellValue('C1', 'موبایل');
+        $sheet->setCellValue('D1', 'ایمیل');
+        $sheet->setCellValue('E1', 'آدرس');
+        $sheet->setCellValue('F1', 'کد پستی');
+        $sheet->setCellValue('G1', 'تاریخ ثبت نام');
+
+        $row = 2;
+        $agents = $this->usersModel->getAllAgents();
+        foreach ($agents as $item) {
+            $sheet->setCellValue('A' . $row, $item->name ?? 'N/A');
+            $sheet->setCellValue('B' . $row, $item->codemelli ?? 'N/A');
+            $sheet->setCellValue('C' . $row, $item->mobile ?? 'N/A');
+            $sheet->setCellValue('D' . $row, $item->email ?? 'N/A');
+            $sheet->setCellValue('E' . $row, $item->address ?? 'N/A');
+            $sheet->setCellValue('F' . $row, $item->codeposti ?? 'N/A');
+
+            // تبدیل تاریخ میلادی به شمسی
+            $persianDate = empty($item->created_at) ? 'N/A' : \Morilog\Jalali\Jalalian::fromDateTime($item->created_at)->format('Y/m/d');
+            $sheet->setCellValue('G' . $row, $persianDate);
+            $row++;
+        }
+
+        // ارسال هدرهای دانلود
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="agents.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+
+        // پاک کردن هر خروجی اضافی قبل از ارسال فایل
+        ob_end_clean();
+
+        // ارسال فایل به خروجی
+        $writer->save('php://output');
+        exit();
+    }
 }
