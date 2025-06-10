@@ -67,6 +67,8 @@ class Dashboard extends Controller
   {
     $data = [
       'total_receptions_by_agent' => $this->receptionsModel->getTotalReceptionsByAgent(),
+      'active_tickets' => 0, // می‌توانید متد مناسب را برای تیکت‌ها اضافه کنید
+      'recent_receptions' => $this->receptionsModel->getRecentReceptionsByAgent(5),
       'status_labels' => [
         'دریافت از دفتر مرکزی',
         'پذیرش در نمایندگی',
@@ -105,8 +107,14 @@ class Dashboard extends Controller
       $endDate = $data['endDate'];
 
       try {
-        // Get filtered data based on date range
-        $filteredCounts = $this->receptionsModel->getReceptionCountsByStatusWithDateFilter($startDate, $endDate);
+        // Check if user is admin or agent and get appropriate filtered data
+        if ($_SESSION['is_admin'] == 1) {
+          // Admin - get all receptions
+          $filteredCounts = $this->receptionsModel->getReceptionCountsByStatusWithDateFilter($startDate, $endDate);
+        } else {
+          // Agent - get only their receptions (need to create this method)
+          $filteredCounts = $this->receptionsModel->getReceptionCountsByStatusForAgentWithDateFilter($startDate, $endDate);
+        }
 
         $statusLabels = [
           'دریافت از دفتر مرکزی',

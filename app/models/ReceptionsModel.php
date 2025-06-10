@@ -79,6 +79,37 @@ class ReceptionsModel
     return $result->total;
   }
 
+  public function getRecentReceptionsByAgent($limit = 5)
+  {
+    if (!isset($_SESSION["id"])) {
+      throw new Exception("User not logged in");
+    }
+
+    try {
+      $query = "
+            SELECT 
+                receptions.id,
+                receptions.created_at,
+                receptions.product_status,
+                customers.name AS customer_name
+            FROM receptions
+            INNER JOIN customers ON receptions.customer_id = customers.id
+            WHERE receptions.user_id = :user_id
+            ORDER BY receptions.id DESC
+            LIMIT :limit
+        ";
+
+      $this->db->query($query);
+      $this->db->bind(':user_id', $_SESSION["id"]);
+      $this->db->bind(':limit', $limit);
+      $receptions = $this->db->fetchAll();
+      return $receptions;
+    } catch (Exception $e) {
+      echo 'خطا در دریافت آخرین پذیرش‌های نماینده: ' . $e->getMessage();
+      return [];
+    }
+  }
+
   public function getAllReceptionsByAgent()
   {
     if (!isset($_SESSION["id"])) {
@@ -604,6 +635,55 @@ class ReceptionsModel
         WHERE DATE(created_at) >= :start_date 
         AND DATE(created_at) <= :end_date");
 
+    $this->db->bind(":start_date", $startDate);
+    $this->db->bind(":end_date", $endDate);
+    $result = $this->db->fetch();
+
+    return [
+      $result->status1 ?? 0,
+      $result->status2 ?? 0,
+      $result->status3 ?? 0,
+      $result->status4 ?? 0,
+      $result->status5 ?? 0,
+      $result->status6 ?? 0,
+      $result->status7 ?? 0,
+      $result->status8 ?? 0,
+      $result->status9 ?? 0,
+      $result->status10 ?? 0,
+      $result->status11 ?? 0,
+      $result->status12 ?? 0,
+      $result->status13 ?? 0,
+      $result->status14 ?? 0
+    ];
+  }
+
+  public function getReceptionCountsByStatusForAgentWithDateFilter($startDate, $endDate)
+  {
+    if (!isset($_SESSION["id"])) {
+      throw new Exception("User not logged in");
+    }
+
+    $this->db->query("SELECT 
+        SUM(CASE WHEN product_status = 'دریافت از دفتر مرکزی' THEN 1 ELSE 0 END) as status1,
+        SUM(CASE WHEN product_status = 'پذیرش در نمایندگی' THEN 1 ELSE 0 END) as status2,
+        SUM(CASE WHEN product_status = 'ارسال از نمایندگی به دفتر مرکزی' THEN 1 ELSE 0 END) as status3,
+        SUM(CASE WHEN product_status = 'در انتظار تکمیل مدارک' THEN 1 ELSE 0 END) as status4,
+        SUM(CASE WHEN product_status = 'ارسال از دفتر مرکزی به نمایندگی' THEN 1 ELSE 0 END) as status5,
+        SUM(CASE WHEN product_status = 'تحویل به مشتری' THEN 1 ELSE 0 END) as status6,
+        SUM(CASE WHEN product_status = 'دریافت از نمایندگی' THEN 1 ELSE 0 END) as status7,
+        SUM(CASE WHEN product_status = 'در انتظار کارشناسی' THEN 1 ELSE 0 END) as status8,
+        SUM(CASE WHEN product_status = 'در انتظار قطعه' THEN 1 ELSE 0 END) as status9,
+        SUM(CASE WHEN product_status = 'در حال تعویض' THEN 1 ELSE 0 END) as status10,
+        SUM(CASE WHEN product_status = 'در حال انجام کار در دفتر مرکزی' THEN 1 ELSE 0 END) as status11,
+        SUM(CASE WHEN product_status = 'اتمام تعمیر' THEN 1 ELSE 0 END) as status12,
+        SUM(CASE WHEN product_status = 'در انتظار تایید هزینه' THEN 1 ELSE 0 END) as status13,
+        SUM(CASE WHEN product_status = 'عدم موافقت با هزینه - مرجوع' THEN 1 ELSE 0 END) as status14
+        FROM receptions 
+        WHERE user_id = :user_id
+        AND DATE(created_at) >= :start_date 
+        AND DATE(created_at) <= :end_date");
+
+    $this->db->bind(":user_id", $_SESSION["id"]);
     $this->db->bind(":start_date", $startDate);
     $this->db->bind(":end_date", $endDate);
     $result = $this->db->fetch();

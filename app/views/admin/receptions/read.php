@@ -7,20 +7,27 @@ use Hekmatinasser\Verta\Verta;
     <div class="page-content dark:bg-zinc-700">
         <div class="container-fluid px-[0.625rem]">
 
-            <form action="<?php echo URLROOT; ?>/receptions/update/<?php echo $data['reception']->id; ?>" method="POST" enctype="multipart/form-data" id="reception-form">
+            <form action="<?php echo URLROOT; ?>/receptions/update/<?php echo $data['reception']->id; ?>" method="POST"
+                enctype="multipart/form-data" id="reception-form">
                 <!-- Header section with title and button -->
                 <nav class="flex" aria-label="Breadcrumb">
                     <ol class="inline-flex items-center space-x-3 ltr:md:space-x-3 rtl:md:space-x-0">
                         <li class="inline-flex items-center">
                             <div class="mb-4">
-                                <h5 class="ltr:ml-1 rtl:mr-1 text-sm font-medium text-gray-500 hover:text-gray-900 ltr:md:ml-2 rtl:md:mr-2 dark:text-gray-100 dark:hover:text-white">
-                                    شماره پذیرش : <?php echo isset($data['reception']->id) ? htmlspecialchars($data['reception']->id) : 'N/A'; ?>
+                                <h5
+                                    class="ltr:ml-1 rtl:mr-1 text-sm font-medium text-gray-500 hover:text-gray-900 ltr:md:ml-2 rtl:md:mr-2 dark:text-gray-100 dark:hover:text-white">
+                                    شماره پذیرش :
+                                    <?php echo isset($data['reception']->id) ? htmlspecialchars($data['reception']->id) : 'N/A'; ?>
                                 </h5>
                             </div>
                         </li>
                         <li class="inline-flex items-center mr-10">
                             <div class="mb-4">
-                                <h5 class="ltr:ml-1 rtl:mr-1 text-sm font-medium text-gray-500 hover:text-gray-900 ltr:md:ml-2 rtl:md:mr-2 dark:text-gray-100 dark:hover:text-white">تاریخ پذیرش : <?php echo isset($data['reception']->created_at) ? Verta::instance($data['reception']->created_at)->format('Y/m/d') : 'N/A'; ?></h5>
+                                <h5
+                                    class="ltr:ml-1 rtl:mr-1 text-sm font-medium text-gray-500 hover:text-gray-900 ltr:md:ml-2 rtl:md:mr-2 dark:text-gray-100 dark:hover:text-white">
+                                    تاریخ پذیرش :
+                                    <?php echo isset($data['reception']->created_at) ? Verta::instance($data['reception']->created_at)->format('Y/m/d') : 'N/A'; ?>
+                                </h5>
                             </div>
                         </li>
                     </ol>
@@ -48,48 +55,48 @@ use Hekmatinasser\Verta\Verta;
                                 <div class="grid grid-cols-12 gap-5">
                                     <div class="col-span-12 lg:col-span-6">
                                         <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">نام و نام خانوادگی مشتری</label>
+                                            <label for="example-text-input"
+                                                class="block font-medium text-gray-700 dark:text-gray-100 mb-2">نام و
+                                                نام خانوادگی مشتری</label>
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
-                                                type="text"
-                                                id="example-text-input"
-                                                name="name"
-                                                readonly
+                                                type="text" id="example-text-input" name="name" readonly
                                                 value="<?php echo htmlspecialchars($data['reception']->name ?? ''); ?>">
                                         </div>
                                         <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">شماره تلفن همراه</label>
+                                            <label for="example-text-input"
+                                                class="block font-medium text-gray-700 dark:text-gray-100 mb-2">شماره
+                                                تلفن همراه</label>
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
-                                                type="tel"
-                                                id="example-date-input"
-                                                name="mobile"
-                                                readonly
+                                                type="tel" id="example-date-input" name="mobile" readonly
                                                 value="<?php echo htmlspecialchars($data['reception']->mobile ?? ''); ?>">
                                         </div>
                                         <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">شماره تلفن ثابت</label>
+                                            <label for="example-text-input"
+                                                class="block font-medium text-gray-700 dark:text-gray-100 mb-2">شماره
+                                                تلفن ثابت</label>
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
-                                                type="tel"
-                                                id="example-date-input"
-                                                name="phone"
-                                                readonly
+                                                type="tel" id="example-date-input" name="phone" readonly
                                                 value="<?php echo htmlspecialchars($data['reception']->phone ?? ''); ?>">
                                         </div>
                                         <div class="mb-4">
                                             <div class="mb-3">
-                                                <label class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">استان</label>
-                                                <select class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
+                                                <label
+                                                    class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">استان</label>
+                                                <select
+                                                    class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
                                                     name="ostan" id="province-select" readonly>
                                                     <option value="">انتخاب استان</option>
                                                     <?php
                                                     foreach (ProvinceHelper::getProvinces() as $province):
-                                                    ?>
-                                                        <option <?php echo (isset($data['reception']->ostan) && $data['reception']->ostan === $province) ? 'selected' : ''; ?> value="<?php echo $province; ?>">
+                                                        ?>
+                                                        <option <?php echo (isset($data['reception']->ostan) && $data['reception']->ostan === $province) ? 'selected' : ''; ?>
+                                                            value="<?php echo $province; ?>">
                                                             <?php echo $province; ?>
                                                         </option>
-                                                    <?php
+                                                        <?php
                                                     endforeach;
                                                     ?>
                                                 </select>
@@ -98,18 +105,21 @@ use Hekmatinasser\Verta\Verta;
 
                                         <div class="mb-4">
                                             <div class="mb-3">
-                                                <label class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">شهر</label>
-                                                <select class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
+                                                <label
+                                                    class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">شهر</label>
+                                                <select
+                                                    class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
                                                     name="shahr" readonly>
                                                     <option value="">انتخاب شهر</option>
                                                     <?php
                                                     foreach (ProvinceHelper::getCities() as $province => $cities):
                                                         foreach ($cities as $city):
-                                                    ?>
-                                                            <option <?php echo (isset($data['reception']->shahr) && $data['reception']->shahr === $city) ? 'selected' : ''; ?> value="<?php echo $city; ?>">
+                                                            ?>
+                                                            <option <?php echo (isset($data['reception']->shahr) && $data['reception']->shahr === $city) ? 'selected' : ''; ?>
+                                                                value="<?php echo $city; ?>">
                                                                 <?php echo $city; ?>
                                                             </option>
-                                                    <?php
+                                                            <?php
                                                         endforeach;
                                                     endforeach;
                                                     ?>
@@ -123,48 +133,42 @@ use Hekmatinasser\Verta\Verta;
                                     </div>
                                     <div class="col-span-12 lg:col-span-6">
                                         <div class="mb-4">
-                                            <label for="codemelli" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">کدملی</label>
+                                            <label for="codemelli"
+                                                class="block font-medium text-gray-700 dark:text-gray-100 mb-2">کدملی</label>
                                             <div class="relative">
                                                 <input
                                                     class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100 pr-[90px]"
-                                                    type="text"
-                                                    id="codemelli"
-                                                    name="codemelli"
-                                                    readonly
+                                                    type="text" id="codemelli" name="codemelli" readonly
                                                     value="<?php echo htmlspecialchars($data['reception']->codemelli ?? ''); ?>">
 
                                             </div>
                                         </div>
                                         <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">شماره پاسپورت</label>
+                                            <label for="example-text-input"
+                                                class="block font-medium text-gray-700 dark:text-gray-100 mb-2">شماره
+                                                پاسپورت</label>
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
-                                                type="text"
-                                                id="example-date-input"
-                                                name="passport"
-                                                readonly
+                                                type="text" id="example-date-input" name="passport" readonly
                                                 value="<?php echo htmlspecialchars($data['reception']->passport ?? ''); ?>">
                                         </div>
                                         <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">کد پستی</label>
+                                            <label for="example-text-input"
+                                                class="block font-medium text-gray-700 dark:text-gray-100 mb-2">کد
+                                                پستی</label>
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
-                                                type="text"
-                                                id="example-date-input"
-                                                name="codeposti"
-                                                readonly
+                                                type="text" id="example-date-input" name="codeposti" readonly
                                                 value="<?php echo htmlspecialchars($data['reception']->codeposti ?? ''); ?>">
                                         </div>
 
                                         <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">آدرس</label>
+                                            <label for="example-text-input"
+                                                class="block font-medium text-gray-700 dark:text-gray-100 mb-2">آدرس</label>
                                             <textarea
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
-                                                style="height: 156px; resize: none;"
-                                                type="text"
-                                                id="example-text-input"
-                                                readonly
-                                                name="address"><?php echo htmlspecialchars($data['reception']->address ?? ''); ?>
+                                                style="height: 156px; resize: none;" type="text" id="example-text-input"
+                                                readonly name="address"><?php echo htmlspecialchars($data['reception']->address ?? ''); ?>
                                             </textarea>
 
                                         </div>
@@ -184,68 +188,66 @@ use Hekmatinasser\Verta\Verta;
                                 <div class="grid grid-cols-12 gap-5">
                                     <div class="col-span-12 lg:col-span-6">
                                         <div class="mb-4">
-                                            <label for="serial" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">سریال</label>
+                                            <label for="serial"
+                                                class="block font-medium text-gray-700 dark:text-gray-100 mb-2">سریال</label>
                                             <div class="relative">
                                                 <input
                                                     class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100 pr-[90px]"
-                                                    type="text"
-                                                    id="serial"
-                                                    name="serial"
-                                                    readonly
+                                                    type="text" id="serial" name="serial" readonly
                                                     value="<?php echo htmlspecialchars($data['reception']->serial ?? ''); ?>">
 
                                             </div>
                                         </div>
 
                                         <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">عنوان درختواره دستگاه </label>
+                                            <label for="example-text-input"
+                                                class="block font-medium text-gray-700 dark:text-gray-100 mb-2">عنوان
+                                                درختواره دستگاه </label>
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
-                                                type="text"
-                                                name="model"
-                                                readonly
+                                                type="text" name="model" readonly
                                                 value="<?php echo htmlspecialchars($data['reception']->model ?? ''); ?>"
                                                 id="example-text-input">
                                         </div>
                                         <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">حافظه داخلی دستگاه </label>
+                                            <label for="example-text-input"
+                                                class="block font-medium text-gray-700 dark:text-gray-100 mb-2">حافظه
+                                                داخلی دستگاه </label>
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
-                                                type="text"
-                                                name="att1_code"
-                                                readonly
+                                                type="text" name="att1_code" readonly
                                                 value="<?php echo htmlspecialchars($data['reception']->att1_code ?? ''); ?>"
                                                 id="example-text-input">
                                         </div>
 
                                         <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">رنگ دستگاه </label>
+                                            <label for="example-text-input"
+                                                class="block font-medium text-gray-700 dark:text-gray-100 mb-2">رنگ
+                                                دستگاه </label>
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
-                                                type="text"
-                                                name="att3_code"
-                                                readonly
+                                                type="text" name="att3_code" readonly
                                                 value="<?php echo htmlspecialchars($data['reception']->att3_code ?? ''); ?>"
                                                 id="example-text-input">
                                         </div>
 
                                         <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">نام شرکت واردکننده دستگاه</label>
+                                            <label for="example-text-input"
+                                                class="block font-medium text-gray-700 dark:text-gray-100 mb-2">نام شرکت
+                                                واردکننده دستگاه</label>
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
-                                                type="text"
-                                                name="company"
-                                                readonly
+                                                type="text" name="company" readonly
                                                 value="<?php echo htmlspecialchars($data['reception']->company ?? ''); ?>"
                                                 id="example-text-input">
                                         </div>
                                         <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">تاریخ شروع گارانتی دستگاه</label>
+                                            <label for="example-text-input"
+                                                class="block font-medium text-gray-700 dark:text-gray-100 mb-2">تاریخ
+                                                شروع گارانتی دستگاه</label>
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
-                                                type="text"
-                                                name="start_guarantee"
-                                                readonly
+                                                type="text" name="start_guarantee" readonly
                                                 value="<?php echo htmlspecialchars($data['reception']->start_guarantee ?? ''); ?>"
                                                 id="example-text-input">
                                         </div>
@@ -254,63 +256,63 @@ use Hekmatinasser\Verta\Verta;
                                     </div>
                                     <div class="col-span-12 lg:col-span-6">
                                         <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">سریال دوم دستگاه</label>
+                                            <label for="example-text-input"
+                                                class="block font-medium text-gray-700 dark:text-gray-100 mb-2">سریال
+                                                دوم دستگاه</label>
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
-                                                type="text"
-                                                name="serial2"
-                                                readonly
+                                                type="text" name="serial2" readonly
                                                 value="<?php echo htmlspecialchars($data['reception']->serial2 ?? ''); ?>"
                                                 id="example-text-input">
                                         </div>
                                         <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">عنوان دستگاه</label>
+                                            <label for="example-text-input"
+                                                class="block font-medium text-gray-700 dark:text-gray-100 mb-2">عنوان
+                                                دستگاه</label>
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
-                                                type="text"
-                                                name="title"
-                                                readonly
+                                                type="text" name="title" readonly
                                                 value="<?php echo htmlspecialchars($data['reception']->title ?? ''); ?>"
                                                 id="example-text-input">
                                         </div>
                                         <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">حافظه RAM دستگاه </label>
+                                            <label for="example-text-input"
+                                                class="block font-medium text-gray-700 dark:text-gray-100 mb-2">حافظه
+                                                RAM دستگاه </label>
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
-                                                type="text"
-                                                name="att2_code"
-                                                readonly
+                                                type="text" name="att2_code" readonly
                                                 value="<?php echo htmlspecialchars($data['reception']->att2_code ?? ''); ?>"
                                                 id="example-text-input">
                                         </div>
 
                                         <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">کشور سازنده دستگاه </label>
+                                            <label for="example-text-input"
+                                                class="block font-medium text-gray-700 dark:text-gray-100 mb-2">کشور
+                                                سازنده دستگاه </label>
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
-                                                type="text"
-                                                name="att4_code"
-                                                readonly
+                                                type="text" name="att4_code" readonly
                                                 value="<?php echo htmlspecialchars($data['reception']->att4_code ?? ''); ?>"
                                                 id="example-text-input">
                                         </div>
                                         <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">شماره سند واردات دستگاه</label>
+                                            <label for="example-text-input"
+                                                class="block font-medium text-gray-700 dark:text-gray-100 mb-2">شماره
+                                                سند واردات دستگاه</label>
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
-                                                type="text"
-                                                name="sh_sanad"
-                                                readonly
+                                                type="text" name="sh_sanad" readonly
                                                 value="<?php echo htmlspecialchars($data['reception']->sh_sanad ?? ''); ?>"
                                                 id="example-text-input">
                                         </div>
                                         <div class="mb-4">
-                                            <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">تاریخ پایان گارانتی دستگاه</label>
+                                            <label for="example-text-input"
+                                                class="block font-medium text-gray-700 dark:text-gray-100 mb-2">تاریخ
+                                                پایان گارانتی دستگاه</label>
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
-                                                type="text"
-                                                name="expite_guarantee"
-                                                readonly
+                                                type="text" name="expite_guarantee" readonly
                                                 value="<?php echo htmlspecialchars($data['reception']->expite_guarantee ?? ''); ?>"
                                                 id="example-text-input">
                                         </div>
@@ -331,10 +333,11 @@ use Hekmatinasser\Verta\Verta;
                                 <div class="col-span-12 lg:col-span-2">
                                     <div class="mb-4">
                                         <div class="mb-3">
-                                            <label class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">نوع پذیرش</label>
-                                            <input class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
-                                                name="paziresh_status"
-                                                readonly
+                                            <label class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">نوع
+                                                پذیرش</label>
+                                            <input
+                                                class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
+                                                name="paziresh_status" readonly
                                                 value="<?php echo htmlspecialchars($data['reception']->paziresh_status ?? ''); ?>">
 
                                             </input>
@@ -342,48 +345,48 @@ use Hekmatinasser\Verta\Verta;
                                         </div>
                                     </div>
                                     <div class="mb-4">
-                                        <label for="activation-date" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">وضعیت فعالسازی </label>
-                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
-                                            type="text"
-                                            id="activation-date"
-                                            name="activation_status"
-                                            readonly
-                                            value="<?php echo htmlspecialchars($data['reception']->activation_status ?? ''); ?>"
-                                            >
+                                        <label for="activation-date"
+                                            class="block font-medium text-gray-700 dark:text-gray-100 mb-2">وضعیت
+                                            فعالسازی </label>
+                                        <input
+                                            class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
+                                            type="text" id="activation-date" name="activation_status" readonly
+                                            value="<?php echo htmlspecialchars($data['reception']->activation_status ?? ''); ?>">
                                     </div>
                                     <div class="mb-4">
-                                        <label for="activation-date" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">تاریخ فعالسازی </label>
-                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
-                                            type="text"
-                                            id="activation-date"
-                                            name="activation_start_date"
-                                            readonly
-                                            value="<?php echo htmlspecialchars($data['reception']->activation_start_date ?? ''); ?>"
-                                            >
+                                        <label for="activation-date"
+                                            class="block font-medium text-gray-700 dark:text-gray-100 mb-2">تاریخ
+                                            فعالسازی </label>
+                                        <input
+                                            class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
+                                            type="text" id="activation-date" name="activation_start_date" readonly
+                                            value="<?php echo htmlspecialchars($data['reception']->activation_start_date ?? ''); ?>">
                                     </div>
                                     <div class="mb-4">
                                         <div class="mb-3">
-                                            <label class="block font-medium text-gray-700 dark:text-zinc-100 mb-2"> تعداد روز فعالسازی
-                                            فعالسازی </label>
-                                            <input class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
-                                                name="activation_day"
-                                                readonly
+                                            <label class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">
+                                                تعداد روز فعالسازی
+                                                فعالسازی </label>
+                                            <input
+                                                class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
+                                                name="activation_day" readonly
                                                 value="<?php echo htmlspecialchars($data['reception']->activation_day ?? ''); ?>">
 
                                             </input>
                                         </div>
                                     </div>
 
-                                    
+
 
                                 </div>
                                 <div class="col-span-12 lg:col-span-2">
-                                <div class="mb-4">
+                                    <div class="mb-4">
                                         <div class="mb-3">
-                                            <label class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">وضعیت گارانتی</label>
-                                            <input class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
-                                                name="guarantee_status"
-                                                readonly
+                                            <label class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">وضعیت
+                                                گارانتی</label>
+                                            <input
+                                                class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
+                                                name="guarantee_status" readonly
                                                 value="<?php echo htmlspecialchars($data['reception']->guarantee_status ?? ''); ?>">
 
                                             </input>
@@ -391,24 +394,30 @@ use Hekmatinasser\Verta\Verta;
                                     </div>
 
                                     <div class="mb-4">
-                                        <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">زمان تقریبی تعمیر </label>
-                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="example-month-input"
-                                            name="estimated_time"
-                                            readonly
+                                        <label for="example-text-input"
+                                            class="block font-medium text-gray-700 dark:text-gray-100 mb-2">زمان تقریبی
+                                            تعمیر </label>
+                                        <input
+                                            class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
+                                            type="text" id="example-month-input" name="estimated_time" readonly
                                             value="<?php echo htmlspecialchars($data['reception']->estimated_time ?? ''); ?>">
                                     </div>
                                     <div class="mb-4">
-                                        <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2"> هزینه تقریبی تعمیر </label>
-                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="example-week-input"
-                                            name="estimated_cost"
-                                            readonly
+                                        <label for="example-text-input"
+                                            class="block font-medium text-gray-700 dark:text-gray-100 mb-2"> هزینه
+                                            تقریبی تعمیر </label>
+                                        <input
+                                            class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
+                                            type="text" id="example-week-input" name="estimated_cost" readonly
                                             value="<?php echo htmlspecialchars($data['reception']->estimated_cost ?? ''); ?>">
                                     </div>
                                     <div class="mb-4">
-                                        <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">توضیحات </label>
-                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="example-date-input"
-                                            name="dex"
-                                            readonly
+                                        <label for="example-text-input"
+                                            class="block font-medium text-gray-700 dark:text-gray-100 mb-2">توضیحات
+                                        </label>
+                                        <input
+                                            class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
+                                            type="text" id="example-date-input" name="dex" readonly
                                             value="<?php echo htmlspecialchars($data['reception']->dex ?? ''); ?>">
                                     </div>
 
@@ -416,103 +425,125 @@ use Hekmatinasser\Verta\Verta;
                                 </div>
 
                                 <div class="col-span-12 lg:col-span-3">
-                                <div class="mb-4">
-                                        <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">  وضعیت تعمیر</label>
-                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="example-date-input"
-                                            name="repair_status"
-                                            readonly
-
+                                    <div class="mb-4">
+                                        <label for="example-text-input"
+                                            class="block font-medium text-gray-700 dark:text-gray-100 mb-2"> وضعیت
+                                            تعمیر</label>
+                                        <input
+                                            class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
+                                            type="text" id="example-date-input" name="repair_status" readonly
                                             value="<?php echo htmlspecialchars($data['reception']->repair_status ?? ''); ?>">
                                     </div>
-                                                    
-                                    <div class="mb-4">
-                                        <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">شرایط فیزیکی دستگاه</label>
-                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="example-date-input"
-                                            name="situation"
-                                            readonly
 
+                                    <div class="mb-4">
+                                        <label for="example-text-input"
+                                            class="block font-medium text-gray-700 dark:text-gray-100 mb-2">شرایط فیزیکی
+                                            دستگاه</label>
+                                        <input
+                                            class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
+                                            type="text" id="example-date-input" name="situation" readonly
                                             value="<?php echo htmlspecialchars($data['reception']->situation ?? ''); ?>">
                                     </div>
                                     <div class="mb-4">
-                                        <label for="example-text-input" class="block font-medium text-gray-700 dark:text-gray-100 mb-2">ایراد دستگاه به اظهار مشتری </label>
-                                        <input class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100" type="text" id="example-date-input"
-                                            name="problem"
-                                            readonly
+                                        <label for="example-text-input"
+                                            class="block font-medium text-gray-700 dark:text-gray-100 mb-2">ایراد دستگاه
+                                            به اظهار مشتری </label>
+                                        <input
+                                            class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
+                                            type="text" id="example-date-input" name="problem" readonly
                                             value="<?php echo htmlspecialchars($data['reception']->problem ?? ''); ?>">
                                     </div>
                                     <div class="mb-4">
-                                        <label class="block font-medium text-gray-700 dark:text-gray-100 mb-2">لوازم همراه</label>
-                                        <div class="py-2.5 flex space-x-4">
+                                        <label class="block font-medium text-gray-700 dark:text-gray-100 mb-2">لوازم
+                                            همراه</label>
+                                        <div class="relative">
                                             <?php
-                                            // تبدیل رشته accessories ه آرایه (اگر به صورت رشته ذخیره شده باشد)
+                                            // تبدیل رشته accessories به آرایه (اگر به صورت رشته ذخیره شده باشد)
                                             $accessories = is_string($data['reception']->accessories ?? '') ?
                                                 explode(',', $data['reception']->accessories) : ($data['reception']->accessories ?? []);
+
+                                            // تعریف لیست لوازم موجود
+                                            $accessoryOptions = [
+                                                'box' => 'جعبه',
+                                                'warrantycard' => 'کارت گارانتی',
+                                                'adapter' => 'آداپتور',
+                                                'cable' => 'کابل شارژ',
+                                                'handsfree' => 'هندزفری',
+                                                'pin' => 'سوزن',
+                                                'case' => 'کاور',
+                                                'screenprotector' => 'محافظ صفحه',
+                                                'memorycard' => 'کارت حافظه'
+                                            ];
+
+                                            // ساخت متن نمایشی برای انتخاب‌های فعلی
+                                            $selectedText = '';
+                                            if (!empty($accessories)) {
+                                                $selectedNames = [];
+                                                foreach ($accessories as $acc) {
+                                                    if (isset($accessoryOptions[$acc])) {
+                                                        $selectedNames[] = $accessoryOptions[$acc];
+                                                    }
+                                                }
+                                                $selectedText = implode(', ', $selectedNames);
+                                            }
                                             ?>
-
-                                            <div class="form-check">
-                                                <label class="ltr:mr-2 rtl:ml-2 font-medium text-gray-700 dark:text-zinc-100" for="acc_box">جعبه</label>
-                                                <input type="checkbox"
-                                                    <?php echo in_array('box', $accessories) ? 'checked' : ''; ?>
-                                                    class="rounded align-middle ml-2 focus:ring-0 focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500"
-                                                    id="acc_box"
-                                                    name="accessories[]"
-                                                    readonly
-                                                    value="box">
+                                            
+                                            <!-- فیلد نمایش انتخاب‌های فعلی -->
+                                            <div 
+                                                id="accessories-display"
+                                                class="w-full rounded border-gray-100 py-2.5 px-3 text-sm text-gray-500 bg-white dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100 cursor-pointer border"
+                                                onclick="toggleAccessoriesDropdown()"
+                                            >
+                                                <div class="flex justify-between items-center">
+                                                    <span id="selected-accessories-text">
+                                                        <?php echo !empty($selectedText) ? htmlspecialchars($selectedText) : 'انتخاب لوازم همراه...'; ?>
+                                                    </span>
+                                                    <svg class="w-4 h-4 transform transition-transform" id="dropdown-arrow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                                    </svg>
+                                                </div>
                                             </div>
 
-                                            <div class="form-check">
-                                                <label class="ltr:mr-2 rtl:ml-2 font-medium text-gray-700 dark:text-zinc-100" for="acc_warranty">کارت گارانتی</label>
-                                                <input type="checkbox"
-                                                    <?php echo in_array('warrantycard', $accessories) ? 'checked' : ''; ?>
-                                                    class="rounded align-middle ml-2 focus:ring-0 focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500"
-                                                    id="acc_warranty"
-                                                    name="accessories[]"
-                                                    readonly
-                                                    value="warrantycard">
-                                            </div>
-
-                                            <div class="form-check">
-                                                <label class="ltr:mr-2 rtl:ml-2 font-medium text-gray-700 dark:text-zinc-100" for="acc_adapter">آداپتور</label>
-                                                <input type="checkbox"
-                                                    <?php echo in_array('adapter', $accessories) ? 'checked' : ''; ?>
-                                                    class="rounded align-middle ml-2 focus:ring-0 focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500"
-                                                    id="acc_adapter"
-                                                    name="accessories[]"
-                                                    readonly
-                                                    value="adapter">
-                                            </div>
-
-                                            <div class="form-check">
-                                                <label class="ltr:mr-2 rtl:ml-2 font-medium text-gray-700 dark:text-zinc-100" for="acc_cable">کابل شارژ</label>
-                                                <input type="checkbox"
-                                                    <?php echo in_array('cable', $accessories) ? 'checked' : ''; ?>
-                                                    class="rounded align-middle ml-2 focus:ring-0 focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500"
-                                                    id="acc_cable"
-                                                    name="accessories[]"
-                                                    readonly
-                                                    value="cable">
-                                            </div>
-
-                                            <div class="form-check">
-                                                <label class="ltr:mr-2 rtl:ml-2 font-medium text-gray-700 dark:text-zinc-100" for="acc_handsfree">هندزفری</label>
-                                                <input type="checkbox"
-                                                    <?php echo in_array('handsfree', $accessories) ? 'checked' : ''; ?>
-                                                    class="rounded align-middle ml-2 focus:ring-0 focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500"
-                                                    id="acc_handsfree"
-                                                    name="accessories[]"
-                                                    readonly
-                                                    value="handsfree">
-                                            </div>
-
-                                            <div class="form-check">
-                                                <label class="ltr:mr-2 rtl:ml-2 font-medium text-gray-700 dark:text-zinc-100" for="acc_pin">سوزن</label>
-                                                <input type="checkbox"
-                                                    <?php echo in_array('pin', $accessories) ? 'checked' : ''; ?>
-                                                    class="rounded align-middle ml-2 focus:ring-0 focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500"
-                                                    id="acc_pin"
-                                                    name="accessories[]"
-                                                    readonly
-                                                    value="pin">
+                                            <!-- درپ‌داون انتخاب -->
+                                            <div 
+                                                id="accessories-dropdown" 
+                                                class="absolute z-10 w-full mt-1 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-600 rounded-md shadow-lg hidden"
+                                            >
+                                                <div class="py-2 max-h-60 overflow-y-auto">
+                                                    <?php foreach ($accessoryOptions as $value => $label): ?>
+                                                                <div class="px-3 py-2 hover:bg-gray-100 dark:hover:bg-zinc-700 cursor-pointer">
+                                                                    <label class="flex items-center cursor-pointer">
+                                                                        <input 
+                                                                            type="checkbox"
+                                                                            name="accessories[]"
+                                                                            value="<?php echo $value; ?>"
+                                                                            <?php echo in_array($value, $accessories) ? 'checked' : ''; ?>
+                                                                            class="rounded mr-2 focus:ring-0 focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500"
+                                                                            onchange="updateAccessoriesDisplay()"
+                                                                        >
+                                                                        <span class="text-sm text-gray-700 dark:text-gray-100"><?php echo $label; ?></span>
+                                                                    </label>
+                                                                </div>
+                                                    <?php endforeach; ?>
+                                                </div>
+                                                
+                                                <!-- دکمه‌های عملیات -->
+                                                <div class="border-t border-gray-200 dark:border-zinc-600 p-2 flex gap-2">
+                                                    <button 
+                                                        type="button"
+                                                        onclick="selectAllAccessories()"
+                                                        class="px-3 py-1 text-xs bg-violet-500 text-white rounded hover:bg-violet-600"
+                                                    >
+                                                        انتخاب همه
+                                                    </button>
+                                                    <button 
+                                                        type="button"
+                                                        onclick="clearAllAccessories()"
+                                                        class="px-3 py-1 text-xs bg-gray-500 text-white rounded hover:bg-gray-600"
+                                                    >
+                                                        پاک کردن همه
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -589,20 +620,20 @@ use Hekmatinasser\Verta\Verta;
                                             onchange="previewImage(this, 'preview1');">
                                         <div class="mt-2">
                                             <?php if (!empty($data['reception']->file1)): ?>
-                                                <div class="flex flex-col gap-2">
-                                                    <img id="preview1"
-                                                        src="<?php echo URLROOT; ?>/assets/uploads/receptions/<?php echo $data['reception']->file1; ?>"
-                                                        alt="تصویر کارت شناسایی"
-                                                        class="rounded-lg"
-                                                        style="width: 150px; height: 150px; object-fit: cover;">
-                                                    <a href="<?php echo URLROOT; ?>/receptions/download/<?php echo $data['reception']->id; ?>/<?php echo $data['reception']->file1; ?>"
-                                                        class="flex items-center gap-2 text-sm text-violet-500 hover:text-violet-600">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                                        </svg>
-                                                        دانلود تصویر
-                                                    </a>
-                                                </div>
+                                                        <div class="flex flex-col gap-2">
+                                                            <img id="preview1"
+                                                                src="<?php echo URLROOT; ?>/assets/uploads/receptions/<?php echo $data['reception']->file1; ?>"
+                                                                alt="تصویر کارت شناسایی"
+                                                                class="rounded-lg"
+                                                                style="width: 150px; height: 150px; object-fit: cover;">
+                                                            <a href="<?php echo URLROOT; ?>/receptions/download/<?php echo $data['reception']->id; ?>/<?php echo $data['reception']->file1; ?>"
+                                                                class="flex items-center gap-2 text-sm text-violet-500 hover:text-violet-600">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                                                </svg>
+                                                                دانلود تصویر
+                                                            </a>
+                                                        </div>
                                             <?php endif; ?>
                                         </div>
                                     </div>
@@ -622,20 +653,20 @@ use Hekmatinasser\Verta\Verta;
                                             onchange="previewImage(this, 'preview2');">
                                         <div class="mt-2">
                                             <?php if (!empty($data['reception']->file2)): ?>
-                                                <div class="flex flex-col gap-2">
-                                                    <img id="preview2"
-                                                        src="<?php echo URLROOT; ?>/assets/uploads/receptions/<?php echo $data['reception']->file2; ?>"
-                                                        alt="تصویر فاکتور خرید"
-                                                        class="rounded-lg"
-                                                        style="width: 150px; height: 150px; object-fit: cover;">
-                                                    <a href="<?php echo URLROOT; ?>/receptions/download/<?php echo urlencode($data['reception']->file2); ?>"
-                                                        class="flex items-center gap-2 text-sm text-violet-500 hover:text-violet-600">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                                        </svg>
-                                                        دانلود تصویر
-                                                    </a>
-                                                </div>
+                                                        <div class="flex flex-col gap-2">
+                                                            <img id="preview2"
+                                                                src="<?php echo URLROOT; ?>/assets/uploads/receptions/<?php echo $data['reception']->file2; ?>"
+                                                                alt="تصویر فاکتور خرید"
+                                                                class="rounded-lg"
+                                                                style="width: 150px; height: 150px; object-fit: cover;">
+                                                            <a href="<?php echo URLROOT; ?>/receptions/download/<?php echo urlencode($data['reception']->file2); ?>"
+                                                                class="flex items-center gap-2 text-sm text-violet-500 hover:text-violet-600">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                                                </svg>
+                                                                دانلود تصویر
+                                                            </a>
+                                                        </div>
                                             <?php endif; ?>
                                         </div>
                                     </div>
@@ -655,20 +686,20 @@ use Hekmatinasser\Verta\Verta;
                                             onchange="previewImage(this, 'preview3');">
                                         <div class="mt-2">
                                             <?php if (!empty($data['reception']->file3)): ?>
-                                                <div class="flex flex-col gap-2">
-                                                    <img id="preview3"
-                                                        src="<?php echo URLROOT; ?>/assets/uploads/receptions/<?php echo $data['reception']->file3; ?>"
-                                                        alt="تصویر فاکتور خرید"
-                                                        class="rounded-lg"
-                                                        style="width: 150px; height: 150px; object-fit: cover;">
-                                                    <a href="<?php echo URLROOT; ?>/receptions/download/<?php echo urlencode($data['reception']->file3); ?>"
-                                                        class="flex items-center gap-2 text-sm text-violet-500 hover:text-violet-600">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                                        </svg>
-                                                        دانلود تصویر
-                                                    </a>
-                                                </div>
+                                                        <div class="flex flex-col gap-2">
+                                                            <img id="preview3"
+                                                                src="<?php echo URLROOT; ?>/assets/uploads/receptions/<?php echo $data['reception']->file3; ?>"
+                                                                alt="تصویر فاکتور خرید"
+                                                                class="rounded-lg"
+                                                                style="width: 150px; height: 150px; object-fit: cover;">
+                                                            <a href="<?php echo URLROOT; ?>/receptions/download/<?php echo urlencode($data['reception']->file3); ?>"
+                                                                class="flex items-center gap-2 text-sm text-violet-500 hover:text-violet-600">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                                                </svg>
+                                                                دانلود تصویر
+                                                            </a>
+                                                        </div>
                                             <?php endif; ?>
                                         </div>
                                     </div>
@@ -716,7 +747,68 @@ use Hekmatinasser\Verta\Verta;
                         });
                     }
                 });
+
+                // کلیک خارج از dropdown برای بستن آن
+                document.addEventListener('click', function(event) {
+                    const dropdown = document.getElementById('accessories-dropdown');
+                    const display = document.getElementById('accessories-display');
+                    
+                    if (dropdown && display && !dropdown.contains(event.target) && !display.contains(event.target)) {
+                        dropdown.classList.add('hidden');
+                        const arrow = document.getElementById('dropdown-arrow');
+                        if (arrow) {
+                            arrow.style.transform = 'rotate(0deg)';
+                        }
+                    }
+                });
             });
+
+            // توابع مدیریت dropdown لوازم همراه
+            function toggleAccessoriesDropdown() {
+                const dropdown = document.getElementById('accessories-dropdown');
+                const arrow = document.getElementById('dropdown-arrow');
+                
+                if (dropdown) {
+                    dropdown.classList.toggle('hidden');
+                    
+                    if (arrow) {
+                        if (dropdown.classList.contains('hidden')) {
+                            arrow.style.transform = 'rotate(0deg)';
+                        } else {
+                            arrow.style.transform = 'rotate(180deg)';
+                        }
+                    }
+                }
+            }
+
+            function updateAccessoriesDisplay() {
+                const checkboxes = document.querySelectorAll('input[name="accessories[]"]:checked');
+                const selectedText = Array.from(checkboxes).map(cb => {
+                    return cb.nextElementSibling.textContent;
+                }).join(', ');
+                
+                const displayText = selectedText || 'انتخاب لوازم همراه...';
+                const textElement = document.getElementById('selected-accessories-text');
+                if (textElement) {
+                    textElement.textContent = displayText;
+                }
+            }
+
+            function selectAllAccessories() {
+                const checkboxes = document.querySelectorAll('input[name="accessories[]"]');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = true;
+                });
+                updateAccessoriesDisplay();
+            }
+
+            function clearAllAccessories() {
+                const checkboxes = document.querySelectorAll('input[name="accessories[]"]');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                updateAccessoriesDisplay();
+            }
         </script>
 
         <script>

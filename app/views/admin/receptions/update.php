@@ -473,60 +473,95 @@ use Morilog\Jalali\Jalalian;
                                             readonly>
                                     </div>
                                     <div class="mb-4">
-                                        <label class="block font-medium text-gray-700 dark:text-gray-100 mb-2">لوازم
-                                            همراه</label>
-                                        <div class="py-2.5 flex space-x-4">
+                                        <label class="block font-medium text-gray-700 dark:text-gray-100 mb-2">لوازم همراه</label>
+                                        <div class="relative">
                                             <?php
-                                            $accessories = explode(',', $data['reception']->accessories);
+                                            // تبدیل رشته accessories به آرایه (اگر به صورت رشته ذخیره شده باشد)
+                                            $accessories = is_string($data['reception']->accessories ?? '') ?
+                                                explode(',', $data['reception']->accessories) : ($data['reception']->accessories ?? []);
+                                            
+                                            // تعریف لیست لوازم موجود
+                                            $accessoryOptions = [
+                                                'box' => 'جعبه',
+                                                'warrantycard' => 'کارت گارانتی',
+                                                'adapter' => 'آداپتور',
+                                                'cable' => 'کابل شارژ',
+                                                'handsfree' => 'هندزفری',
+                                                'pin' => 'سوزن',
+                                                'case' => 'کاور',
+                                                'screenprotector' => 'محافظ صفحه',
+                                                'memorycard' => 'کارت حافظه'
+                                            ];
+                                            
+                                            // ساخت متن نمایشی برای انتخاب‌های فعلی
+                                            $selectedText = '';
+                                            if (!empty($accessories)) {
+                                                $selectedNames = [];
+                                                foreach ($accessories as $acc) {
+                                                    if (isset($accessoryOptions[$acc])) {
+                                                        $selectedNames[] = $accessoryOptions[$acc];
+                                                    }
+                                                }
+                                                $selectedText = implode(', ', $selectedNames);
+                                            }
                                             ?>
-                                            <div class="form-check">
-                                                <label
-                                                    class="ltr:mr-2 rtl:ml-2 font-medium text-gray-700 dark:text-zinc-100"
-                                                    for="acc_box">جعبه</label>
-                                                <input type="checkbox"
-                                                    class="rounded align-middle ml-2 focus:ring-0 focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500"
-                                                    id="acc_box" name="accessories[]" value="box" <?php echo in_array('box', $accessories) ? 'checked' : ''; ?> readonly>
+                                            
+                                            <!-- فیلد نمایش انتخاب‌های فعلی -->
+                                            <div 
+                                                id="accessories-display"
+                                                class="w-full rounded border-gray-100 py-2.5 px-3 text-sm text-gray-500 bg-white dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100 cursor-pointer border"
+                                                onclick="toggleAccessoriesDropdown()"
+                                            >
+                                                <div class="flex justify-between items-center">
+                                                    <span id="selected-accessories-text">
+                                                        <?php echo !empty($selectedText) ? htmlspecialchars($selectedText) : 'انتخاب لوازم همراه...'; ?>
+                                                    </span>
+                                                    <svg class="w-4 h-4 transform transition-transform" id="dropdown-arrow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                                    </svg>
+                                                </div>
                                             </div>
-                                            <div class="form-check">
-                                                <label
-                                                    class="ltr:mr-2 rtl:ml-2 font-medium text-gray-700 dark:text-zinc-100"
-                                                    for="acc_warranty">کارت گارانتی</label>
-                                                <input type="checkbox"
-                                                    class="rounded align-middle ml-2 focus:ring-0 focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500"
-                                                    id="acc_warranty" name="accessories[]" value="warrantycard" <?php echo in_array('warrantycard', $accessories) ? 'checked' : ''; ?>
-                                                    readonly>
-                                            </div>
-                                            <div class="form-check">
-                                                <label
-                                                    class="ltr:mr-2 rtl:ml-2 font-medium text-gray-700 dark:text-zinc-100"
-                                                    for="acc_adapter">آداپتور</label>
-                                                <input type="checkbox"
-                                                    class="rounded align-middle ml-2 focus:ring-0 focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500"
-                                                    id="acc_adapter" name="accessories[]" value="adapter" <?php echo in_array('adapter', $accessories) ? 'checked' : ''; ?> readonly>
-                                            </div>
-                                            <div class="form-check">
-                                                <label
-                                                    class="ltr:mr-2 rtl:ml-2 font-medium text-gray-700 dark:text-zinc-100"
-                                                    for="acc_cable">کابل شارژ</label>
-                                                <input type="checkbox"
-                                                    class="rounded align-middle ml-2 focus:ring-0 focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500"
-                                                    id="acc_cable" name="accessories[]" value="cable" <?php echo in_array('cable', $accessories) ? 'checked' : ''; ?> readonly>
-                                            </div>
-                                            <div class="form-check">
-                                                <label
-                                                    class="ltr:mr-2 rtl:ml-2 font-medium text-gray-700 dark:text-zinc-100"
-                                                    for="acc_handsfree">هندزفری</label>
-                                                <input type="checkbox"
-                                                    class="rounded align-middle ml-2 focus:ring-0 focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500"
-                                                    id="acc_handsfree" name="accessories[]" value="handsfree" <?php echo in_array('handsfree', $accessories) ? 'checked' : ''; ?> readonly>
-                                            </div>
-                                            <div class="form-check">
-                                                <label
-                                                    class="ltr:mr-2 rtl:ml-2 font-medium text-gray-700 dark:text-zinc-100"
-                                                    for="acc_pin">سوزن</label>
-                                                <input type="checkbox"
-                                                    class="rounded align-middle ml-2 focus:ring-0 focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500"
-                                                    id="acc_pin" name="accessories[]" value="pin" <?php echo in_array('pin', $accessories) ? 'checked' : ''; ?> readonly>
+
+                                            <!-- درپ‌داون انتخاب -->
+                                            <div 
+                                                id="accessories-dropdown" 
+                                                class="absolute z-10 w-full mt-1 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-600 rounded-md shadow-lg hidden"
+                                            >
+                                                <div class="py-2 max-h-60 overflow-y-auto">
+                                                    <?php foreach ($accessoryOptions as $value => $label): ?>
+                                                        <div class="px-3 py-2 hover:bg-gray-100 dark:hover:bg-zinc-700 cursor-pointer">
+                                                            <label class="flex items-center cursor-pointer">
+                                                                <input 
+                                                                    type="checkbox"
+                                                                    name="accessories[]"
+                                                                    value="<?php echo $value; ?>"
+                                                                    <?php echo in_array($value, $accessories) ? 'checked' : ''; ?>
+                                                                    class="rounded mr-2 focus:ring-0 focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500"
+                                                                    onchange="updateAccessoriesDisplay()"
+                                                                >
+                                                                <span class="text-sm text-gray-700 dark:text-gray-100"><?php echo $label; ?></span>
+                                                            </label>
+                                                        </div>
+                                                    <?php endforeach; ?>
+                                                </div>
+                                                
+                                                <!-- دکمه‌های عملیات -->
+                                                <div class="border-t border-gray-200 dark:border-zinc-600 p-2 flex gap-2">
+                                                    <button 
+                                                        type="button"
+                                                        onclick="selectAllAccessories()"
+                                                        class="px-3 py-1 text-xs bg-violet-500 text-white rounded hover:bg-violet-600"
+                                                    >
+                                                        انتخاب همه
+                                                    </button>
+                                                    <button 
+                                                        type="button"
+                                                        onclick="clearAllAccessories()"
+                                                        class="px-3 py-1 text-xs bg-gray-500 text-white rounded hover:bg-gray-600"
+                                                    >
+                                                        پاک کردن همه
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -620,8 +655,8 @@ use Morilog\Jalali\Jalalian;
                                         <div class="mt-2">
                                             <?php if (!empty($data['reception']->file1)): ?>
                                                 <div class="mb-2">
-                                                    <a href="<?php echo URLROOT; ?>/receptions/download/<?php echo $data['reception']->file1; ?>"
-                                                        class="text-violet-500 hover:text-violet-600" target="_blank">دانلود
+                                                    <a href="<?php echo URLROOT; ?>/assets/uploads/receptions/<?php echo $data['reception']->file1; ?>"
+                                                        class="text-violet-500 hover:text-violet-600" target="_blank" download>دانلود
                                                         تصویر فعلی</a>
                                                 </div>
                                             <?php endif; ?>
@@ -647,8 +682,8 @@ use Morilog\Jalali\Jalalian;
                                         <div class="mt-2">
                                             <?php if (!empty($data['reception']->file2)): ?>
                                                 <div class="mb-2">
-                                                    <a href="<?php echo URLROOT; ?>/receptions/download/<?php echo $data['reception']->file2; ?>"
-                                                        class="text-violet-500 hover:text-violet-600" target="_blank">دانلود
+                                                    <a href="<?php echo URLROOT; ?>/assets/uploads/receptions/<?php echo $data['reception']->file2; ?>"
+                                                        class="text-violet-500 hover:text-violet-600" target="_blank" download>دانلود
                                                         تصویر فعلی</a>
                                                 </div>
                                             <?php endif; ?>
@@ -674,8 +709,8 @@ use Morilog\Jalali\Jalalian;
                                         <div class="mt-2">
                                             <?php if (!empty($data['reception']->file3)): ?>
                                                 <div class="mb-2">
-                                                    <a href="<?php echo URLROOT; ?>/receptions/download/<?php echo $data['reception']->file3; ?>"
-                                                        class="text-violet-500 hover:text-violet-600" target="_blank">دانلود
+                                                    <a href="<?php echo URLROOT; ?>/assets/uploads/receptions/<?php echo $data['reception']->file3; ?>"
+                                                        class="text-violet-500 hover:text-violet-600" target="_blank" download>دانلود
                                                         تصویر فعلی</a>
                                                 </div>
                                             <?php endif; ?>
@@ -761,6 +796,67 @@ use Morilog\Jalali\Jalalian;
             preview.classList.add('hidden');
         }
     }
+
+    // توابع مدیریت dropdown لوازم همراه
+    function toggleAccessoriesDropdown() {
+        const dropdown = document.getElementById('accessories-dropdown');
+        const arrow = document.getElementById('dropdown-arrow');
+        
+        if (dropdown) {
+            dropdown.classList.toggle('hidden');
+            
+            if (arrow) {
+                if (dropdown.classList.contains('hidden')) {
+                    arrow.style.transform = 'rotate(0deg)';
+                } else {
+                    arrow.style.transform = 'rotate(180deg)';
+                }
+            }
+        }
+    }
+
+    function updateAccessoriesDisplay() {
+        const checkboxes = document.querySelectorAll('input[name="accessories[]"]:checked');
+        const selectedText = Array.from(checkboxes).map(cb => {
+            return cb.nextElementSibling.textContent;
+        }).join(', ');
+        
+        const displayText = selectedText || 'انتخاب لوازم همراه...';
+        const textElement = document.getElementById('selected-accessories-text');
+        if (textElement) {
+            textElement.textContent = displayText;
+        }
+    }
+
+    function selectAllAccessories() {
+        const checkboxes = document.querySelectorAll('input[name="accessories[]"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = true;
+        });
+        updateAccessoriesDisplay();
+    }
+
+    function clearAllAccessories() {
+        const checkboxes = document.querySelectorAll('input[name="accessories[]"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        updateAccessoriesDisplay();
+    }
+
+    // کلیک خارج از dropdown برای بستن آن
+    document.addEventListener('click', function(event) {
+        const dropdown = document.getElementById('accessories-dropdown');
+        const display = document.getElementById('accessories-display');
+        
+        if (dropdown && display && !dropdown.contains(event.target) && !display.contains(event.target)) {
+            dropdown.classList.add('hidden');
+            const arrow = document.getElementById('dropdown-arrow');
+            if (arrow) {
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+    });
 </script>
 
 <script>

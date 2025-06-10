@@ -1,0 +1,20 @@
+# محافظت از اجرای فایل‌های PHP
+<Files "*.php">
+    Order Deny,Allow
+    Deny from all
+</Files>
+
+# فقط دسترسی به فایل‌های تصویری
+<FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
+
+# جلوگیری از لیست کردن فایل‌ها
+Options -Indexes
+
+# تنظیمات امنیتی اضافی
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options nosniff
+    Header set X-Frame-Options DENY
+</IfModule> 

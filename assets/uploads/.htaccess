@@ -1,0 +1,17 @@
+# محافظت از اجرای فایل‌های PHP در پوشه uploads
+<Files "*.php">
+    Order Deny,Allow
+    Deny from all
+</Files>
+
+# فقط دسترسی خواندن فایل‌های تصویری
+<FilesMatch "\.(jpg|jpeg|png|gif)$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
+
+# جلوگیری از لیست کردن فایل‌ها
+Options -Indexes
+
+# محدودیت حجم فایل (5MB)
+LimitRequestBody 5242880 
