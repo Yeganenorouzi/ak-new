@@ -14,6 +14,20 @@ class Dashboard extends Controller
       header("Location: " . URLROOT . "/auth/login");
       exit();
     }
+
+    // Check if user is an agent and is not approved
+    if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 0) {
+      $this->usersModel = $this->model("UsersModel");
+      $user = $this->usersModel->getUserById($_SESSION['id']);
+
+      if (!$user || $user->approved == 0) {
+        // Log out the user
+        session_destroy();
+        header("Location: " . URLROOT . "/auth/login?error=not_approved");
+        exit();
+      }
+    }
+
     $this->receptionsModel = $this->model("ReceptionsModel");
     $this->cardsModel = $this->model("CardsModel");
     $this->usersModel = $this->model("UsersModel");
