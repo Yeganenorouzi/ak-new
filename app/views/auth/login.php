@@ -360,16 +360,16 @@
                                 </div>
 
                                 <div class="mb-6 flex items-center justify-between">
-                                    <!-- <div class="flex items-center">
+                                    <div class="flex items-center">
                                         <input type="checkbox" id="remember" name="remember"
                                             class="h-4 w-4 text-violet-500 border-gray-300 rounded focus:ring-violet-500">
                                         <label for="remember" class="mr-2 text-sm text-gray-600">
                                             مرا به خاطر بسپار
                                         </label>
-                                    </div> -->
-                                    <!-- <a href="#" class="text-sm text-violet-600 hover:text-violet-700 font-medium">
+                                    </div>
+                                    <a href="#" class="text-sm text-violet-600 hover:text-violet-700 font-medium">
                                         فراموشی رمز عبور؟
-                                    </a> -->
+                                    </a>
                                 </div>
 
                                 <div class="mb-6">
@@ -416,7 +416,7 @@
                         </div>
 
                         <!-- Stats at bottom -->
-                        <div class="stats-container">
+                        <div class="stats-container absolute bottom-0 left-0 right-0">
                             <div class="text-center text-white/80 text-xs">
                                 ©
                                 <script>document.write(new Date().getFullYear())</script>

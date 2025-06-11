@@ -39,6 +39,8 @@
   <!-- Jalali Date Picker -->
   <link rel="stylesheet" href="https://unpkg.com/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.css">
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 </head>
 
 <body data-mode="light" data-sidebar-size="lg">
@@ -67,7 +69,8 @@
       <div class="flex items-center">
         <div>
           <div class="dropdown relative sm:hidden block">
-            <button type="button" class="text-xl px-4 h-[70px] text-gray-600 dark:text-gray-100 "
+            <button type="button"
+              class="text-xl px-4 h-[70px] text-gray-600 dark:text-gray-100 flex items-center justify-center"
               data-dropdown-toggle="navNotifications">
               <i data-feather="search" class="h-5 w-5"></i>
             </button>
@@ -90,83 +93,72 @@
           </div>
         </div>
 
-        <!--  Darkmode -->
-        <div>
-          <button type="button"
-            class="light-dark-mode text-xl px-4 h-[70px] text-gray-600 dark:text-gray-100 hidden sm:block ">
-            <i data-feather="moon" class="h-5 w-5 block dark:hidden"></i>
-            <i data-feather="sun" class="h-5 w-5 hidden dark:block"></i>
+        <!-- Quick Links -->
+        <div class="flex items-center">
+          <a href="https://www.google.com/" target="_blank"
+            class="text-xl px-3 h-[70px] flex items-center justify-center hover:bg-gray-50 dark:hover:bg-zinc-700"
+            title="گوگل">
+            <i class="fab fa-google" style="color: #4285F4;"></i>
+          </a>
+          <a href="https://hamta.ntsw.ir/Account/Login?ReturnUrl=%2F" target="_blank"
+            class="text-xl px-3 h-[70px] flex items-center justify-center hover:bg-gray-50 dark:hover:bg-zinc-700"
+            title="همتا">
+            <i class="fas fa-mobile-alt" style="color: #1abc9c;"></i>
+          </a>
+          <a href="https://www.gsmarena.com/" target="_blank"
+            class="text-xl px-3 h-[70px] flex items-center justify-center hover:bg-gray-50 dark:hover:bg-zinc-700"
+            title="Gsm Arena">
+            <i class="fas fa-mobile-screen" style="color: #e74c3c;"></i>
+          </a>
         </div>
-
-        <div>
-          <div class="dropdown relative text-gray-600 hidden sm:block">
-            <button type="button" class="btn border-0 h-[70px] text-xl px-4  dark:text-gray-100"
-              data-bs-toggle="dropdown" id="dropdownMenuButton1">
-              <i data-feather="grid" class="h-5 w-5"></i>
-            </button>
-            <div
-              class="dropdown-menu absolute left-0 z-50 hidden w-72 list-none border border-gray-50 rounded bg-white shadow dark:bg-zinc-800 dark:border-zinc-600 dark:text-gray-300 dropdown-toggle"
-              aria-labelledby="dropdownMenuButton1">
-              <div class="p-2">
-                <div class="grid grid-cols-3">
-                  <a class="dropdown-item hover:bg-gray-50/50 py-4 text-center dark:hover:bg-zinc-700/50 dark:hover:text-gray-50"
-                    href="https://www.google.com/" target="_blank">
-                    <img src="<?php echo URLROOT . "/assets/images/brands/google.png" ?>" class="mb-2 mx-auto h-6"
-                      alt="Google">
-                    <span>گوگل</span>
-                  </a>
-                  <a class="dropdown-item hover:bg-gray-50/50 py-4 text-center dark:hover:bg-zinc-700/50 dark:hover:text-gray-50"
-                    href="https://hamta.ntsw.ir/Account/Login?ReturnUrl=%2F" target="_blank">
-                    <img src="<?php echo URLROOT . "/assets/images/brands/bitbucket.png" ?>" class="mb-2 mx-auto h-6"
-                      alt="Hamta">
-                    <span>همتا</span>
-                  </a>
-                  <a class="dropdown-item hover:bg-gray-50/50 py-4 text-center dark:hover:bg-zinc-700/50 dark:hover:text-gray-50"
-                    href="https://www.gsmarena.com/" target="_blank">
-
-                    <img src="<?php echo URLROOT . "/assets/images/brands/dribbble.png" ?>" class="mb-2 mx-auto h-6"
-                      alt="GsmArena">
-                    <span>Gsm Arena</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
 
 
 
         <div>
           <div class="dropdown relative ltr:mr-4 rtl:ml-4">
             <button type="button"
-              class="flex items-center px-4 py-5 border-x border-gray-50 bg-gray-50/30 dark:bg-zinc-700 dark:border-zinc-600 dark:text-gray-100 dropdown-toggle"
+              class="flex items-center gap-2 px-4 py-3 border-x border-gray-50 bg-gray-50/30 dark:bg-zinc-700 dark:border-zinc-600 dark:text-gray-100 dropdown-toggle hover:bg-gray-100 dark:hover:bg-zinc-600 transition-colors duration-200"
               id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-              <img class="h-8 w-8 rounded-full ltr:xl:mr-2 rtl:xl:ml-2"
-                src="<?php echo URLROOT . "/assets/images/users/38.jpg" ?>" alt="Header Avatar">
-              <span class="fw-medium hidden xl:block"><?php echo $_SESSION['name']; ?></span>
-              <i class="mdi mdi-chevron-down align-bottom hidden xl:block"></i>
+              <div class="relative">
+                <?php if (!empty($_SESSION['avatar'])): ?>
+                  <img class="h-9 w-9 rounded-full ring-2 ring-violet-500/20 dark:ring-violet-400/20 object-cover"
+                    src="<?php echo URLROOT . "/uploads/users/" . $_SESSION['avatar']; ?>" alt="Header Avatar">
+                <?php else: ?>
+                  <div
+                    class="h-9 w-9 rounded-full bg-violet-500 flex items-center justify-center ring-2 ring-violet-500/20">
+                    <i class="fas fa-user text-white text-lg"></i>
+                  </div>
+                <?php endif; ?>
+                <span
+                  class="absolute bottom-0 right-0 h-3 w-3 bg-green-500 border-2 border-white dark:border-zinc-800 rounded-full"></span>
+              </div>
+              <div class="flex flex-col items-start">
+                <span class="fw-medium text-sm"><?php echo $_SESSION['name']; ?></span>
+                <span
+                  class="text-xs text-gray-500 dark:text-gray-400"><?php echo (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1) ? 'ادمین' : 'نماینده'; ?></span>
+              </div>
             </button>
             <div
-              class="dropdown-menu absolute top-0 ltr:-left-3 rtl:left-0 z-50 hidden w-40 list-none rounded bg-white shadow dark:bg-zinc-800"
+              class="dropdown-menu absolute top-full mt-2 ltr:-left-3 rtl:left-0 z-50 hidden w-56 list-none rounded-lg bg-white shadow-lg dark:bg-zinc-800 border border-gray-100 dark:border-zinc-700"
               id="profile/log">
-              <div class="border border-gray-50 dark:border-zinc-600" aria-labelledby="navNotifications">
+              <div class="p-2" aria-labelledby="navNotifications">
                 <div class="dropdown-item dark:text-gray-100">
-                  <a class="px-3 py-2 hover:bg-gray-50/50 block dark:hover:bg-zinc-700/50"
+                  <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-700/50 transition-colors duration-200"
                     href="<?php echo URLROOT . "/users/profile" ?>">
-                    <i class="mdi mdi-face-man text-16 align-middle mr-1"></i> پروفایل
+                    <i class="fas fa-user text-violet-500"></i>
+                    <span>پروفایل</span>
                   </a>
                 </div>
-                <!-- <div class="dropdown-item dark:text-gray-100">
-                  <a class="px-3 py-2 hover:bg-gray-50/50 block dark:hover:bg-zinc-700/50" href="lock-screen.html">
-                    <i class="mdi mdi-lock text-16 align-middle mr-1"></i> قفل صفحه
-                  </a>
-                </div> -->
-                <hr class="border-gray-50 dark:border-gray-700">
+
+
+
+                <hr class="my-2 border-gray-100 dark:border-zinc-700">
+
                 <div class="dropdown-item dark:text-gray-100">
-                  <a class="p-3 hover:bg-gray-50/50 block dark:hover:bg-zinc-700/50"
+                  <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 text-red-500 transition-colors duration-200"
                     href="<?php echo URLROOT . "/auth/logout" ?>">
-                    <i class="mdi mdi-logout text-16 align-middle mr-1"></i> خروج
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>خروج</span>
                   </a>
                 </div>
               </div>

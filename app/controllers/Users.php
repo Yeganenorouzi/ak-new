@@ -11,7 +11,7 @@ class Users extends Controller
     public function index()
     {
         $filters = [];
-        
+
         // دریافت فیلترها از درخواست
         if ($_SERVER["REQUEST_METHOD"] == "GET") {
             if (!empty($_GET['name'])) {
@@ -27,7 +27,7 @@ class Users extends Controller
                 $filters['email'] = $_GET['email'];
             }
         }
-        
+
         $data = [
             "users" => $this->usersModel->getFilteredUsers($filters),
             "filters" => $filters
@@ -119,7 +119,7 @@ class Users extends Controller
     public function indexAgents()
     {
         $filters = [];
-        
+
         // دریافت فیلترها از درخواست
         if ($_SERVER["REQUEST_METHOD"] == "GET") {
             if (!empty($_GET['name'])) {
@@ -135,7 +135,7 @@ class Users extends Controller
                 $filters['email'] = $_GET['email'];
             }
         }
-        
+
         $data = [
             "agents" => $this->usersModel->getFilteredAgents($filters),
             "filters" => $filters
@@ -269,6 +269,110 @@ class Users extends Controller
     {
         $this->usersModel->deleteAgent($id);
         header("Location: " . URLROOT . "/users/indexAgents");
+        exit();
+    }
+
+    public function profile()
+    {
+        // بررسی ورود کاربر
+        if (!isset($_SESSION['admin']) || !isset($_SESSION['id'])) {
+            $_SESSION['error_message'] = 'لطفاً ابتدا وارد شوید.';
+            header("Location: " . URLROOT . "/auth/login");
+            exit();
+        }
+
+        $userId = $_SESSION['id'];
+
+        try {
+            $user = $this->usersModel->getUserById($userId);
+
+            // بررسی وجود کاربر
+            if (!$user) {
+                $_SESSION['error_message'] = 'کاربر پیدا نشد. لطفاً دوباره وارد شوید.';
+                header("Location: " . URLROOT . "/auth/logout");
+                exit();
+            }
+
+            $data = [
+                "user" => $user,
+                "success" => isset($_SESSION['success_message']) ? $_SESSION['success_message'] : '',
+                "errors" => isset($_SESSION['error_message']) ? $_SESSION['error_message'] : ''
+            ];
+
+            // پاک کردن پیام‌ها بعد از نمایش
+            unset($_SESSION['success_message']);
+            unset($_SESSION['error_message']);
+
+            $this->view("public/userProfile", $data);
+
+        } catch (Exception $e) {
+            $_SESSION['error_message'] = 'خطا در بارگذاری اطلاعات کاربر: ' . $e->getMessage();
+            header("Location: " . URLROOT . "/dashboard");
+            exit();
+        }
+    }
+
+    public function changePassword()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // بررسی وجود session
+            if (!isset($_SESSION['id'])) {
+                header("Location: " . URLROOT . "/auth/login");
+                exit();
+            }
+
+            $userId = $_SESSION['id'];
+            $currentPassword = $_POST['current_password'];
+            $newPassword = $_POST['new_password'];
+            $confirmPassword = $_POST['confirm_password'];
+
+            // بررسی اینکه آیا فیلدها پر شده‌اند
+            if (empty($currentPassword) || empty($newPassword) || empty($confirmPassword)) {
+                $_SESSION['error_message'] = 'لطفاً همه فیلدها را پر کنید.';
+                header("Location: " . URLROOT . "/users/profile");
+                exit();
+            }
+
+            // بررسی اینکه رمز جدید و تکرار آن یکسان باشند
+            if ($newPassword !== $confirmPassword) {
+                $_SESSION['error_message'] = 'رمز عبور جدید و تکرار آن باید یکسان باشند.';
+                header("Location: " . URLROOT . "/users/profile");
+                exit();
+            }
+
+            // بررسی طول رمز عبور
+            if (strlen($newPassword) < 6) {
+                $_SESSION['error_message'] = 'رمز عبور جدید باید حداقل 6 کاراکتر باشد.';
+                header("Location: " . URLROOT . "/users/profile");
+                exit();
+            }
+
+            // دریافت اطلاعات کاربر فعلی
+            $user = $this->usersModel->getUserById($userId);
+
+            // بررسی صحت رمز عبور فعلی
+            if (!password_verify($currentPassword, $user->password)) {
+                $_SESSION['error_message'] = 'رمز عبور فعلی اشتباه است.';
+                header("Location: " . URLROOT . "/users/profile");
+                exit();
+            }
+
+            // هش کردن رمز عبور جدید
+            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+            // به‌روزرسانی رمز عبور
+            if ($this->usersModel->updatePassword($userId, $hashedPassword)) {
+                $_SESSION['success_message'] = 'رمز عبور با موفقیت تغییر یافت.';
+            } else {
+                $_SESSION['error_message'] = 'خطا در تغییر رمز عبور. لطفاً دوباره تلاش کنید.';
+            }
+
+            header("Location: " . URLROOT . "/users/profile");
+            exit();
+        }
+
+        // اگر متد POST نبود، به صفحه پروفایل برگردد
+        header("Location: " . URLROOT . "/users/profile");
         exit();
     }
 }

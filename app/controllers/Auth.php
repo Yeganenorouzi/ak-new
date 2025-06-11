@@ -75,6 +75,7 @@ class Auth extends Controller
           $_SESSION['is_admin'] = $user->admin;
           $_SESSION['name'] = $user->name;
           $_SESSION['id'] = $user->id;
+          $_SESSION['avatar'] = $user->avatar;
 
           // Remember me functionality
           if ($data['remember']) {

@@ -252,9 +252,14 @@ class UsersModel
 
   public function getUserById($id)
   {
-    $this->db->query("SELECT * FROM users WHERE id = :id");
-    $this->db->bind(":id", $id);
-    return $this->db->fetch();
+    try {
+      $this->db->query("SELECT * FROM users WHERE id = :id");
+      $this->db->bind(":id", $id);
+      return $this->db->fetch();
+    } catch (Exception $e) {
+      error_log("getUserById Error: " . $e->getMessage());
+      return false;
+    }
   }
 
   public function updateUser($id, $data)

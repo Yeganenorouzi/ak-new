@@ -324,7 +324,7 @@ class ReceptionsModel
   {
     try {
       // Step 1: یافتن سریال
-      $serial = $this->findSerialById($data['serial']);
+      $serial = $this->findSerialById($data);
       if (!$serial) {
         throw new Exception("سریال مورد نظر یافت نشد");
       }
@@ -347,10 +347,10 @@ class ReceptionsModel
     }
   }
 
-  private function findSerialById(string $serial): ?object
+  private function findSerialById(array $data): ?object
   {
     $this->db->query("SELECT id FROM serials WHERE serial = :serial");
-    $this->db->bind(':serial', $serial);
+    $this->db->bind(':serial', $data['serial']);
     $result = $this->db->fetch();
 
     if ($result !== false) {

@@ -57,6 +57,24 @@
         var appScript = document.createElement('script');
         appScript.src = '<?php echo URLROOT . "/assets/js/app.js" ?>';
         document.body.appendChild(appScript);
+
+        // Initialize Feather Icons after all scripts are loaded
+        appScript.onload = function () {
+            if (typeof feather !== 'undefined') {
+                feather.replace();
+            }
+
+            // Initialize Bootstrap dropdowns manually if needed
+            setTimeout(function () {
+                if (typeof bootstrap !== 'undefined') {
+                    // Initialize all dropdowns
+                    var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+                    var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+                        return new bootstrap.Dropdown(dropdownToggleEl);
+                    });
+                }
+            }, 100);
+        };
     }
 
     // Check if jQuery is already loaded

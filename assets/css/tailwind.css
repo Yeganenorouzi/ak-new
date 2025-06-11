@@ -5684,23 +5684,10 @@ body {
     outline: 3px solid white;
 }
 
-.main-content {
-    margin-left: var(--tw-sidebar-width);
-    position: relative;
-    overflow: hidden;
-}
 
-[dir="rtl"] .main-content{
-    margin-right: var(--tw-sidebar-width);
-    margin-left: 0 !important;
-}
-
-.page-content {
-    padding: calc(70px + 20px) calc(20px / 2) 60px calc(20px / 2);
-}
 
 .main-content .content {
-    padding: 0 15px 10px 15px;
+    padding: 0 20px 10px 20px;
     margin-top: 70px;
 }
 
@@ -8503,6 +8490,36 @@ canvas {
 :root {
    --tw-sidebar-width: 250px;
    --tw-sidebar-bg: #fbfaff;
+}
+
+/* Fix asymmetric layout */
+.main-content {
+    margin-left: var(--tw-sidebar-width);
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+[dir="rtl"] .main-content {
+    margin-right: var(--tw-sidebar-width);
+    margin-left: 0 !important;
+}
+
+.page-content {
+    padding: calc(70px + 20px) 20px 60px 20px;
+    box-sizing: border-box;
+}
+
+/* Fix container-fluid padding */
+.container-fluid {
+    width: 100%;
+    padding-right: 20px;
+    padding-left: 20px;
+    margin-right: auto;
+    margin-left: auto;
+    box-sizing: border-box;
 }
 
 .progress-bar-striped {
