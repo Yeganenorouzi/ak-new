@@ -29,7 +29,7 @@ class AuthModel
   {
     try {
       error_log("Starting registration process...");
-      
+
       // بررسی اتصال به دیتابیس
       $this->db->query("SELECT 1");
       $this->db->execute();
@@ -50,7 +50,9 @@ class AuthModel
         `address`, 
         `phone`, 
         `hours`, 
-        `codeposti`
+        `codeposti`,
+        `agent`,
+        `approved`
       ) VALUES (
         :email,
         :password,
@@ -62,11 +64,13 @@ class AuthModel
         :address,
         :phone,
         :hours,
-        :codeposti
+        :codeposti,
+        :agent,
+        :approved
       )";
 
       error_log("Preparing SQL query: " . $sql);
-      
+
       // آماده‌سازی کوئری
       $this->db->query($sql);
 
@@ -82,7 +86,9 @@ class AuthModel
         ":address" => $data["address"],
         ":phone" => substr($data["phone"], 0, 20),
         ":hours" => substr($data["hours"], 0, 50),
-        ":codeposti" => substr($data["codeposti"], 0, 10)
+        ":codeposti" => substr($data["codeposti"], 0, 10),
+        ":agent" => "نماینده",
+        ":approved" => 0  // نمایندگان نیاز به تایید دارند
       ];
 
       // لاگ کردن پارامترها
@@ -139,7 +145,10 @@ class AuthModel
       $user = $this->db->fetch();
 
       if ($user && password_verify($data["password"], $user->password)) {
-
+        // Check if user is approved (only for agents, not admins)
+        if ($user->admin == 0 && $user->approved == 0) {
+          return 'not_approved';
+        }
         return $user;
       }
       return false;
@@ -156,5 +165,78 @@ class AuthModel
     $this->db->bind(":codemelli", $codemelli);
     $this->db->fetch();
     return $this->db->rowCount() > 0;
+  }
+
+  public function findUserByEmail($email)
+  {
+    $this->db->query("SELECT * FROM users WHERE email = :email");
+    $this->db->bind(":email", $email);
+    $this->db->fetch();
+    return $this->db->rowCount() > 0;
+  }
+
+  public function findUserByMobile($mobile)
+  {
+    $this->db->query("SELECT * FROM users WHERE mobile = :mobile");
+    $this->db->bind(":mobile", $mobile);
+    $this->db->fetch();
+    return $this->db->rowCount() > 0;
+  }
+
+  public function saveRememberToken($userId, $token)
+  {
+    try {
+      // Create remember_tokens table if it doesn't exist
+      $this->db->query("CREATE TABLE IF NOT EXISTS remember_tokens (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT NOT NULL,
+        token VARCHAR(255) NOT NULL,
+        expires_at DATETIME NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+      )");
+      $this->db->execute();
+
+      // Delete old tokens for this user
+      $this->db->query("DELETE FROM remember_tokens WHERE user_id = :user_id");
+      $this->db->bind(":user_id", $userId);
+      $this->db->execute();
+
+      // Insert new token
+      $this->db->query("INSERT INTO remember_tokens (user_id, token, expires_at) VALUES (:user_id, :token, :expires_at)");
+      $this->db->bind(":user_id", $userId);
+      $this->db->bind(":token", hash('sha256', $token));
+      $this->db->bind(":expires_at", date('Y-m-d H:i:s', time() + (30 * 24 * 60 * 60))); // 30 days
+      return $this->db->execute();
+    } catch (Exception $e) {
+      error_log("Error saving remember token: " . $e->getMessage());
+      return false;
+    }
+  }
+
+  public function clearRememberToken($token)
+  {
+    try {
+      $this->db->query("DELETE FROM remember_tokens WHERE token = :token");
+      $this->db->bind(":token", hash('sha256', $token));
+      return $this->db->execute();
+    } catch (Exception $e) {
+      error_log("Error clearing remember token: " . $e->getMessage());
+      return false;
+    }
+  }
+
+  public function getUserByRememberToken($token)
+  {
+    try {
+      $this->db->query("SELECT u.* FROM users u 
+                        INNER JOIN remember_tokens rt ON u.id = rt.user_id 
+                        WHERE rt.token = :token AND rt.expires_at > NOW()");
+      $this->db->bind(":token", hash('sha256', $token));
+      return $this->db->fetch();
+    } catch (Exception $e) {
+      error_log("Error getting user by remember token: " . $e->getMessage());
+      return false;
+    }
   }
 }

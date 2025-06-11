@@ -91,6 +91,9 @@
                                                     ایمیل
                                                 </th>
                                                 <th scope="col" class="px-6 py-3">
+                                                    وضعیت تایید
+                                                </th>
+                                                <th scope="col" class="px-6 py-3">
                                                     عملیات
                                                 </th>
                                             </tr>
@@ -117,7 +120,33 @@
                                                         <?php echo $item->email; ?>
                                                     </td>
                                                     <td class="px-6 py-4">
+                                                        <?php if ($item->approved == 1): ?>
+                                                            <span
+                                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                                                <i class="fas fa-check-circle ml-1"></i>
+                                                                تایید شده
+                                                            </span>
+                                                        <?php else: ?>
+                                                            <span
+                                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
+                                                                <i class="fas fa-clock ml-1"></i>
+                                                                در انتظار تایید
+                                                            </span>
+                                                        <?php endif; ?>
+                                                    </td>
+                                                    <td class="px-6 py-4">
                                                         <div class="flex flex-row gap-2">
+                                                            <?php if ($item->approved == 0): ?>
+                                                                <button onclick="approveAgent(<?php echo $item->id; ?>)"
+                                                                    class="font-medium text-green-600 dark:text-green-500 hover:underline cursor-pointer">
+                                                                    <i class="fas fa-check ml-1"></i>تایید
+                                                                </button>
+                                                            <?php else: ?>
+                                                                <button onclick="rejectAgent(<?php echo $item->id; ?>)"
+                                                                    class="font-medium text-orange-600 dark:text-orange-500 hover:underline cursor-pointer">
+                                                                    <i class="fas fa-times ml-1"></i>لغو تایید
+                                                                </button>
+                                                            <?php endif; ?>
                                                             <a href="<?php echo URLROOT; ?>/users/editAgent/<?php echo $item->id; ?>"
                                                                 class="font-medium text-blue-600 dark:text-blue-500 hover:underline">ویرایش</a>
                                                             <a href="<?php echo URLROOT; ?>/users/deleteAgent/<?php echo $item->id; ?>"
@@ -219,3 +248,125 @@
     </div>
     <?php require_once(APPROOT . "/views/public/footer.php"); ?>
 </div>
+
+<!-- SweetAlert2 for notifications -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    // Approve Agent
+    function approveAgent(agentId) {
+        Swal.fire({
+            title: 'تایید نماینده',
+            text: 'آیا از تایید این نماینده مطمئن هستید؟',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#10b981',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'بله، تایید کن',
+            cancelButtonText: 'انصراف',
+            customClass: {
+                popup: 'rtl-alert'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch('<?php echo URLROOT; ?>/admin/approveAgent', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'agent_id=' + agentId
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'موفق!',
+                                text: data.message,
+                                icon: 'success',
+                                customClass: { popup: 'rtl-alert' }
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'خطا!',
+                                text: data.message,
+                                icon: 'error',
+                                customClass: { popup: 'rtl-alert' }
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            title: 'خطا!',
+                            text: 'مشکلی در ارتباط با سرور رخ داد',
+                            icon: 'error',
+                            customClass: { popup: 'rtl-alert' }
+                        });
+                    });
+            }
+        });
+    }
+
+    // Reject Agent
+    function rejectAgent(agentId) {
+        Swal.fire({
+            title: 'لغو تایید نماینده',
+            text: 'آیا از لغو تایید این نماینده مطمئن هستید؟',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#f59e0b',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'بله، لغو کن',
+            cancelButtonText: 'انصراف',
+            customClass: {
+                popup: 'rtl-alert'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch('<?php echo URLROOT; ?>/admin/rejectAgent', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'agent_id=' + agentId
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'موفق!',
+                                text: data.message,
+                                icon: 'success',
+                                customClass: { popup: 'rtl-alert' }
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'خطا!',
+                                text: data.message,
+                                icon: 'error',
+                                customClass: { popup: 'rtl-alert' }
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire({
+                            title: 'خطا!',
+                            text: 'مشکلی در ارتباط با سرور رخ داد',
+                            icon: 'error',
+                            customClass: { popup: 'rtl-alert' }
+                        });
+                    });
+            }
+        });
+    }
+</script>
+
+<style>
+    .rtl-alert {
+        direction: rtl;
+        font-family: 'Yekan', Tahoma, Arial, sans-serif;
+    }
+</style>
