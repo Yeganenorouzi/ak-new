@@ -255,6 +255,7 @@
 <script>
     // Approve Agent
     function approveAgent(agentId) {
+        console.log('Approving agent:', agentId);
         Swal.fire({
             title: 'تایید نماینده',
             text: 'آیا از تایید این نماینده مطمئن هستید؟',
@@ -269,15 +270,20 @@
             }
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch('<?php echo URLROOT; ?>/admin/approveAgent', {
+                console.log('Sending approval request...');
+                fetch('<?php echo URLROOT; ?>/Admin/approveAgent', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
                     body: 'agent_id=' + agentId
                 })
-                    .then(response => response.json())
+                    .then(response => {
+                        console.log('Response status:', response.status);
+                        return response.json();
+                    })
                     .then(data => {
+                        console.log('Response data:', data);
                         if (data.success) {
                             Swal.fire({
                                 title: 'موفق!',
@@ -297,6 +303,7 @@
                         }
                     })
                     .catch(error => {
+                        console.error('Error:', error);
                         Swal.fire({
                             title: 'خطا!',
                             text: 'مشکلی در ارتباط با سرور رخ داد',

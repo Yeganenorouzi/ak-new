@@ -33,13 +33,38 @@ class AdminModel
     // Approve an agent
     public function approveAgent($agentId)
     {
+        error_log("AdminModel::approveAgent - Starting approval for agent ID: " . $agentId);
+
         try {
-            $this->db->query("UPDATE users SET approved = 1 WHERE id = :id AND agent = 'نماینده'");
+            // First check if the agent exists
+            $this->db->query("SELECT id, approved FROM users WHERE id = :id AND admin = 0");
             $this->db->bind(':id', $agentId);
-            return $this->db->execute();
+            $agent = $this->db->fetch();
+
+            if (!$agent) {
+                error_log("Agent not found or is not an agent: " . $agentId);
+                return false;
+            }
+
+            error_log("Current agent status - ID: " . $agentId . ", Approved: " . $agent->approved);
+
+            // Update the agent's approved status
+            $this->db->query("UPDATE users SET approved = 1 WHERE id = :id");
+            $this->db->bind(':id', $agentId);
+
+            $result = $this->db->execute();
+            error_log("Update query executed. Result: " . ($result ? "success" : "failed"));
+
+            if ($result) {
+                error_log("Successfully approved agent ID: " . $agentId);
+                return true;
+            } else {
+                error_log("Failed to approve agent ID: " . $agentId);
+                return false;
+            }
         } catch (Exception $e) {
-            error_log("Error approving agent: " . $e->getMessage());
-            return false;
+            error_log("Exception in approveAgent: " . $e->getMessage());
+            throw $e;
         }
     }
 

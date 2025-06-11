@@ -45,18 +45,29 @@ class Admin extends Controller
     // Approve agent
     public function approveAgent()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agent_id'])) {
-            $agentId = (int) $_POST['agent_id'];
+        error_log("Admin::approveAgent - Request received");
+        error_log("POST data: " . print_r($_POST, true));
 
-            if ($this->adminModel->approveAgent($agentId)) {
-                echo json_encode(['success' => true, 'message' => 'نماینده با موفقیت تایید شد']);
-            } else {
-                echo json_encode(['success' => false, 'message' => 'خطا در تایید نماینده']);
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $agentId = $_POST['agent_id'];
+            error_log("Attempting to approve agent ID: " . $agentId);
+
+            try {
+                if ($this->adminModel->approveAgent($agentId)) {
+                    error_log("Agent approval successful for ID: " . $agentId);
+                    echo json_encode(['success' => true, 'message' => 'نماینده با موفقیت تایید شد']);
+                } else {
+                    error_log("Agent approval failed for ID: " . $agentId);
+                    echo json_encode(['success' => false, 'message' => 'خطا در تایید نماینده']);
+                }
+            } catch (Exception $e) {
+                error_log("Exception in approveAgent: " . $e->getMessage());
+                echo json_encode(['success' => false, 'message' => 'خطا در تایید نماینده: ' . $e->getMessage()]);
             }
         } else {
+            error_log("Invalid request method: " . $_SERVER['REQUEST_METHOD']);
             echo json_encode(['success' => false, 'message' => 'درخواست نامعتبر']);
         }
-        exit();
     }
 
     // Reject agent

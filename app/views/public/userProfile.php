@@ -99,8 +99,7 @@ if (!is_object($user) || !isset($user->name)) {
                                             <i class="fas fa-user text-white text-4xl"></i>
                                         </div>
                                     <?php endif; ?>
-                                    <span
-                                        class="absolute bottom-2 right-2 h-6 w-6 bg-green-500 border-2 border-white dark:border-zinc-800 rounded-full"></span>
+                                   
                                 </div>
 
                                 <!-- نام کاربر -->
