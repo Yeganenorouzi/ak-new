@@ -1,5 +1,6 @@
 <!-- Footer Start -->
-<footer class="footer border-t border-gray-50 py-5 px-5 bg-white dark:bg-zinc-700 dark:border-zinc-600 dark:text-gray-200">
+<footer
+    class="footer border-t border-gray-50 py-5 px-5 bg-white dark:bg-zinc-700 dark:border-zinc-600 dark:text-gray-200">
     <div class="grid grid-cols-2">
         <div class="grow lg:text-left order-2 md:order-1 text-left md:text-right">
             &copy;
@@ -7,8 +8,8 @@
                 document.write(new Date().getFullYear());
             </script> AK WARRANTY
         </div>
-        <div class="hidden md:inline-block text-start order-1 md:order-2">دیزاین و توسعه توسط <a href="https://github.com/Yeganenorouzi"
-                class="text-violet-500 underline">Yegane Norouzi</a></div>
+        <div class="hidden md:inline-block text-start order-1 md:order-2">دیزاین و توسعه توسط <a
+                href="https://github.com/Yeganenorouzi" class="text-violet-500 underline">Yegane Norouzi</a></div>
     </div>
 </footer>
 <!-- end Footer -->
@@ -184,7 +185,12 @@
 
                 } else if (data.status === 'not_found') {
                     // اگر مشتری پیدا نشد، فرم را خالی کن
-                    alert('کد ملی در سیستم نیست. لطفاً اطلاعات را وارد کنید.');
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'مشتری جدید',
+                        text: 'کد ملی در سیستم نیست. لطفاً اطلاعات مشتری جدید را وارد کنید.',
+                        confirmButtonText: 'باشه'
+                    });
                     // پاک کردن فیلدها
                     document.querySelector('[name="name"]').value = '';
                     document.querySelector('[name="mobile"]').value = '';
@@ -198,7 +204,12 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('خطا در برقراری ارتباط با سرور');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'خطا',
+                    text: 'خطا در برقراری ارتباط با سرور',
+                    confirmButtonText: 'باشه'
+                });
             });
     });
 
@@ -214,9 +225,19 @@
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'created') {
-                    alert('مشتری با موفقیت ایجاد شد.');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'موفق',
+                        text: 'مشتری با موفقیت ایجاد شد.',
+                        confirmButtonText: 'باشه'
+                    });
                 } else {
-                    alert('خطا در ذخیره اطلاعات.');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'خطا',
+                        text: 'خطا در ذخیره اطلاعات.',
+                        confirmButtonText: 'باشه'
+                    });
                 }
             });
     });
@@ -280,7 +301,12 @@
 
                 } else if (data.status === 'not_found') {
                     // اگر کارت پیدا نشد، فرم را خالی کن
-                    alert('سریال در سیستم نیست. لطفاً اطلاعات را وارد کنید.');
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'کارت جدید',
+                        text: 'سریال در سیستم نیست. لطفاً اطلاعات کارت جدید را وارد کنید.',
+                        confirmButtonText: 'باشه'
+                    });
                     // پاک کردن فیلدها
                     document.querySelector('[name="serial"]').value = '';
                     document.querySelector('[name="serial2"]').value = '';
@@ -298,7 +324,12 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('خطا در برقراری ارتباط با سرور');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'خطا',
+                    text: 'خطا در برقراری ارتباط با سرور',
+                    confirmButtonText: 'باشه'
+                });
             });
     });
 
@@ -314,9 +345,19 @@
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'created') {
-                    alert('کارت با موفقیت ایجاد شد.');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'موفق',
+                        text: 'کارت با موفقیت ایجاد شد.',
+                        confirmButtonText: 'باشه'
+                    });
                 } else {
-                    alert('خطا در ذخیره اطلاعات.');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'خطا',
+                        text: 'خطا در ذخیره اطلاعات.',
+                        confirmButtonText: 'باشه'
+                    });
                 }
             });
     });

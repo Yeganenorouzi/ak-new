@@ -46,6 +46,7 @@ if ($_SESSION['is_admin'] == 1) {
                                                 </option>
                                                 <option value="waiting" <?php echo (isset($_GET['status']) && $_GET['status'] == 'waiting') ? 'selected' : ''; ?>>در انتظار</option>
                                                 <option value="resolved" <?php echo (isset($_GET['status']) && $_GET['status'] == 'resolved') ? 'selected' : ''; ?>>حل شده</option>
+                                                <option value="closed" <?php echo (isset($_GET['status']) && $_GET['status'] == 'closed') ? 'selected' : ''; ?>>بسته شده</option>
                                             </select>
                                         </div>
                                         <div class="form-group flex flex-col">
@@ -131,6 +132,9 @@ if ($_SESSION['is_admin'] == 1) {
                                                                     case 'resolved':
                                                                         echo 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
                                                                         break;
+                                                                    case 'closed':
+                                                                        echo 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
+                                                                        break;
                                                                     default:
                                                                         echo 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
                                                                 }
@@ -148,6 +152,9 @@ if ($_SESSION['is_admin'] == 1) {
                                                                         break;
                                                                     case 'resolved':
                                                                         echo 'حل شده';
+                                                                        break;
+                                                                    case 'closed':
+                                                                        echo 'بسته شده';
                                                                         break;
                                                                     default:
                                                                         echo $ticket->status;
@@ -324,6 +331,7 @@ if ($_SESSION['is_admin'] == 1) {
                         <option value="in_progress">در حال انجام</option>
                         <option value="waiting">در انتظار</option>
                         <option value="resolved">حل شده</option>
+                        <option value="closed">بسته شده</option>
                     </select>
                 </div>
                 <div class="flex justify-end gap-2">

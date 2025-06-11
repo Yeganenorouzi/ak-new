@@ -17,6 +17,7 @@ class Export extends Controller
             session_start();
         }
 
+        // اجازه دسترسی به admin و agent
         if (!isset($_SESSION['admin']) || empty($_SESSION['admin'])) {
             header("Location: " . URLROOT . "/auth/login");
             exit();
@@ -88,7 +89,71 @@ class Export extends Controller
         exit();
     }
 
+    public function exportReceptionsAgent()
+    {
+        // بررسی اینکه کاربر agent است
+        if (!isset($_SESSION['admin']) || empty($_SESSION['admin']) || $_SESSION['is_admin'] == 1) {
+            header("Location: " . URLROOT . "/auth/login");
+            exit();
+        }
 
+        // پاک کردن هرگونه خروجی قبلی برای جلوگیری از خرابی فایل
+        ob_start();
+
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // تنظیم هدرها
+        $sheet->setCellValue('A1', 'شماره پذیرش');
+        $sheet->setCellValue('B1', 'نام مشتری');
+        $sheet->setCellValue('C1', 'سریال ');
+        $sheet->setCellValue('D1', 'شماره تماس');
+        $sheet->setCellValue('E1', 'آدرس');
+        $sheet->setCellValue('F1', 'تاریخ پذیرش');
+        $sheet->setCellValue('G1', 'وضعیت');
+        $sheet->setCellValue('H1', 'توضیحات');
+        $sheet->setCellValue('I1', ' وضعیت گارانتی ');
+        $sheet->setCellValue('J1', 'ایراد دستگاه  ');
+        $sheet->setCellValue('K1', ' مشکل ظاهری  ');
+        $sheet->setCellValue('L1', '  نوع پذیرش  ');
+
+        $row = 2;
+        // دریافت پذیرش‌های مربوط به این agent
+        $receptions = $this->receptionsModel->getAllReceptionsByAgent();
+
+        foreach ($receptions as $item) {
+            $sheet->setCellValue('A' . $row, $item->id);
+            $sheet->setCellValue('B' . $row, $item->name ?? 'N/A');
+            $sheet->setCellValue('C' . $row, $item->serial ?? 'N/A');
+            $sheet->setCellValue('D' . $row, $item->mobile ?? 'N/A');
+            $sheet->setCellValue('E' . $row, $item->address ?? 'N/A');
+            // تبدیل تاریخ میلادی به شمسی
+            $persianDate = empty($item->created_at) ? 'N/A' : \Morilog\Jalali\Jalalian::fromDateTime($item->created_at)->format('Y/m/d');
+            $sheet->setCellValue('F' . $row, $persianDate);
+
+            $sheet->setCellValue('G' . $row, $item->product_status ?? 'N/A');
+            $sheet->setCellValue('H' . $row, $item->dex ?? 'N/A');
+            $sheet->setCellValue('I' . $row, $item->guarantee_status ?? 'N/A');
+            $sheet->setCellValue('J' . $row, $item->problem ?? 'N/A');
+            $sheet->setCellValue('K' . $row, $item->situation ?? 'N/A');
+            $sheet->setCellValue('L' . $row, $item->repair_status ?? 'N/A');
+            $row++;
+        }
+
+        // ارسال هدرهای دانلود
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="agent_receptions.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+
+        // پاک کردن هر خروجی اضافی قبل از ارسال فایل
+        ob_end_clean();
+
+        // ارسال فایل به خروجی
+        $writer->save('php://output');
+        exit();
+    }
 
     private function convertToExcelDate($date)
     {

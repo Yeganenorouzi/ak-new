@@ -153,6 +153,12 @@ class Receptions extends Controller
         if (!empty($_GET['customer_name'])) {
             $filters['customer_name'] = $_GET['customer_name'];
         }
+        if (!empty($_GET['codemelli'])) {
+            $filters['codemelli'] = $_GET['codemelli'];
+        }
+        if (!empty($_GET['mobile'])) {
+            $filters['mobile'] = $_GET['mobile'];
+        }
         if (!empty($_GET['status'])) {
             $filters['status'] = $_GET['status'];
         }

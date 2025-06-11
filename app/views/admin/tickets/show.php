@@ -69,6 +69,9 @@ if ($_SESSION['is_admin'] == 1) {
                                             case 'resolved':
                                                 echo 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
                                                 break;
+                                            case 'closed':
+                                                echo 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300';
+                                                break;
                                             default:
                                                 echo 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
                                         }
@@ -86,6 +89,9 @@ if ($_SESSION['is_admin'] == 1) {
                                                 break;
                                             case 'resolved':
                                                 echo 'حل شده';
+                                                break;
+                                            case 'closed':
+                                                echo 'بسته شده';
                                                 break;
                                             default:
                                                 echo $data['ticket']->status;

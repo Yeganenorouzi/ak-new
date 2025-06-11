@@ -281,19 +281,26 @@ class ReceptionsModel
         $params[':date_to'] = $filters['date_to'];
       }
 
-      $query .= " ORDER BY receptions.id DESC";
+      $query .= " ORDER BY receptions.id DESC LIMIT :limit OFFSET :offset";
 
-      $this->db->query($query);
+      // First execute count query to get total records
       $this->db->query($countQuery);
-
-      // Bind all parameters
       foreach ($params as $key => $value) {
         $this->db->bind($key, $value);
       }
-
-      $receptions = $this->db->fetchAll();
       $totalResult = $this->db->fetch();
       $total = $totalResult->total;
+
+      // Add pagination parameters for main query
+      $params[':limit'] = $perPage;
+      $params[':offset'] = $offset;
+
+      // Then execute main query to get receptions
+      $this->db->query($query);
+      foreach ($params as $key => $value) {
+        $this->db->bind($key, $value);
+      }
+      $receptions = $this->db->fetchAll();
 
       // Calculate pagination info
       $totalPages = ceil($total / $perPage);
