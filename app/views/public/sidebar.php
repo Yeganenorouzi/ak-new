@@ -232,6 +232,33 @@
   </div>
 </div>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // همه آیتم‌های منو که زیرمنو دارند
+    const navMenus = document.querySelectorAll('.nav-menu');
 
+    navMenus.forEach(function (menu) {
+      menu.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        // همه زیرمنوها را ببند
+        document.querySelectorAll('.nav-menu + ul').forEach(function (submenu) {
+          submenu.style.display = 'none';
+        });
+
+        // اگر زیرمنوی فعلی باز نبود، بازش کن
+        const submenu = this.nextElementSibling;
+        if (submenu && submenu.style.display !== 'block') {
+          submenu.style.display = 'block';
+        }
+      });
+    });
+
+    // در ابتدا همه زیرمنوها بسته باشند
+    document.querySelectorAll('.nav-menu + ul').forEach(function (submenu) {
+      submenu.style.display = 'none';
+    });
+  });
+</script>
 
 <!-- Left Sidebar End -->
