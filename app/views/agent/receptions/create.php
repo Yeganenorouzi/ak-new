@@ -926,12 +926,24 @@
             return;
         }
 
+        // Get model value
+        const model = document.querySelector('[name="model"]').value.trim();
+        if (!model) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'هشدار',
+                text: 'لطفاً مدل دستگاه را وارد کنید',
+                confirmButtonText: 'باشه'
+            });
+            return;
+        }
+
         fetch('<?php echo URLROOT; ?>/cards/searchOrCreate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `serial=${encodeURIComponent(serial)}`
+                body: `serial=${encodeURIComponent(serial)}&model=${encodeURIComponent(model)}`
             })
             .then(response => response.json())
             .then(data => {
@@ -948,18 +960,15 @@
                     document.querySelector('[name="sh_sanad"]').value = data.data.sh_sanad;
                     document.querySelector('[name="start_guarantee"]').value = data.data.start_guarantee;
                     document.querySelector('[name="expite_guarantee"]').value = data.data.expite_guarantee;
-
-
-                } else if (data.status === 'not_found') {
+                } else if (data.status === 'created') {
                     Swal.fire({
-                        icon: 'info',
-                        title: 'کارت جدید',
-                        text: 'کارت در سیستم نیست. لطفاً اطلاعات کارت جدید را وارد کنید.',
+                        icon: 'success',
+                        title: 'موفق',
+                        text: data.message,
                         confirmButtonText: 'باشه'
                     });
-                    // فقط سایر فیلدها پاک شوند
+                    // Clear other fields since this is a new card
                     document.querySelector('[name="serial2"]').value = '';
-                    document.querySelector('[name="model"]').value = '';
                     document.querySelector('[name="title"]').value = '';
                     document.querySelector('[name="att1_code"]').value = '';
                     document.querySelector('[name="att2_code"]').value = '';
@@ -969,6 +978,13 @@
                     document.querySelector('[name="sh_sanad"]').value = '';
                     document.querySelector('[name="start_guarantee"]').value = '';
                     document.querySelector('[name="expite_guarantee"]').value = '';
+                } else if (data.status === 'error') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'خطا',
+                        text: data.message,
+                        confirmButtonText: 'باشه'
+                    });
                 }
             })
             .catch(error => {

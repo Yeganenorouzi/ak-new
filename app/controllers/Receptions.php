@@ -462,9 +462,9 @@ class Receptions extends Controller
                 'kaar_at' => $_POST['kaar_at'] ?? '',
                 'sh_baar2' => $_POST['sh_baar2'] ?? '',
                 'sh_baar' => $_POST['sh_baar'] ?? '',
-                'file1' => $files['file1'] ?? '',
-                'file2' => $files['file2'] ?? '',
-                'file3' => $files['file3'] ?? ''
+                'file1' => $files['file1'] ?: ($_POST['existing_image1'] ?? ''),
+                'file2' => $files['file2'] ?: ($_POST['existing_image2'] ?? ''),
+                'file3' => $files['file3'] ?: ($_POST['existing_image3'] ?? '')
             ];
 
             // به‌روزرسانی پذیرش
@@ -472,6 +472,25 @@ class Receptions extends Controller
 
             if (!$result['success']) {
                 throw new Exception($result['error'] ?? "خطا در به‌روزرسانی پذیرش");
+            }
+
+            // ثبت تاریخچه تغییرات
+            $changedFields = [];
+            $fieldsToCheck = ['product_status', 'kaar', 'kaar_serial', 'kaar_at', 'sh_baar2', 'sh_baar', 'file1', 'file2', 'file3'];
+            foreach ($fieldsToCheck as $field) {
+                $oldValue = $reception->$field ?? '';
+                $newValue = $data[$field] ?? '';
+                if ($oldValue != $newValue) {
+                    $changedFields[] = [
+                        'field' => $field,
+                        'old' => $oldValue,
+                        'new' => $newValue
+                    ];
+                }
+            }
+            if (!empty($changedFields)) {
+                $changer = $_SESSION['id'] ?? 0;
+                $this->receptionsModel->logReceptionEditHistory($id, $changer, $changedFields);
             }
 
             // Clear any output buffers

@@ -57,6 +57,8 @@ use Morilog\Jalali\Jalalian;
                         <button type="submit" id="update-button"
                             class="flex btn text-white bg-violet-500 border-violet-500 hover:bg-violet-600 hover:border-violet-600 focus:bg-violet-600 focus:border-violet-600 focus:ring focus:ring-violet-500/30 active:bg-violet-600 active:border-violet-600 ltr:mr-2 rtl:ml-2">بروزرسانی
                             پذیرش</button>
+                        <a href="<?php echo isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1 ? URLROOT . '/receptions/admin' : URLROOT . '/receptions/agent'; ?>"
+                            class="flex btn text-white bg-gray-500 border-gray-500 hover:bg-gray-600 hover:border-gray-600 focus:bg-gray-600 focus:border-gray-600 focus:ring focus:ring-gray-500/30 active:bg-gray-600 active:border-gray-600">انصراف</a>
                     </div>
                 </div>
 
@@ -80,7 +82,7 @@ use Morilog\Jalali\Jalalian;
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
                                                 type="text" id="name" name="name"
                                                 value="<?php echo htmlspecialchars($data['reception']->name); ?>"
-                                                readonly>
+                                                >
                                         </div>
                                         <div class="mb-4">
                                             <label for="mobile"
@@ -89,8 +91,7 @@ use Morilog\Jalali\Jalalian;
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                                 type="tel" id="mobile" name="mobile"
-                                                value="<?php echo htmlspecialchars($data['reception']->mobile); ?>"
-                                                readonly>
+                                                value="<?php echo htmlspecialchars($data['reception']->mobile); ?>">
                                         </div>
                                         <div class="mb-4">
                                             <label for="phone"
@@ -99,8 +100,7 @@ use Morilog\Jalali\Jalalian;
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                                 type="tel" id="phone" name="phone"
-                                                value="<?php echo htmlspecialchars($data['reception']->phone); ?>"
-                                                readonly>
+                                                value="<?php echo htmlspecialchars($data['reception']->phone); ?>">
                                         </div>
                                         <div class="mb-4">
                                             <div class="mb-3">
@@ -108,12 +108,12 @@ use Morilog\Jalali\Jalalian;
                                                     class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">استان</label>
                                                 <select
                                                     class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
-                                                    name="ostan" id="province-select" disabled>
+                                                    name="ostan" id="province-select">
                                                     <option value="">انتخاب استان</option>
                                                     <?php foreach (ProvinceHelper::getProvinces() as $province): ?>
-                                                        <option value="<?php echo $province; ?>" <?php echo ($data['reception']->ostan === $province) ? 'selected' : ''; ?>>
-                                                            <?php echo $province; ?>
-                                                        </option>
+                                                            <option value="<?php echo $province; ?>" <?php echo ($data['reception']->ostan === $province) ? 'selected' : ''; ?>>
+                                                                <?php echo $province; ?>
+                                                            </option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
@@ -125,14 +125,14 @@ use Morilog\Jalali\Jalalian;
                                                     class="block font-medium text-gray-700 dark:text-zinc-100 mb-2">شهر</label>
                                                 <select
                                                     class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
-                                                    name="shahr" disabled>
+                                                    name="shahr">
                                                     <option value="">انتخاب شهر</option>
                                                     <?php foreach (ProvinceHelper::getCities() as $province => $cities): ?>
-                                                        <?php foreach ($cities as $city): ?>
-                                                            <option value="<?php echo $city; ?>" <?php echo ($data['reception']->shahr === $city) ? 'selected' : ''; ?>>
-                                                                <?php echo $city; ?>
-                                                            </option>
-                                                        <?php endforeach; ?>
+                                                            <?php foreach ($cities as $city): ?>
+                                                                    <option value="<?php echo $city; ?>" <?php echo ($data['reception']->shahr === $city) ? 'selected' : ''; ?>>
+                                                                        <?php echo $city; ?>
+                                                                    </option>
+                                                            <?php endforeach; ?>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </div>
@@ -179,8 +179,7 @@ use Morilog\Jalali\Jalalian;
                                             <input
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                                 type="text" id="codeposti" name="codeposti"
-                                                value="<?php echo htmlspecialchars($data['reception']->codeposti); ?>"
-                                                readonly>
+                                                value="<?php echo htmlspecialchars($data['reception']->codeposti); ?>">
                                         </div>
 
                                         <div class="mb-4">
@@ -188,8 +187,7 @@ use Morilog\Jalali\Jalalian;
                                                 class="block font-medium text-gray-700 dark:text-gray-100 mb-2">آدرس</label>
                                             <textarea
                                                 class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:placeholder:text-zinc-100 dark:text-zinc-100"
-                                                style="height: 210px; resize: none;" name="address" id="address"
-                                                readonly><?php echo htmlspecialchars($data['reception']->address); ?></textarea>
+                                                style="height: 210px; resize: none;" name="address" id="address"><?php echo htmlspecialchars($data['reception']->address); ?></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -357,7 +355,7 @@ use Morilog\Jalali\Jalalian;
                                                 پذیرش</label>
                                             <select
                                                 class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
-                                                name="paziresh_status" disabled>
+                                                name="paziresh_status">
                                                 <option value="">انتخاب</option>
                                                 <option value="پذیرش حضوری" <?php echo ($data['reception']->paziresh_status === 'پذیرش حضوری') ? 'selected' : ''; ?>>پذیرش حضوری</option>
                                                 <option value="پذیرش غیرحضوری" <?php echo ($data['reception']->paziresh_status === 'پذیرش غیرحضوری') ? 'selected' : ''; ?>>پذیرش غیرحضوری</option>
@@ -371,8 +369,7 @@ use Morilog\Jalali\Jalalian;
                                         <input
                                             class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                             type="text" id="activation-date" name="activation_status" required
-                                            value="<?php echo htmlspecialchars($data['reception']->activation_status ?? ''); ?>"
-                                            readonly>
+                                            value="<?php echo htmlspecialchars($data['reception']->activation_status ?? ''); ?>">
                                     </div>
                                     <div class="mb-4">
                                         <label for="activation-date"
@@ -381,8 +378,7 @@ use Morilog\Jalali\Jalalian;
                                         <input
                                             class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                             type="text" id="activation-date" name="activation_start_date" required
-                                            value="<?php echo htmlspecialchars($data['reception']->activation_start_date ?? ''); ?>"
-                                            readonly d>
+                                            value="<?php echo htmlspecialchars($data['reception']->activation_start_date ?? ''); ?>">
                                     </div>
                                     <div class="mb-4">
                                         <label for="activation-date"
@@ -391,8 +387,7 @@ use Morilog\Jalali\Jalalian;
                                         <input
                                             class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                             type="text" id="activation-date" name="activation_day" required
-                                            value="<?php echo htmlspecialchars($data['reception']->activation_day ?? ''); ?>"
-                                            readonly>
+                                            value="<?php echo htmlspecialchars($data['reception']->activation_day ?? ''); ?>">
                                     </div>
 
                                 </div>
@@ -403,7 +398,7 @@ use Morilog\Jalali\Jalalian;
                                                 گارانتی</label>
                                             <select
                                                 class="dark:bg-zinc-800 dark:border-zinc-700 w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:text-zinc-100"
-                                                name="guarantee_status" disabled>
+                                                name="guarantee_status">
                                                 <option value="">انتخاب</option>
                                                 <option value="تحت گارانتی" <?php echo ($data['reception']->guarantee_status === 'تحت گارانتی') ? 'selected' : ''; ?>>تحت گارانتی</option>
                                                 <option value="ابطال گارانتی" <?php echo ($data['reception']->guarantee_status === 'ابطال گارانتی') ? 'selected' : ''; ?>>ابطال گارانتی</option>
@@ -418,8 +413,7 @@ use Morilog\Jalali\Jalalian;
                                         <input
                                             class="w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                             type="text" id="estimated_time" name="estimated_time" required
-                                            value="<?php echo htmlspecialchars($data['reception']->estimated_time ?? ''); ?>"
-                                            readonly>
+                                            value="<?php echo htmlspecialchars($data['reception']->estimated_time ?? ''); ?>">
                                     </div>
                                     <div class="mb-4">
                                         <label for="estimated_cost"
@@ -428,8 +422,7 @@ use Morilog\Jalali\Jalalian;
                                         <input
                                             class="w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                             type="text" id="estimated_cost" name="estimated_cost" required
-                                            value="<?php echo htmlspecialchars($data['reception']->estimated_cost ?? ''); ?>"
-                                            readonly>
+                                            value="<?php echo htmlspecialchars($data['reception']->estimated_cost ?? ''); ?>">
                                     </div>
                                     <div class="mb-4">
                                         <label for="dex"
@@ -437,8 +430,7 @@ use Morilog\Jalali\Jalalian;
                                         <input
                                             class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                             type="text" id="dex" name="dex"
-                                            value="<?php echo htmlspecialchars($data['reception']->dex ?? ''); ?>"
-                                            readonly>
+                                            value="<?php echo htmlspecialchars($data['reception']->dex ?? ''); ?>">
                                     </div>
                                 </div>
                                 <div class="col-span-12 lg:col-span-3">
@@ -449,8 +441,7 @@ use Morilog\Jalali\Jalalian;
                                         <input
                                             class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                             type="text" id="repair_status" name="repair_status" required
-                                            value="<?php echo htmlspecialchars($data['reception']->repair_status ?? ''); ?>"
-                                            readonly>
+                                            value="<?php echo htmlspecialchars($data['reception']->repair_status ?? ''); ?>">
                                     </div>
                                     <div class="mb-4">
                                         <label for="situation"
@@ -459,8 +450,7 @@ use Morilog\Jalali\Jalalian;
                                         <input
                                             class="w-full rounded border-gray-100 placeholder:text-sm focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                             type="text" id="situation" name="situation" required
-                                            value="<?php echo htmlspecialchars($data['reception']->situation ?? ''); ?>"
-                                            readonly>
+                                            value="<?php echo htmlspecialchars($data['reception']->situation ?? ''); ?>">
                                     </div>
                                     <div class="mb-4">
                                         <label for="problem"
@@ -469,8 +459,7 @@ use Morilog\Jalali\Jalalian;
                                         <input
                                             class="w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                             type="text" id="problem" name="problem" required
-                                            value="<?php echo htmlspecialchars($data['reception']->problem ?? ''); ?>"
-                                            readonly>
+                                            value="<?php echo htmlspecialchars($data['reception']->problem ?? ''); ?>">
                                     </div>
                                     <div class="mb-4">
                                         <label class="block font-medium text-gray-700 dark:text-gray-100 mb-2">لوازم همراه</label>
@@ -479,7 +468,7 @@ use Morilog\Jalali\Jalalian;
                                             // تبدیل رشته accessories به آرایه (اگر به صورت رشته ذخیره شده باشد)
                                             $accessories = is_string($data['reception']->accessories ?? '') ?
                                                 explode(',', $data['reception']->accessories) : ($data['reception']->accessories ?? []);
-                                            
+
                                             // تعریف لیست لوازم موجود
                                             $accessoryOptions = [
                                                 'box' => 'جعبه',
@@ -492,7 +481,7 @@ use Morilog\Jalali\Jalalian;
                                                 'screenprotector' => 'محافظ صفحه',
                                                 'memorycard' => 'کارت حافظه'
                                             ];
-                                            
+
                                             // ساخت متن نمایشی برای انتخاب‌های فعلی
                                             $selectedText = '';
                                             if (!empty($accessories)) {
@@ -529,19 +518,19 @@ use Morilog\Jalali\Jalalian;
                                             >
                                                 <div class="py-2 max-h-60 overflow-y-auto">
                                                     <?php foreach ($accessoryOptions as $value => $label): ?>
-                                                        <div class="px-3 py-2 hover:bg-gray-100 dark:hover:bg-zinc-700 cursor-pointer">
-                                                            <label class="flex items-center cursor-pointer">
-                                                                <input 
-                                                                    type="checkbox"
-                                                                    name="accessories[]"
-                                                                    value="<?php echo $value; ?>"
-                                                                    <?php echo in_array($value, $accessories) ? 'checked' : ''; ?>
-                                                                    class="rounded mr-2 focus:ring-0 focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500"
-                                                                    onchange="updateAccessoriesDisplay()"
-                                                                >
-                                                                <span class="text-sm text-gray-700 dark:text-gray-100"><?php echo $label; ?></span>
-                                                            </label>
-                                                        </div>
+                                                            <div class="px-3 py-2 hover:bg-gray-100 dark:hover:bg-zinc-700 cursor-pointer">
+                                                                <label class="flex items-center cursor-pointer">
+                                                                    <input 
+                                                                        type="checkbox"
+                                                                        name="accessories[]"
+                                                                        value="<?php echo $value; ?>"
+                                                                        <?php echo in_array($value, $accessories) ? 'checked' : ''; ?>
+                                                                        class="rounded mr-2 focus:ring-0 focus:ring-offset-0 dark:bg-zinc-700 dark:border-zinc-400 checked:bg-violet-500 dark:checked:bg-violet-500"
+                                                                        onchange="updateAccessoriesDisplay()"
+                                                                    >
+                                                                    <span class="text-sm text-gray-700 dark:text-gray-100"><?php echo $label; ?></span>
+                                                                </label>
+                                                            </div>
                                                     <?php endforeach; ?>
                                                 </div>
                                                 
@@ -575,9 +564,9 @@ use Morilog\Jalali\Jalalian;
                                             name="product_status" required>
                                             <option value="">انتخاب</option>
                                             <?php foreach ($data['product_statuses'] as $status): ?>
-                                                <option value="<?php echo $status->status; ?>" <?php echo ($data['reception']->product_status === $status->status) ? 'selected' : ''; ?>>
-                                                    <?php echo $status->status; ?>
-                                                </option>
+                                                    <option value="<?php echo $status->status; ?>" <?php echo ($data['reception']->product_status === $status->status) ? 'selected' : ''; ?>>
+                                                        <?php echo $status->status; ?>
+                                                    </option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
@@ -652,13 +641,14 @@ use Morilog\Jalali\Jalalian;
                                             class="input-field w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                             type="file" id="avatar1" accept="image/*"
                                             onchange="previewImage(this, 'preview1');">
+                                        <input type="hidden" name="existing_image1" value="<?php echo htmlspecialchars($data['reception']->file1 ?? ''); ?>">
                                         <div class="mt-2">
                                             <?php if (!empty($data['reception']->file1)): ?>
-                                                <div class="mb-2">
-                                                    <a href="<?php echo URLROOT; ?>/assets/uploads/receptions/<?php echo $data['reception']->file1; ?>"
-                                                        class="text-violet-500 hover:text-violet-600" target="_blank" download>دانلود
-                                                        تصویر فعلی</a>
-                                                </div>
+                                                    <div class="mb-2">
+                                                        <a href="<?php echo URLROOT; ?>/assets/uploads/receptions/<?php echo $data['reception']->file1; ?>"
+                                                            class="text-violet-500 hover:text-violet-600" target="_blank" download>دانلود
+                                                            تصویر فعلی</a>
+                                                    </div>
                                             <?php endif; ?>
                                             <img id="preview1"
                                                 src="<?php echo !empty($data['reception']->file1) ? URLROOT . '/assets/uploads/receptions/' . $data['reception']->file1 : '#'; ?>"
@@ -679,13 +669,14 @@ use Morilog\Jalali\Jalalian;
                                             class="input-field w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                             type="file" id="avatar2" accept="image/*"
                                             onchange="previewImage(this, 'preview2');">
+                                        <input type="hidden" name="existing_image2" value="<?php echo htmlspecialchars($data['reception']->file2 ?? ''); ?>">
                                         <div class="mt-2">
                                             <?php if (!empty($data['reception']->file2)): ?>
-                                                <div class="mb-2">
-                                                    <a href="<?php echo URLROOT; ?>/assets/uploads/receptions/<?php echo $data['reception']->file2; ?>"
-                                                        class="text-violet-500 hover:text-violet-600" target="_blank" download>دانلود
-                                                        تصویر فعلی</a>
-                                                </div>
+                                                    <div class="mb-2">
+                                                        <a href="<?php echo URLROOT; ?>/assets/uploads/receptions/<?php echo $data['reception']->file2; ?>"
+                                                            class="text-violet-500 hover:text-violet-600" target="_blank" download>دانلود
+                                                            تصویر فعلی</a>
+                                                    </div>
                                             <?php endif; ?>
                                             <img id="preview2"
                                                 src="<?php echo !empty($data['reception']->file2) ? URLROOT . '/assets/uploads/receptions/' . $data['reception']->file2 : '#'; ?>"
@@ -706,13 +697,14 @@ use Morilog\Jalali\Jalalian;
                                             class="input-field w-full rounded border-gray-100 py-2.5 text-sm text-gray-500 focus:border focus:border-violet-500 focus:ring-0 dark:bg-zinc-700/50 dark:border-zinc-600 dark:text-zinc-100"
                                             type="file" id="avatar3" accept="image/*"
                                             onchange="previewImage(this, 'preview3');">
+                                        <input type="hidden" name="existing_image3" value="<?php echo htmlspecialchars($data['reception']->file3 ?? ''); ?>">
                                         <div class="mt-2">
                                             <?php if (!empty($data['reception']->file3)): ?>
-                                                <div class="mb-2">
-                                                    <a href="<?php echo URLROOT; ?>/assets/uploads/receptions/<?php echo $data['reception']->file3; ?>"
-                                                        class="text-violet-500 hover:text-violet-600" target="_blank" download>دانلود
-                                                        تصویر فعلی</a>
-                                                </div>
+                                                    <div class="mb-2">
+                                                        <a href="<?php echo URLROOT; ?>/assets/uploads/receptions/<?php echo $data['reception']->file3; ?>"
+                                                            class="text-violet-500 hover:text-violet-600" target="_blank" download>دانلود
+                                                            تصویر فعلی</a>
+                                                    </div>
                                             <?php endif; ?>
                                             <img id="preview3"
                                                 src="<?php echo !empty($data['reception']->file3) ? URLROOT . '/assets/uploads/receptions/' . $data['reception']->file3 : '#'; ?>"
@@ -727,48 +719,93 @@ use Morilog\Jalali\Jalalian;
                     </div>
                 </div>
 
-                <!-- Tracking Log Section -->
-                <!-- <div class="grid grid-cols-1 mt-5">
-                    <div class="card dark:bg-zinc-800 dark:border-zinc-600">
-                        <div class="card-body pb-0">
-                            <h6 class="mb-1 text-15 text-gray-700 dark:text-gray-100">تاریخچه تغییرات</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="overflow-x-auto">
-                                <table class="w-full text-sm text-right text-gray-500 dark:text-gray-400">
-                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-zinc-700 dark:text-gray-400">
-                                        <tr>
-                                            <th scope="col" class="px-6 py-3">تاریخ</th>
-                                            <th scope="col" class="px-6 py-3">کاربر</th>
-                                            <th scope="col" class="px-6 py-3">وضعیت پذیرش</th>
-                                           
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        // Add reception record as first entry
-                                        $shamsiDate = new Verta($data['reception']->created_at);
-                                        ?>
-                                        <tr class="bg-white border-b dark:bg-zinc-800 dark:border-zinc-700">
-                                            <td class="px-6 py-4"><?php echo $shamsiDate->format('Y/m/d H:i'); ?></td>
-                                            <td class="px-6 py-4"><?php echo $data['reception']->user_name; ?></td>
-                                            <td class="px-6 py-4"><?php echo $data['reception']->product_status; ?></td>
-                                        </tr>
-                                        <?php if (isset($data['reception']->tracking_log) && !empty($data['reception']->tracking_log)): ?>
-                                            <?php foreach (json_decode($data['reception']->tracking_log, true) as $log): ?>
-                                                <tr class="bg-white border-b dark:bg-zinc-800 dark:border-zinc-700">
-                                                    <td class="px-6 py-4"><?php echo $log['date']; ?></td>
-                                                    <td class="px-6 py-4"><?php echo $log['user']; ?></td>
-                                                    <td class="px-6 py-4"><?php echo $log['product_status']; ?></td>
+                <!-- دریافت تاریخچه تغییرات این پذیرش -->
+                <?php
+                $histories = [];
+                try {
+                    $db = new Database();
+                    $db->query("SELECT * FROM reception_edit_histories WHERE reception_id = :rid ORDER BY created_at DESC");
+                    $db->bind(":rid", $data['reception']->id);
+                    $histories = $db->fetchAll();
+                } catch (Exception $e) {
+                }
+                // تابع کمکی برای گرفتن نام کاربر
+                function getUserNameById($id)
+                {
+                    $db = new Database();
+                    $db->query("SELECT name FROM users WHERE id = :id");
+                    $db->bind(":id", $id);
+                    $user = $db->fetch();
+                    return $user ? $user->name : '---';
+                }
+                ?>
+                <div class="card mt-5 dark:bg-zinc-800 dark:border-zinc-600">
+                    <div class="card-body pb-0">
+                        <h6 class="mb-1 text-15 text-gray-700 dark:text-gray-100">تاریخچه تغییرات</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-right text-gray-500 dark:text-gray-400">
+                                <thead>
+                                    <tr>
+                                        <th>تاریخ</th>
+                                        <th>کاربر</th>
+                                        <th>فیلد</th>
+                                        <th>مقدار قبلی</th>
+                                        <th>مقدار جدید</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($histories as $history): ?>
+                                            <?php
+                                            $userName = getUserNameById($history->changer);
+                                            if ($history->changer && $userName !== '---' && !empty($userName)):
+                                                ?>
+                                                <tr>
+                                                    <td><?php echo (new Verta($history->created_at))->format('Y/m/d H:i'); ?></td>
+                                                    <td><?php echo $userName; ?></td>
+                                                    <td>
+                                                        <?php
+                                                        $changes = json_decode($history->history, true);
+                                                        if (is_array($changes)) {
+                                                            foreach ($changes as $change) {
+                                                                if (is_array($change) && isset($change['field'], $change['old'], $change['new'])) {
+                                                                    echo "<b>{$change['field']}</b>";
+                                                                }
+                                                            }
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php
+                                                        if (is_array($changes)) {
+                                                            foreach ($changes as $change) {
+                                                                if (is_array($change) && isset($change['field'], $change['old'], $change['new'])) {
+                                                                    echo "<span style='color:red'>{$change['old']}</span>";
+                                                                }
+                                                            }
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php
+                                                        if (is_array($changes)) {
+                                                            foreach ($changes as $change) {
+                                                                if (is_array($change) && isset($change['field'], $change['old'], $change['new'])) {
+                                                                    echo "<span style='color:green'>{$change['new']}</span>";
+                                                                }
+                                                            }
+                                                        }
+                                                        ?>
+                                                    </td>
                                                 </tr>
-                                            <?php endforeach; ?>
-                                        <?php endif; ?>
-                                    </tbody>
-                                </table>
-                            </div>
+                                            <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                </div> -->
+                </div>
             </form>
         </div>
     </div>
@@ -913,9 +950,9 @@ use Morilog\Jalali\Jalalian;
                             }).then(() => {
                                 // بررسی نقش کاربر و هدایت به صفحه مناسب
                                 <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] == 1): ?>
-                                    window.location.href = '<?php echo URLROOT; ?>/receptions/admin';
+                                        window.location.href = '<?php echo URLROOT; ?>/receptions/admin';
                                 <?php else: ?>
-                                    window.location.href = '<?php echo URLROOT; ?>/receptions/agent';
+                                        window.location.href = '<?php echo URLROOT; ?>/receptions/agent';
                                 <?php endif; ?>
                             });
                         } else {

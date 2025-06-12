@@ -375,7 +375,7 @@
                                     <div class="error-message text-red-500 text-sm mt-1" id="password-error"></div>
                                 </div>
 
-                                <div class="mb-6 flex items-center justify-between">
+                                <!-- <div class="mb-6 flex items-center justify-between">
                                     <div class="flex items-center">
                                         <input type="checkbox" id="remember" name="remember"
                                             class="h-4 w-4 text-violet-500 border-gray-300 rounded focus:ring-violet-500">
@@ -386,7 +386,7 @@
                                     <a href="#" class="text-sm text-violet-600 hover:text-violet-700 font-medium">
                                         فراموشی رمز عبور؟
                                     </a>
-                                </div>
+                                </div> -->
 
                                 <div class="mb-6">
                                     <button type="submit" id="loginBtn"

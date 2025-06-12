@@ -233,65 +233,73 @@ class CardsModel
                 throw new Exception("این سریال قبلاً در سیستم ثبت شده است");
             }
 
+            // Validate required fields
+            if (empty($data['serial'])) {
+                throw new Exception("سریال نمی‌تواند خالی باشد");
+            }
+
+            if (empty($data['model'])) {
+                throw new Exception("مدل دستگاه نمی‌تواند خالی باشد");
+            }
+
             // تنظیم مقادیر پیش‌فرض برای فیلدهای سیستمی
-            $data['is_import'] = 0;        // کارت وارداتی نیست
-            $data['added_by_user'] = 1;    // کاربر پیش‌فرض با ID = 1
-            $data['approved'] = 1;         // تایید شده
-            $data['did'] = 0;             // شناسه پیش‌فرض
+            $data['is_import'] = $data['is_import'] ?? 0;
+            $data['added_by_user'] = $data['added_by_user'] ?? 0;
+            $data['approved'] = $data['approved'] ?? 0; // Default to pending approval
+            $data['did'] = $data['did'] ?? 0;
+            $data['created_at'] = date('Y-m-d H:i:s');
+            $data['updated_at'] = date('Y-m-d H:i:s');
 
             $this->db->query("INSERT INTO serials
             (code_dastgah, title, coding_derakhtvare, model, att1_code, att1_val, att2_code, att2_val, 
             att3_code, att3_val, att4_code, att4_val, serial, serial2, company, sh_sanad, 
-            code_guarantee, sharh_guarantee, code_agent_service, agent_service, start_guarantee, 
-            expite_guarantee, is_import, added_by_user, approved, did , created_at, updated_at) 
+            start_guarantee, expite_guarantee, is_import, added_by_user, approved, did, created_at, updated_at)
             VALUES 
-            (:code_dastgah, :title, :coding_derakhtvare, :model, :att1_code, :att1_val, :att2_code, 
-            :att2_val, :att3_code, :att3_val, :att4_code, :att4_val, :serial, :serial2, :company, 
-            :sh_sanad, :code_guarantee, :sharh_guarantee, :code_agent_service, :agent_service, 
-            :start_guarantee, :expite_guarantee, :is_import, :added_by_user, :approved, :did , :created_at, :updated_at)");
+            (:code_dastgah, :title, :coding_derakhtvare, :model, :att1_code, :att1_val, :att2_code, :att2_val,
+            :att3_code, :att3_val, :att4_code, :att4_val, :serial, :serial2, :company, :sh_sanad,
+            :start_guarantee, :expite_guarantee, :is_import, :added_by_user, :approved, :did, :created_at, :updated_at)");
 
-            // bind parameters
-            $this->db->bind(':code_dastgah', $data['code_dastgah']);
-            $this->db->bind(':title', $data['title']);
-            $this->db->bind(':coding_derakhtvare', $data['coding_derakhtvare']);
+            // Bind parameters
+            $this->db->bind(':code_dastgah', $data['code_dastgah'] ?? null);
+            $this->db->bind(':title', $data['title'] ?? null);
+            $this->db->bind(':coding_derakhtvare', $data['coding_derakhtvare'] ?? null);
             $this->db->bind(':model', $data['model']);
-            $this->db->bind(':att1_code', $data['att1_code']);
-            $this->db->bind(':att1_val', $data['att1_val']);
-            $this->db->bind(':att2_code', $data['att2_code']);
-            $this->db->bind(':att2_val', $data['att2_val']);
-            $this->db->bind(':att3_code', $data['att3_code']);
-            $this->db->bind(':att3_val', $data['att3_val']);
-            $this->db->bind(':att4_code', $data['att4_code']);
-            $this->db->bind(':att4_val', $data['att4_val']);
+            $this->db->bind(':att1_code', $data['att1_code'] ?? null);
+            $this->db->bind(':att1_val', $data['att1_val'] ?? null);
+            $this->db->bind(':att2_code', $data['att2_code'] ?? null);
+            $this->db->bind(':att2_val', $data['att2_val'] ?? null);
+            $this->db->bind(':att3_code', $data['att3_code'] ?? null);
+            $this->db->bind(':att3_val', $data['att3_val'] ?? null);
+            $this->db->bind(':att4_code', $data['att4_code'] ?? null);
+            $this->db->bind(':att4_val', $data['att4_val'] ?? null);
             $this->db->bind(':serial', $data['serial']);
-            $this->db->bind(':serial2', $data['serial2']);
-            $this->db->bind(':company', $data['company']);
-            $this->db->bind(':sh_sanad', $data['sh_sanad']);
-            $this->db->bind(':code_guarantee', $data['code_guarantee']);
-            $this->db->bind(':sharh_guarantee', $data['sharh_guarantee']);
-            $this->db->bind(':code_agent_service', $data['code_agent_service']);
-            $this->db->bind(':agent_service', $data['agent_service']);
-            $this->db->bind(':start_guarantee', $data['start_guarantee']);
-            $this->db->bind(':expite_guarantee', $data['expite_guarantee']);
+            $this->db->bind(':serial2', $data['serial2'] ?? null);
+            $this->db->bind(':company', $data['company'] ?? null);
+            $this->db->bind(':sh_sanad', $data['sh_sanad'] ?? null);
+            $this->db->bind(':start_guarantee', $data['start_guarantee'] ?? null);
+            $this->db->bind(':expite_guarantee', $data['expite_guarantee'] ?? null);
             $this->db->bind(':is_import', $data['is_import']);
             $this->db->bind(':added_by_user', $data['added_by_user']);
             $this->db->bind(':approved', $data['approved']);
             $this->db->bind(':did', $data['did']);
-            $this->db->bind(':created_at', date('Y-m-d H:i:s'));
-            $this->db->bind(':updated_at', date('Y-m-d H:i:s'));
+            $this->db->bind(':created_at', $data['created_at']);
+            $this->db->bind(':updated_at', $data['updated_at']);
 
+            // Execute the query
             if ($this->db->execute()) {
-                return true;
+                return $this->db->lastInsertId();
+            } else {
+                throw new Exception("خطا در ثبت اطلاعات کارت");
             }
 
-            throw new Exception("خطا در ذخیره‌سازی اطلاعات");
         } catch (PDOException $e) {
-            // اگر خطای تکراری بودن سریال باشد
-            if ($e->getCode() == 23000) {
+            // Handle database-specific errors
+            if ($e->getCode() == 23000) { // Duplicate entry error
                 throw new Exception("این سریال قبلاً در سیستم ثبت شده است");
             }
-            // سایر خطاهای دیتابیس
             throw new Exception("خطا در ارتباط با پایگاه داده: " . $e->getMessage());
+        } catch (Exception $e) {
+            throw $e;
         }
     }
 
@@ -380,6 +388,60 @@ class CardsModel
         $this->db->query("DELETE FROM serials WHERE id = :id");
         $this->db->bind(':id', $id);
         return $this->db->execute();
+    }
+
+    public function approveCard($id)
+    {
+        try {
+            // First check if the card exists
+            $this->db->query("SELECT id, approved FROM serials WHERE id = :id");
+            $this->db->bind(':id', $id);
+            $card = $this->db->fetch();
+
+            if (!$card) {
+                throw new Exception("کارت گارانتی مورد نظر یافت نشد");
+            }
+
+            // Update the card's approved status
+            $this->db->query("UPDATE serials SET approved = 1, updated_at = :updated_at WHERE id = :id");
+            $this->db->bind(':id', $id);
+            $this->db->bind(':updated_at', date('Y-m-d H:i:s'));
+
+            if (!$this->db->execute()) {
+                throw new Exception("خطا در تایید کارت گارانتی");
+            }
+
+            return true;
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function rejectCard($id)
+    {
+        try {
+            // First check if the card exists
+            $this->db->query("SELECT id, approved FROM serials WHERE id = :id");
+            $this->db->bind(':id', $id);
+            $card = $this->db->fetch();
+
+            if (!$card) {
+                throw new Exception("کارت گارانتی مورد نظر یافت نشد");
+            }
+
+            // Update the card's approved status
+            $this->db->query("UPDATE serials SET approved = 0, updated_at = :updated_at WHERE id = :id");
+            $this->db->bind(':id', $id);
+            $this->db->bind(':updated_at', date('Y-m-d H:i:s'));
+
+            if (!$this->db->execute()) {
+                throw new Exception("خطا در لغو تایید کارت گارانتی");
+            }
+
+            return true;
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 
     public function getAllCardsWithoutPagination()

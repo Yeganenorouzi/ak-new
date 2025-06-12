@@ -160,9 +160,42 @@ class Cards extends Controller
                     'data' => $card
                 ]);
             } else {
-                echo json_encode([
-                    'status' => 'not_found'
-                ]);
+                // If card not found, create a new one with pending approval
+                $cardData = [
+                    'serial' => $serial,
+                    'model' => $_POST['model'] ?? '',
+                    'title' => $_POST['title'] ?? '',
+                    'serial2' => $_POST['serial2'] ?? '',
+                    'company' => $_POST['company'] ?? '',
+                    'sh_sanad' => $_POST['sh_sanad'] ?? '',
+                    'start_guarantee' => $_POST['start_guarantee'] ?? '',
+                    'expite_guarantee' => $_POST['expite_guarantee'] ?? '',
+                    'att1_code' => $_POST['att1_code'] ?? '',
+                    'att2_code' => $_POST['att2_code'] ?? '',
+                    'att3_code' => $_POST['att3_code'] ?? '',
+                    'att4_code' => $_POST['att4_code'] ?? '',
+                    'approved' => 0, // Set as pending approval
+                    'is_import' => 0,
+                    'added_by_user' => $_SESSION['user_id'] ?? 0,
+                    'did' => 0
+                ];
+
+                try {
+                    if ($this->cardModel->createCard($cardData)) {
+                        echo json_encode([
+                            'status' => 'created',
+                            'message' => 'کارت گارانتی با موفقیت ایجاد شد و در انتظار تایید است',
+                            'data' => $cardData
+                        ]);
+                    } else {
+                        throw new Exception('خطا در ایجاد کارت گارانتی');
+                    }
+                } catch (Exception $e) {
+                    echo json_encode([
+                        'status' => 'error',
+                        'message' => $e->getMessage()
+                    ]);
+                }
             }
         }
     }
@@ -440,5 +473,69 @@ class Cards extends Controller
         exit();
     }
 
+    public function approve()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $cardId = $_POST['card_id'] ?? null;
 
+            if (!$cardId) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'شناسه کارت گارانتی نامعتبر است'
+                ]);
+                return;
+            }
+
+            try {
+                $this->cardModel->approveCard($cardId);
+                echo json_encode([
+                    'status' => 'success',
+                    'message' => 'کارت گارانتی با موفقیت تایید شد'
+                ]);
+            } catch (Exception $e) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => $e->getMessage()
+                ]);
+            }
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'درخواست نامعتبر'
+            ]);
+        }
+    }
+
+    public function reject()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $cardId = $_POST['card_id'] ?? null;
+
+            if (!$cardId) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'شناسه کارت گارانتی نامعتبر است'
+                ]);
+                return;
+            }
+
+            try {
+                $this->cardModel->rejectCard($cardId);
+                echo json_encode([
+                    'status' => 'success',
+                    'message' => 'تایید کارت گارانتی با موفقیت لغو شد'
+                ]);
+            } catch (Exception $e) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => $e->getMessage()
+                ]);
+            }
+        } else {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'درخواست نامعتبر'
+            ]);
+        }
+    }
 }

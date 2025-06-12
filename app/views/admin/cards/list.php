@@ -91,8 +91,9 @@
                                                 <th scope="col" class="px-6 py-3">مدل دستگاه</th>
                                                 <th scope="col" class="px-6 py-3">شرکت وارد کننده</th>
                                                 <th scope="col" class="px-6 py-3">شماره سند</th>
-                                                <th scope="col" class="px-6 py-3">تاریخ صدور  </th>
-                                                <th scope="col" class="px-6 py-3">تاریخ انقضا  </th>
+                                                <th scope="col" class="px-6 py-3">تاریخ صدور </th>
+                                                <th scope="col" class="px-6 py-3">تاریخ انقضا </th>
+                                                <th scope="col" class="px-6 py-3">وضعیت تایید</th>
                                                 <th scope="col" class="px-6 py-3">عملیات</th>
                                             </tr>
                                         </thead>
@@ -100,7 +101,7 @@
                                             <?php if (empty($data['cards'])): ?>
                                                 <tr
                                                     class="bg-white border-b border-gray-100 dark:bg-zinc-700 dark:border-zinc-600">
-                                                    <td colspan="9"
+                                                    <td colspan="10"
                                                         class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
                                                         هیچ نتیجه‌ای یافت نشد
                                                     </td>
@@ -109,7 +110,6 @@
                                                 <?php foreach ($data['cards'] as $item): ?>
                                                     <tr
                                                         class="bg-white border-b border-gray-100 hover:bg-gray-50/50 dark:bg-zinc-700 dark:hover:bg-zinc-700/50 dark:border-zinc-600">
-                                                       
                                                         <th scope="row"
                                                             class="px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                             <?php echo $item->serial; ?>
@@ -121,7 +121,33 @@
                                                         <td class="px-6 py-4"><?php echo $item->start_guarantee; ?></td>
                                                         <td class="px-6 py-4"><?php echo $item->expite_guarantee; ?></td>
                                                         <td class="px-6 py-4">
+                                                            <?php if ($item->approved == 1): ?>
+                                                                <span
+                                                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                                                    <i class="fas fa-check-circle ml-1"></i>
+                                                                    تایید شده
+                                                                </span>
+                                                            <?php else: ?>
+                                                                <span
+                                                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
+                                                                    <i class="fas fa-clock ml-1"></i>
+                                                                    در انتظار تایید
+                                                                </span>
+                                                            <?php endif; ?>
+                                                        </td>
+                                                        <td class="px-6 py-4">
                                                             <div class="flex flex-row gap-2">
+                                                                <?php if ($item->approved == 0): ?>
+                                                                    <button onclick="approveCard(<?php echo $item->id; ?>)"
+                                                                        class="font-medium text-green-600 dark:text-green-500 hover:underline cursor-pointer">
+                                                                        <i class="fas fa-check ml-1"></i>تایید
+                                                                    </button>
+                                                                <?php else: ?>
+                                                                    <button onclick="rejectCard(<?php echo $item->id; ?>)"
+                                                                        class="font-medium text-orange-600 dark:text-orange-500 hover:underline cursor-pointer">
+                                                                        <i class="fas fa-times ml-1"></i>لغو تایید
+                                                                    </button>
+                                                                <?php endif; ?>
                                                                 <a href="<?php echo URLROOT; ?>/cards/update/<?php echo $item->id; ?>"
                                                                     class="font-medium text-blue-600 dark:text-blue-500 hover:underline">ویرایش</a>
                                                                 <a href="javascript:void(0);"
@@ -265,6 +291,118 @@
                 });
             }
         });
+
+        // Approve Card
+        function approveCard(cardId) {
+            Swal.fire({
+                title: 'تایید کارت گارانتی',
+                text: 'آیا از تایید این کارت گارانتی مطمئن هستید؟',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#10b981',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'بله، تایید کن',
+                cancelButtonText: 'انصراف',
+                customClass: {
+                    popup: 'rtl-alert'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('<?php echo URLROOT; ?>/cards/approve', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: 'card_id=' + cardId
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                Swal.fire({
+                                    title: 'موفق',
+                                    text: data.message,
+                                    icon: 'success',
+                                    confirmButtonText: 'باشه'
+                                }).then(() => {
+                                    window.location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'خطا',
+                                    text: data.message,
+                                    icon: 'error',
+                                    confirmButtonText: 'باشه'
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire({
+                                title: 'خطا',
+                                text: 'خطا در برقراری ارتباط با سرور',
+                                icon: 'error',
+                                confirmButtonText: 'باشه'
+                            });
+                        });
+                }
+            });
+        }
+
+        // Reject Card
+        function rejectCard(cardId) {
+            Swal.fire({
+                title: 'لغو تایید کارت گارانتی',
+                text: 'آیا از لغو تایید این کارت گارانتی مطمئن هستید؟',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'بله، لغو تایید کن',
+                cancelButtonText: 'انصراف',
+                customClass: {
+                    popup: 'rtl-alert'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('<?php echo URLROOT; ?>/cards/reject', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: 'card_id=' + cardId
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                Swal.fire({
+                                    title: 'موفق',
+                                    text: data.message,
+                                    icon: 'success',
+                                    confirmButtonText: 'باشه'
+                                }).then(() => {
+                                    window.location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'خطا',
+                                    text: data.message,
+                                    icon: 'error',
+                                    confirmButtonText: 'باشه'
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            Swal.fire({
+                                title: 'خطا',
+                                text: 'خطا در برقراری ارتباط با سرور',
+                                icon: 'error',
+                                confirmButtonText: 'باشه'
+                            });
+                        });
+                }
+            });
+        }
     </script>
 
     <?php require_once(APPROOT . "/views/public/footer.php"); ?>

@@ -773,6 +773,15 @@ class ReceptionsModel
     }
   }
 
+  public function logReceptionEditHistory($reception_id, $changer, $history)
+  {
+    $this->db->query("INSERT INTO reception_edit_histories (reception_id, changer, history, created_at) VALUES (:reception_id, :changer, :history, NOW())");
+    $this->db->bind(':reception_id', $reception_id);
+    $this->db->bind(':changer', $changer);
+    $this->db->bind(':history', json_encode($history, JSON_UNESCAPED_UNICODE));
+    $this->db->execute();
+  }
+
   public function getFilteredReceptions($filters)
   {
     try {
