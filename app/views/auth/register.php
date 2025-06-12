@@ -324,22 +324,29 @@
         }
 
         .feature-card {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(102, 126, 234, 0.05);
             backdrop-filter: blur(10px);
             border-radius: 12px;
             padding: 1rem;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.15);
         }
 
         .feature-icon {
             font-size: 1.5rem;
             margin-bottom: 0.5rem;
-            color: rgba(255, 255, 255, 0.9);
+            color: #667eea;
         }
 
         .feature-card p {
-            color: rgba(255, 255, 255, 0.9);
+            color: #4a5568;
             font-weight: 600;
             font-size: 0.875rem;
         }
@@ -644,6 +651,19 @@
                                     </p>
                                 </div>
                             </form>
+
+
+                        </div>
+
+                        <!-- Stats at bottom -->
+                        <div class="stats-container absolute bottom-0 left-0 right-0">
+                            <div class="text-center text-white/80 text-xs">
+                                ©
+                                <script>document.write(new Date().getFullYear())</script>
+                                سیستم گارانتی آک | دیزاین و توسعه توسط <a href="https://github.com/Yeganenorouzi"
+                                    class="text-white-500 underline">Yegane
+                                    Norouzi</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -659,48 +679,6 @@
                         <!-- Additional subtle gradient from form side -->
                         <div
                             class="absolute inset-0 bg-gradient-to-r from-violet-900/20 via-transparent to-transparent z-20">
-                        </div>
-
-                        <!-- Content overlay -->
-                        <div class="relative z-30 h-full flex items-end justify-center p-8">
-                            <div class="text-center text-white/90">
-                                <div class="mb-4">
-                                    <h2 class="text-3xl md:text-4xl font-bold mb-2 text-shadow">سیستم مدیریت گارانتی
-                                    </h2>
-                                    <p class="text-lg md:text-xl text-white/80 text-shadow">عضویت در پلتفرم حرفه‌ای
-                                        مدیریت محصولات</p>
-                                </div>
-
-                                <div class="features-grid max-w-md mx-auto">
-                                    <div class="feature-card">
-                                        <div class="feature-icon">👤</div>
-                                        <p class="text-white/90">حساب کاربری امن</p>
-                                    </div>
-                                    <div class="feature-card">
-                                        <div class="feature-icon">⚡</div>
-                                        <p class="text-white/90">فرآیند ساده ثبت‌نام</p>
-                                    </div>
-                                    <div class="feature-card">
-                                        <div class="feature-icon">🛡️</div>
-                                        <p class="text-white/90">حفاظت از اطلاعات</p>
-                                    </div>
-                                    <div class="feature-card">
-                                        <div class="feature-icon">📱</div>
-                                        <p class="text-white/90">پشتیبانی 24/7</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Stats at bottom -->
-                        <div class="stats-container">
-                            <div class="text-center text-white/80 text-xs">
-                                ©
-                                <script>document.write(new Date().getFullYear())</script>
-                                سیستم گارانتی آک | دیزاین و توسعه توسط <a href="https://github.com/Yeganenorouzi"
-                                    class="text-white-500 underline">Yegane
-                                    Norouzi</a>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -1152,6 +1130,9 @@
             })
                 .then(response => {
                     console.log('Response status:', response.status); // Debug
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
                     return response.json();
                 })
                 .then(data => {
@@ -1202,9 +1183,10 @@
                     }
                 })
                 .catch(error => {
+                    console.error('Fetch error:', error); // Detailed error logging
                     Swal.fire({
                         title: '⚠️ خطای ارتباط',
-                        text: 'مشکلی در ارتباط با سرور رخ داده است',
+                        text: 'مشکلی در ارتباط با سرور رخ داده است. لطفاً دوباره تلاش کنید.',
                         icon: 'error',
                         confirmButtonText: 'باشه',
                         customClass: { popup: 'rtl-alert' }
