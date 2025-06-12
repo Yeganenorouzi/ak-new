@@ -135,187 +135,171 @@ class Auth extends Controller
 
   public function register()
   {
-    if ($_SERVER['REQUEST_METHOD'] === "POST") {
-      // CSRF Protection
-      if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
-        die(json_encode(['success' => false, 'message' => 'درخواست نامعتبر است']));
-      }
+    try {
+      // Check if it's a POST request
+      if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        // Process form
+        $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-      $_POST = array_map('htmlspecialchars', $_POST);
-      $data = [
-        "email" => trim($_POST['email'] ?? ''),
-        "password" => trim($_POST["password"] ?? ''),
-        "confirm_password" => trim($_POST["confirm_password"] ?? ''),
-        "name" => trim($_POST["name"] ?? ''),
-        "codemelli" => trim($_POST['codemelli'] ?? ''),
-        "mobile" => trim($_POST['mobile'] ?? ''),
-        "ostan" => trim($_POST['ostan'] ?? ''),
-        "shahr" => trim($_POST['shahr'] ?? ''),
-        "address" => trim($_POST['address'] ?? ''),
-        "phone" => trim($_POST['phone'] ?? ''),
-        "hours" => trim($_POST['hours'] ?? ''),
-        "codeposti" => trim($_POST['codeposti'] ?? ''),
-        "terms" => isset($_POST['terms']) ? true : false,
-        // Error fields
-        "email_err" => "",
-        "password_err" => "",
-        "confirm_password_err" => "",
-        "name_err" => "",
-        "codemelli_err" => "",
-        "mobile_err" => "",
-        "ostan_err" => "",
-        "shahr_err" => "",
-        "address_err" => "",
-        "phone_err" => "",
-        "hours_err" => "",
-        "codeposti_err" => "",
-        "terms_err" => ""
-      ];
+        // Init data
+        $data = [
+          'name' => trim($_POST['name']),
+          'email' => trim($_POST['email']),
+          'password' => trim($_POST['password']),
+          'confirm_password' => trim($_POST['confirm_password']),
+          'codemelli' => trim($_POST['codemelli']),
+          'mobile' => trim($_POST['mobile']),
+          'phone' => trim($_POST['phone']),
+          'ostan' => trim($_POST['ostan']),
+          'shahr' => trim($_POST['shahr']),
+          'address' => trim($_POST['address']),
+          'codeposti' => trim($_POST['codeposti']),
+          'hours' => trim($_POST['hours']),
+          'name_err' => '',
+          'email_err' => '',
+          'password_err' => '',
+          'confirm_password_err' => '',
+          'codemelli_err' => '',
+          'mobile_err' => '',
+          'phone_err' => '',
+          'ostan_err' => '',
+          'shahr_err' => '',
+          'address_err' => '',
+          'codeposti_err' => '',
+          'hours_err' => ''
+        ];
 
-      // Enhanced validation
-      if (empty($data["email"])) {
-        $data["email_err"] = "لطفا ایمیل را وارد کنید";
-      } elseif (!filter_var($data["email"], FILTER_VALIDATE_EMAIL)) {
-        $data["email_err"] = "لطفا ایمیل معتبر وارد کنید";
-      } elseif ($this->authModel->findUserByEmail($data["email"])) {
-        $data["email_err"] = "این ایمیل قبلاً ثبت شده است";
-      }
+        // Validate Email
+        if (empty($data['email'])) {
+          $data['email_err'] = 'لطفا ایمیل را وارد کنید';
+        } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+          $data['email_err'] = 'ایمیل نامعتبر است';
+        } elseif ($this->authModel->findUserByEmail($data['email'])) {
+          $data['email_err'] = 'این ایمیل قبلا ثبت شده است';
+        }
 
-      if (empty($data["password"])) {
-        $data["password_err"] = "لطفا رمز عبور را وارد کنید";
-      } elseif (strlen($data["password"]) < 8) {
-        $data["password_err"] = "رمز عبور باید حداقل 8 کاراکتر باشد";
-      } elseif (!preg_match('/\d/', $data["password"])) {
-        $data["password_err"] = "رمز عبور باید حداقل شامل یک عدد باشد";
-      }
+        // Validate Name
+        if (empty($data['name'])) {
+          $data['name_err'] = 'لطفا نام را وارد کنید';
+        }
 
-      if (empty($data["confirm_password"])) {
-        $data["confirm_password_err"] = "لطفا تکرار رمز عبور را وارد کنید";
-      } elseif ($data["password"] !== $data["confirm_password"]) {
-        $data["confirm_password_err"] = "رمز عبور و تکرار آن مطابقت ندارند";
-      }
+        // Validate Password
+        if (empty($data['password'])) {
+          $data['password_err'] = 'لطفا رمز عبور را وارد کنید';
+        } elseif (strlen($data['password']) < 8) {
+          $data['password_err'] = 'رمز عبور باید حداقل 8 کاراکتر باشد';
+        }
 
-      if (empty($data["name"])) {
-        $data["name_err"] = "لطفا نام را وارد کنید";
-      } elseif (strlen($data["name"]) < 3) {
-        $data["name_err"] = "نام باید حداقل 3 کاراکتر باشد";
-      } elseif (!preg_match('/^[\x{0600}-\x{06FF}\s]+$/u', $data["name"])) {
-        $data["name_err"] = "لطفا نام را به فارسی وارد کنید";
-      }
+        // Validate Confirm Password
+        if (empty($data['confirm_password'])) {
+          $data['confirm_password_err'] = 'لطفا تکرار رمز عبور را وارد کنید';
+        } else {
+          if ($data['password'] != $data['confirm_password']) {
+            $data['confirm_password_err'] = 'رمز عبور و تکرار آن مطابقت ندارند';
+          }
+        }
 
-      if (empty($data["codemelli"])) {
-        $data["codemelli_err"] = "لطفا کد ملی را وارد کنید";
-      } elseif ($this->authModel->findUserBycodemelli($data["codemelli"])) {
-        $data["codemelli_err"] = "این کد ملی قبلاً ثبت شده است";
-      } elseif (!$this->isValidCodemelli($data["codemelli"])) {
-        $data["codemelli_err"] = "کد ملی نامعتبر است";
-      }
+        // Validate National Code
+        if (empty($data['codemelli'])) {
+          $data['codemelli_err'] = 'لطفا کد ملی را وارد کنید';
+        } elseif (!preg_match('/^\d{10}$/', $data['codemelli'])) {
+          $data['codemelli_err'] = 'کد ملی باید 10 رقم باشد';
+        }
 
-      if (empty($data["mobile"])) {
-        $data["mobile_err"] = "لطفا شماره موبایل را وارد کنید";
-      } elseif (!preg_match('/^09[0-9]{9}$/', $data["mobile"])) {
-        $data["mobile_err"] = "شماره موبایل نامعتبر است";
-      } elseif ($this->authModel->findUserByMobile($data["mobile"])) {
-        $data["mobile_err"] = "این شماره موبایل قبلاً ثبت شده است";
-      }
+        // Validate Mobile
+        if (empty($data['mobile'])) {
+          $data['mobile_err'] = 'لطفا شماره موبایل را وارد کنید';
+        } elseif (!preg_match('/^09\d{9}$/', $data['mobile'])) {
+          $data['mobile_err'] = 'شماره موبایل نامعتبر است';
+        }
 
-      // Other validations remain the same...
-      if (empty($data["ostan"])) {
-        $data["ostan_err"] = "لطفا استان را انتخاب کنید";
-      }
-      if (empty($data["shahr"])) {
-        $data["shahr_err"] = "لطفا شهر را انتخاب کنید";
-      }
-      if (empty($data["address"])) {
-        $data["address_err"] = "لطفا آدرس را وارد کنید";
-      }
-      // Phone is completely optional - no validation needed
-      if (!empty($data["hours"]) && strlen($data["hours"]) < 3) {
-        $data["hours_err"] = "ساعت کاری نامعتبر است";
-      }
-      if (!empty($data["codeposti"]) && !$this->isValidCodeposti($data["codeposti"])) {
-        $data["codeposti_err"] = "کد پستی نامعتبر است";
-      }
+        // Validate Province and City
+        if (empty($data['ostan'])) {
+          $data['ostan_err'] = 'لطفا استان را انتخاب کنید';
+        }
+        if (empty($data['shahr'])) {
+          $data['shahr_err'] = 'لطفا شهر را انتخاب کنید';
+        }
 
-      if (!isset($_POST['terms'])) {
-        $data["terms_err"] = "لطفا قوانین و مقررات را بپذیرید";
-      }
+        // Validate Address
+        if (empty($data['address'])) {
+          $data['address_err'] = 'لطفا آدرس را وارد کنید';
+        }
 
-      // Check if all validations passed
-      $errors = array_filter($data, function ($key) use ($data) {
-        return strpos($key, '_err') !== false && !empty($data[$key]);
-      }, ARRAY_FILTER_USE_KEY);
+        // Validate Postal Code
+        if (empty($data['codeposti'])) {
+          $data['codeposti_err'] = 'لطفا کد پستی را وارد کنید';
+        } elseif (!preg_match('/^\d{10}$/', $data['codeposti'])) {
+          $data['codeposti_err'] = 'کد پستی باید 10 رقم باشد';
+        }
 
-      if (empty($errors)) {
-        $data["password"] = password_hash($data["password"], PASSWORD_DEFAULT);
+        // Make sure errors are empty
+        if (
+          empty($data['email_err']) && empty($data['name_err']) &&
+          empty($data['password_err']) && empty($data['confirm_password_err']) &&
+          empty($data['codemelli_err']) && empty($data['mobile_err']) &&
+          empty($data['ostan_err']) && empty($data['shahr_err']) &&
+          empty($data['address_err']) && empty($data['codeposti_err'])
+        ) {
 
-        try {
+          // Hash Password
+          $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+
+          // Register User
           if ($this->authModel->register($data)) {
-            // Send welcome email (optional)
-            // $this->sendWelcomeEmail($data["email"], $data["name"]);
-
             echo json_encode([
               'success' => true,
-              'message' => 'ثبت نام شما با موفقیت انجام شد. حساب شما پس از تایید ادمین فعال خواهد شد.'
+              'message' => 'ثبت نام با موفقیت انجام شد'
             ]);
-            exit();
           } else {
-            echo json_encode([
-              'success' => false,
-              'message' => 'خطا در ذخیره اطلاعات. لطفاً مجدداً تلاش کنید.'
-            ]);
-            exit();
+            throw new Exception('خطا در ثبت نام کاربر');
           }
-        } catch (Exception $e) {
-          error_log('Register Exception: ' . $e->getMessage());
+        } else {
           echo json_encode([
             'success' => false,
-            'message' => 'خطای سیستمی رخ داده است. لطفاً با پشتیبانی تماس بگیرید.'
+            'errors' => $data
           ]);
-          exit();
         }
       } else {
-        echo json_encode([
-          'success' => false,
-          'message' => 'لطفاً خطاهای زیر را برطرف کنید',
-          'errors' => array_filter($data, function ($key) use ($data) {
-            return strpos($key, '_err') !== false;
-          }, ARRAY_FILTER_USE_KEY)
-        ]);
-        exit();
+        // Load view
+        $data = [
+          "email" => "",
+          "password" => "",
+          "confirm_password" => "",
+          "name" => "",
+          "codemelli" => "",
+          "mobile" => "",
+          "ostan" => "",
+          "shahr" => "",
+          "address" => "",
+          "phone" => "",
+          "hours" => "",
+          "codeposti" => "",
+          "terms" => false,
+          // Error fields
+          "email_err" => "",
+          "password_err" => "",
+          "confirm_password_err" => "",
+          "name_err" => "",
+          "codemelli_err" => "",
+          "mobile_err" => "",
+          "ostan_err" => "",
+          "shahr_err" => "",
+          "address_err" => "",
+          "phone_err" => "",
+          "hours_err" => "",
+          "codeposti_err" => "",
+          "terms_err" => "",
+          "csrf_token" => $_SESSION['csrf_token']
+        ];
+        return $this->view('auth/register', $data);
       }
-    } else {
-      $data = [
-        "email" => "",
-        "password" => "",
-        "confirm_password" => "",
-        "name" => "",
-        "codemelli" => "",
-        "mobile" => "",
-        "ostan" => "",
-        "shahr" => "",
-        "address" => "",
-        "phone" => "",
-        "hours" => "",
-        "codeposti" => "",
-        "terms" => false,
-        // Error fields
-        "email_err" => "",
-        "password_err" => "",
-        "confirm_password_err" => "",
-        "name_err" => "",
-        "codemelli_err" => "",
-        "mobile_err" => "",
-        "ostan_err" => "",
-        "shahr_err" => "",
-        "address_err" => "",
-        "phone_err" => "",
-        "hours_err" => "",
-        "codeposti_err" => "",
-        "terms_err" => "",
-        "csrf_token" => $_SESSION['csrf_token']
-      ];
-      return $this->view('auth/register', $data);
+    } catch (Exception $e) {
+      error_log($e->getMessage());
+      echo json_encode([
+        'success' => false,
+        'message' => 'خطا در ثبت نام: ' . $e->getMessage()
+      ]);
     }
   }
 

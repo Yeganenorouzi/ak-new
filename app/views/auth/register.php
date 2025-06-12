@@ -956,6 +956,8 @@
             const strengthBar = document.getElementById('password-strength-bar');
             const strengthText = document.getElementById('password-strength-text');
 
+            if (!strengthBar || !strengthText) return; // Add null check
+
             let strength = 0;
             let text = '';
 
